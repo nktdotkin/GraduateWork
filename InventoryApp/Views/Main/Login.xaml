@@ -3,10 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InventoryApp.Views.Main"
+        xmlns:local="clr-namespace:InventoryApp.ViewModels.Base"
+        xmlns:Login="clr-namespace:InventoryApp.ViewModels.User"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Login" Height="450" Width="800">
-    <Grid>
-        
+        Title="Login" Height="450" Width="300" WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <Login:LoginViewModel/>
+    </Window.DataContext>
+    <Grid Background="#FFDE73">
+        <Image Source="/InventoryApp;component/Resources/Icons/log.png" Margin="40,160,220,250" Width="30"/>
+        <Image Source="/InventoryApp;component/Resources/Icons/pass.png" Margin="40,240,220,170" Width="30"/>
+        <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="95,10,95,0" VerticalAlignment="Top" Height="68" Width="68"/>
+        <Button HorizontalAlignment="Center" Width="220" Margin="0,310,0,100" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Sign In" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+        <Button HorizontalAlignment="Center" Width="220" Margin="0,370,0,40" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Sign Up" Command="{Binding SingUpCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+        <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,20" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding ExitApp}">
+            <Button.DataContext>
+                <local:BaseQuery/>
+            </Button.DataContext>
+            <materialDesign:PackIcon Kind="PowerOff" Foreground="Black"/>
+        </Button>
+        <TextBox materialDesign:HintAssist.Hint="Login" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="10" Margin="80,150,40,255" Text="{Binding UserName}" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" TextAlignment="Justify" FontSize="18"/>
+        <PasswordBox x:Name="PasswordBox" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" MaxLength="12" Margin="80,230,39,175" Background="{x:Null}" BorderBrush="{x:Null}" FontFamily="Arial" SelectionBrush="{x:Null}" FontSize="18"/>
     </Grid>
 </Window>

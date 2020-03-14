@@ -4,9 +4,51 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryApp.Views.Main"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:BaseCommand="clr-namespace:InventoryApp.ViewModels.Base"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Inventory Control" Width="auto" Height="auto" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#fafafa" WindowState="Maximized">
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveToFIleCommand}"></KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="B" Command="{Binding BackupCommand}"></KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding RestoreCommand}"></KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding LogOutCommand}"></KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding ExitCommand}"></KeyBinding>
+    </Window.InputBindings>
+    <Grid Height="60" VerticalAlignment="Top" Background="#FFDE73">
+        <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="-0,0,0,0" HorizontalAlignment="Left"></Image>
+        <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22"/>
+        <Menu Margin="0,0,20,0"  Background="Transparent" IsMainMenu="True" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <MenuItem Height="35" Width="50" Icon="{materialDesign:PackIcon Kind=UserBox}"  Command="{Binding SaveToFIleCommand}">
+                <MenuItem Background="#f4f4f4" Header="Save" InputGestureText="Ctrl+S">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ContentSave" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Background="#f4f4f4" Header="Backup Database" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="Backup" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Background="#f4f4f4" Header="Restore Database" InputGestureText="Ctrl+R" Command="{Binding RestoreCommand}">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="Restore" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Background="#f4f4f4" Header="Logout" InputGestureText="Ctrl+E" Command="{Binding LogOutCommand}">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="User" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Background="#f4f4f4" Header="Exit" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
+                    <MenuItem.Icon>
+                        <materialDesign:PackIcon Kind="ExitToApp" />
+                    </MenuItem.Icon>
+                    <MenuItem.DataContext>
+                        <BaseCommand:BaseQuery/>
+                    </MenuItem.DataContext>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
     </Grid>
 </Window>

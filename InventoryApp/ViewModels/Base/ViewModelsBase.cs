@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace InventoryControl.ViewModels.Base
+namespace InventoryApp.ViewModels.Base
 {
     public abstract class ViewModelsBase : INotifyPropertyChanged
     {
