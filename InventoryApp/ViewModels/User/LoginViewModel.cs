@@ -1,20 +1,14 @@
 ﻿using InventoryApp.ViewModels.Base;
 using InventoryControl.Models.Base;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Input;
 using InventoryApp.Security;
 using System.Windows;
 using System.Data;
-using System.ComponentModel.DataAnnotations;
 using InventoryApp.Views.Main;
-using InventoryApp.Models.Base;
 
 namespace InventoryApp.ViewModels.User
 {
