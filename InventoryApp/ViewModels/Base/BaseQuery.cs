@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
+using InventoryApp.Models.Base;
 using Microsoft.VisualStudio.PlatformUI;
 
 namespace InventoryApp.ViewModels.Base
@@ -28,7 +29,7 @@ namespace InventoryApp.ViewModels.Base
                 int readerValueCounter = 0;
                 while (reader.Read())
                 {
-                    var instanse = (T)Activator.CreateInstance(typeof(T));
+                    var instanse = BaseModel.GetClass<T>();
                     foreach (var fields in instanse.GetType().GetProperties())
                     {
                         var prop = instanse.GetType().GetProperty(fields.Name);

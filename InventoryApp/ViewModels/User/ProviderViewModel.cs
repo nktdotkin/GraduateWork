@@ -12,11 +12,7 @@ namespace InventoryApp.ViewModels.User
         public ProviderViewModel()
         {
             ProviderModels = new ObservableCollection<ProviderModel>();
-            var userCollectionModels = new BaseQuery().Fill<ProviderModel>(CommandToExecute);
-            foreach (var userFiled in userCollectionModels)
-            {
-                ProviderModels.Add(userFiled);
-            }
+            ProviderModels = new BaseQuery().Fill<ProviderModel>(CommandToExecute);
         }
     }
 }

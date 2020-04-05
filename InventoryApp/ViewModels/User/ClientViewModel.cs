@@ -12,11 +12,7 @@ namespace InventoryApp.ViewModels.User
         public ClientViewModel()
         {
             ClientModels = new ObservableCollection<ClientModel>();
-            var userCollectionModels = new BaseQuery().Fill<ClientModel>(CommandToExecute);
-            foreach (var userFiled in userCollectionModels)
-            {
-                ClientModels.Add(userFiled);
-            }
+            ClientModels = new BaseQuery().Fill<ClientModel>(CommandToExecute);
         }     
     }
 }
