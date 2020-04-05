@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Reflection;
-using InventoryApp.Models.Base;
-using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.VisualStudio.PlatformUI;
 
@@ -18,25 +11,34 @@ namespace InventoryApp.ViewModels.Base
 {
     class BaseQuery : ViewModelsBase
     {
-        //private string connectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
-        private SqlConnection connection;
+        private static string connectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
+        private SqlConnection connection = new SqlConnection(connectionString);
         private SqlCommand command;
+        private SqlDataReader reader;
 
-        public T Fill<T>() where T : class
+        public ObservableCollection<T> Fill<T>(string commandToExecute) where T : class
         {
+            var collection = new ObservableCollection<T>();
             try
             {
-                var classType = BaseModel.GetClass<T>();
-                ObservableCollection<T> model = new ObservableCollection<T>();
-
-                //connection = new SqlConnection(connectionString);
-                command = new SqlCommand("ViewInfo", connection);
-                command.Parameters.Add(new SqlParameter("@tablename", SqlDbType.VarChar)).Value = "Client";
+                command = new SqlCommand(commandToExecute, connection);
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                reader = command.ExecuteReader();
+                int readerValueCounter = 0;
+                while (reader.Read())
+                {
+                    var instanse = (T)Activator.CreateInstance(typeof(T));
+                    foreach (var fields in instanse.GetType().GetProperties())
+                    {
+                        var prop = instanse.GetType().GetProperty(fields.Name);
+                        prop.SetValue(instanse, Convert.ChangeType(reader.GetValue(readerValueCounter), prop.PropertyType));
+                        readerValueCounter++;
+                    }
+                    collection.Add(instanse);
+                    readerValueCounter = 0;
+                }
             }
-            //TODO custom materialdesign MessageBox
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
@@ -45,7 +47,7 @@ namespace InventoryApp.ViewModels.Base
             {
                 connection.Close();
             }
-            return (T)Activator.CreateInstance(typeof(T));
+            return collection;
         }
 
         public void Add()
@@ -63,7 +65,26 @@ namespace InventoryApp.ViewModels.Base
 
         }
 
-        public ICommand ExitApp
+        public bool ExecuteQuery(string Expression)
+        {
+            bool isCompleted = false;
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                connection.Open();
+                command = new SqlCommand(Expression, connection);              
+                var exetudedCommand = command.ExecuteReader();
+                isCompleted = exetudedCommand.HasRows;
+                connection.Close();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message + e.HelpLink);
+            }
+            return isCompleted;
+        }
+
+        public ICommand ExitCommand
         {
             get
             {

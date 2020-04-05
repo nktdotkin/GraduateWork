@@ -170,6 +170,7 @@
     <Compile Include="Models\Base\RelayCommand.cs" />
     <Compile Include="Security\PasswordSecurity.cs" />
     <Compile Include="ViewModels\Base\BaseQuery.cs" />
+    <Compile Include="ViewModels\Base\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelsBase.cs" />
     <Compile Include="ViewModels\Product\ProductViewModel.cs" />
     <Compile Include="ViewModels\Product\ShipmentViewModel.cs" />

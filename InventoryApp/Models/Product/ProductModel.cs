@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace InventoryApp.Models.Product
+﻿namespace InventoryApp.Models.Product
 {
     class ProductModel
     {
-        enum Group
+        private enum GroupEnum
         {
             Default = 0,
             Electronics = 5,
@@ -26,5 +20,6 @@ namespace InventoryApp.Models.Product
         public decimal Price { get; set; }
         public decimal Tax { get; set; }
         public decimal TotalPrice { get; set; }
+        public string Group { get; set; }
     }
 }

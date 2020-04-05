@@ -45,5 +45,29 @@ namespace InventoryApp.Properties {
                 this["CurrentUser"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RestorePath {
+            get {
+                return ((string)(this["RestorePath"]));
+            }
+            set {
+                this["RestorePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BackUpPath {
+            get {
+                return ((string)(this["BackUpPath"]));
+            }
+            set {
+                this["BackUpPath"] = value;
+            }
+        }
     }
 }
