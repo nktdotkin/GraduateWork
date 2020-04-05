@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using InventoryApp.Models.Product;
+using InventoryApp.ViewModels.Base;
+using System.Collections.ObjectModel;
 
 namespace InventoryApp.ViewModels.Product
 {
-    class ShipmentViewModel
+    class ShipmentViewModel : ViewModelsBase
     {
+        private const string CommandToExecute = "GetShipment";
+        public ObservableCollection<ShipmentModel> ShipmentModels { get; set; }
+
+        public ShipmentViewModel()
+        {
+            ShipmentModels = new ObservableCollection<ShipmentModel>();
+            ShipmentModels = new BaseQuery().Fill<ShipmentModel>(CommandToExecute);
+        }
     }
 }

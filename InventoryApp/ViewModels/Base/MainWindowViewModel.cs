@@ -1,4 +1,6 @@
-﻿using InventoryApp.Views.Controls;
+﻿using InventoryApp.ViewModels.Product;
+using InventoryApp.ViewModels.User;
+using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
 using InventoryControl.Models.Base;
 using System.Windows;
@@ -25,6 +27,16 @@ namespace InventoryApp.ViewModels.Base
             BackupCommand = new RelayCommand((obj) => Backup());
             RestoreCommand = new RelayCommand((obj) => Restore());
             LogoutCommand = new RelayCommand((obj) => Logout());
+            InitializeViewModels();
+        }
+
+        private void InitializeViewModels()
+        {
+            new ClientViewModel();
+            new ProviderViewModel();
+            new ProductViewModel();
+            new ShipmentViewModel();
+            new SupplyViewModel();
         }
 
         public RelayCommand ClickTabCommand { get; set; }

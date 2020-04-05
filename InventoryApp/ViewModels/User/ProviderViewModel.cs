@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace InventoryApp.ViewModels.User
 {
-    class ProviderViewModel
+    class ProviderViewModel : ViewModelsBase
     {
         private const string CommandToExecute = "GetProvider";
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }

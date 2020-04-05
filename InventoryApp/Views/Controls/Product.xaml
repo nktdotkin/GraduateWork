@@ -3,10 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:InventoryApp.Views.Controls"
+             xmlns:local="clr-namespace:InventoryApp.ViewModels.Product"             
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:ProductViewModel/>
+    </UserControl.DataContext>
     <Grid>
-            
+        <Grid Margin="0,180,0,0">
+            <DataGrid HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProductModels}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=Name}" Header="Name"/>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=Description}" Header="Description"/>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=Amount}" Header="Amount"/>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=Price}" Header="Price"/>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=Tax}" Header="Tax"/>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=TotalPrice}" Header="TotalPrice"/>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=Group}" Header="Group"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

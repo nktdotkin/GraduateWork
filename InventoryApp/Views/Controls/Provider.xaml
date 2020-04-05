@@ -17,7 +17,7 @@
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Surname}" Header="Surname"/>
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Adress}" Header="Adress"/>
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Email}" Header="E-Mail"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Company}" Header="Status"/>
+                    <DataGridTextColumn Width="100" Binding="{Binding Path=Company}" Header="Company"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
