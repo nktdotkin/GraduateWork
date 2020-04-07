@@ -1,5 +1,6 @@
 ﻿namespace InventoryApp.Models.Product
 {
+    //replace groupID with text
     class ProductModel
     {
         private enum GroupEnum
@@ -12,7 +13,7 @@
             Auto = 25,
             Work = 30
         }
-
+        
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

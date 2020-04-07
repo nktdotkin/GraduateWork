@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using InventoryApp.Models.Base;
@@ -33,8 +34,24 @@ namespace InventoryApp.ViewModels.Base
                     foreach (var fields in instanse.GetType().GetProperties())
                     {
                         var prop = instanse.GetType().GetProperty(fields.Name);
-                        prop.SetValue(instanse, Convert.ChangeType(reader.GetValue(readerValueCounter), prop.PropertyType));
-                        readerValueCounter++;
+                        if (fields.PropertyType.FullName.Contains("InventoryApp"))
+                        {
+                            //do something with this
+                            var baseInstance = Activator.CreateInstance(prop.PropertyType);
+                            //set values to class object in model
+                            foreach (var baseFields in baseInstance.GetType().GetProperties())
+                            {
+                                var baseProp = baseInstance.GetType().GetProperty(baseFields.Name);
+                                baseProp.SetValue(baseInstance, Convert.ChangeType(reader.GetValue(readerValueCounter), baseProp.PropertyType));
+                                readerValueCounter++;
+                            }
+                            prop.SetValue(instanse, Convert.ChangeType(baseInstance, prop.PropertyType));
+                        }
+                        else
+                        {
+                            prop.SetValue(instanse, Convert.ChangeType(reader.GetValue(readerValueCounter), prop.PropertyType));
+                            readerValueCounter++;
+                        }
                     }
                     collection.Add(instanse);
                     readerValueCounter = 0;
@@ -56,9 +73,22 @@ namespace InventoryApp.ViewModels.Base
 
         }
 
-        public void Delete()
+        public void Delete(string tableName, int id)
         {
-
+            try
+            {
+                command = new SqlCommand($"DELETE FROM {tableName} WHERE {tableName}Id = {id}", connection);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
         }
 
         public void Find()
@@ -66,6 +96,7 @@ namespace InventoryApp.ViewModels.Base
 
         }
 
+        //redo because of recover\save DB
         public bool ExecuteQuery(string Expression)
         {
             bool isCompleted = false;
@@ -94,6 +125,12 @@ namespace InventoryApp.ViewModels.Base
                     Application.Current.Shutdown();
                 });
             }
+        }
+
+        //add to configure columns in grid
+        public bool BorderVisible()
+        {
+            return false;
         }
     }
 }

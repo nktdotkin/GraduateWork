@@ -11,7 +11,7 @@
     </UserControl.DataContext>
     <Grid>
         <Grid Margin="0,180,0,0">
-            <DataGrid HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProviderModels}">
+            <DataGrid HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProviderModels}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Name}" Header="Name"/>
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Surname}" Header="Surname"/>

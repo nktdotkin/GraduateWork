@@ -9,11 +9,15 @@
     <UserControl.DataContext>
         <local:ClientViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid Margin="0,180,0,0">
-            <DataGrid HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ClientModels}">
+            <DataGrid HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ClientModels}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Name}" Header="Name"/>
+                    <!--Add a setting to change column visibility-->
+                    <DataGridTextColumn Visibility="{Binding Path=BorderVisible, Converter={StaticResource BoolToVisConverter} }"  Width="100" Binding="{Binding Path=Name}" Header="Name"/>
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Surname}" Header="Surname"/>
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Adress}" Header="Adress"/>
                     <DataGridTextColumn Width="100" Binding="{Binding Path=Email}" Header="E-Mail"/>

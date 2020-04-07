@@ -27,7 +27,8 @@ namespace InventoryApp.ViewModels.Base
             BackupCommand = new RelayCommand((obj) => Backup());
             RestoreCommand = new RelayCommand((obj) => Restore());
             LogoutCommand = new RelayCommand((obj) => Logout());
-            InitializeViewModels();
+            //Add setting to on\off this
+            //InitializeViewModels();
         }
 
         private void InitializeViewModels()

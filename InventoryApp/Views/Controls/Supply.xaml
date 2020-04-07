@@ -11,14 +11,27 @@
     </UserControl.DataContext>
     <Grid>
         <Grid Margin="0,180,0,0">
-            <DataGrid HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding SupplyModels}">
+            <DataGrid Width="800" HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding SupplyModels}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Date}" Header="Date"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Product}" Header="Product"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Provider}" Header="Provider"/>
+                    <DataGridTextColumn Binding="{Binding Path=Date}" Header="Date"/>
+                    <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Id}" Header="Product"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Name}" Header="Product"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Description}" Header="Product"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Price}" Header="Product"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Tax}" Header="Product"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.TotalPrice}" Header="Product"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Group}" Header="Product"/>
+                    <DataGridTextColumn Binding="{Binding Path=Provider.Id}" Header="Provider"/>
+                    <DataGridTextColumn Binding="{Binding Path=Provider.Name}" Header="Provider"/>
+                    <DataGridTextColumn Binding="{Binding Path=Provider.Surname}" Header="Provider"/>
+                    <DataGridTextColumn Binding="{Binding Path=Provider.Phone}" Header="Provider"/>
+                    <DataGridTextColumn Binding="{Binding Path=Provider.Adress}" Header="Provider"/>
+                    <DataGridTextColumn Binding="{Binding Path=Provider.Email}" Header="Provider"/>
+                    <DataGridTextColumn Binding="{Binding Path=Provider.Company}" Header="Provider"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+        <Button VerticalAlignment="Top" Command="{Binding DeleteCommand}"></Button>
     </Grid>
 </UserControl>
