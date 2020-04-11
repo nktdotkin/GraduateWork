@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
@@ -91,9 +92,18 @@ namespace InventoryApp.ViewModels.Base
             }
         }
 
-        public void Find()
+        public ObservableCollection<T> Find<T>(ObservableCollection<T> searchInCollection, string searchItem) where T : class
         {
-
+            //var tempCollection = new ObservableCollection<T>();
+            //foreach (var fields in searchInCollection)
+            //{
+            //    var prop = fields.GetType();
+            //    if (prop.GetField(prop.Name).GetValue(fields).ToString().Contains(searchItem))
+            //    {
+            //        tempCollection.Add(prop.GetField(prop.Name).GetValue(fields));
+            //    }
+            //}
+            return searchInCollection;
         }
 
         //redo because of recover\save DB

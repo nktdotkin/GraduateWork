@@ -4,6 +4,7 @@ using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
 using InventoryControl.Models.Base;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace InventoryApp.ViewModels.Base
 {
@@ -31,19 +32,20 @@ namespace InventoryApp.ViewModels.Base
             //InitializeViewModels();
         }
 
-        private void InitializeViewModels()
-        {
-            new ClientViewModel();
-            new ProviderViewModel();
-            new ProductViewModel();
-            new ShipmentViewModel();
-            new SupplyViewModel();
-        }
+        //private void InitializeViewModels()
+        //{
+        //    new ClientViewModel();
+        //    new ProviderViewModel();
+        //    new ProductViewModel();
+        //    new ShipmentViewModel();
+        //    new SupplyViewModel();
+        //}
 
         public RelayCommand ClickTabCommand { get; set; }
         public RelayCommand BackupCommand { get; set; }
         public RelayCommand RestoreCommand { get; set; }
         public RelayCommand LogoutCommand { get; set; }
+
 
         private object tablePanel;
         private TabControl tabControl;
