@@ -76,20 +76,7 @@ namespace InventoryApp.ViewModels.Base
 
         public void Delete(string tableName, int id)
         {
-            try
-            {
-                command = new SqlCommand($"DELETE FROM {tableName} WHERE {tableName}Id = {id}", connection);
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+            ExecuteQuery($"DELETE FROM {tableName} WHERE {tableName}Id = {id}");
         }
 
         public ObservableCollection<T> Find<T>(ObservableCollection<T> searchInCollection, string searchItem) where T : class
@@ -107,9 +94,8 @@ namespace InventoryApp.ViewModels.Base
         }
 
         //redo because of recover\save DB
-        public bool ExecuteQuery(string Expression)
+        public bool ExecuteQuery(string Expression, bool isCompleted = false)
         {
-            bool isCompleted = false;
             try
             {
                 connection = new SqlConnection(connectionString);
@@ -124,6 +110,11 @@ namespace InventoryApp.ViewModels.Base
                 MessageBox.Show(e.Message + e.HelpLink);
             }
             return isCompleted;
+        }
+
+        public string GetAdress(string Adress)
+        {
+            return ("https://www.google.com/maps/search/?api=1&query=" + Adress?.Replace(" ", "+")) ?? "https://www.google.ru/maps";
         }
 
         public ICommand ExitCommand

@@ -1,6 +1,7 @@
-﻿namespace InventoryApp.Models.Product
+﻿using System;
+
+namespace InventoryApp.Models.Product
 {
-    //replace groupID with text
     class ProductModel
     {
         private enum GroupEnum
@@ -17,10 +18,12 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int ExpirationDateDays { get; set; }
         public int Amount { get; set; }
         public decimal Price { get; set; }
         public decimal Tax { get; set; }
         public decimal TotalPrice { get; set; }
+        public int GroupId { get; set; }
         public string Group { get; set; }
     }
 }

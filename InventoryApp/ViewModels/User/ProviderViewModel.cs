@@ -10,19 +10,31 @@ namespace InventoryApp.ViewModels.User
     {
         private const string CommandToExecute = "GetProvider";
         private const string TableName = "Provider";
+        private string searchText;
+        public string ProviderLocationSource { get; set; }
 
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
         public RelayCommand DeleteCommand { get; set; }
-        public ProviderModel SelectedItem { get; set; }
 
-        public ProviderViewModel()
+        private ProviderModel selectedItem;
+        public ProviderModel SelectedItem
         {
-            ProviderModels = new ObservableCollection<ProviderModel>();
-            DeleteCommand = new RelayCommand((obj) => Delete());
-            Update();
+            get => selectedItem;
+            set
+            {
+                if (value != selectedItem)
+                {
+                    selectedItem = value;
+                    OnPropertyChanged(nameof(SearchText));
+                    if (ProviderLocationSource != selectedItem.Adress)
+                    {
+                        ProviderLocationSource = new BaseQuery().GetAdress(selectedItem.Adress);
+                        OnPropertyChanged(nameof(ProviderLocationSource));
+                    }
+                }
+            }
         }
 
-        private string searchText;
         public string SearchText
         {
             get => searchText;
@@ -43,6 +55,15 @@ namespace InventoryApp.ViewModels.User
                     }
                 }
             }
+        }
+
+        public ProviderViewModel()
+        {
+            ProviderModels = new ObservableCollection<ProviderModel>();
+            DeleteCommand = new RelayCommand((obj) => Delete());
+            Update();
+            //TODO Replace with current location
+            ProviderLocationSource = new BaseQuery().GetAdress(null);
         }
 
         private void Update()

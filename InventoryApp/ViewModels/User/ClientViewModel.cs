@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using InventoryApp.Models.User;
 using InventoryControl.Models.Base;
 using System.Linq;
+using System;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -10,18 +11,31 @@ namespace InventoryApp.ViewModels.User
     {
         private const string CommandToExecute = "GetClient";
         private const string TableName = "Client";
+        private string searchText;
+        public string ClientLocationSource { get; set; }
+
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public RelayCommand DeleteCommand { get; set; }
-        public ClientModel SelectedItem { get; set; }
 
-        public ClientViewModel()
+        private ClientModel selectedItem;
+        public ClientModel SelectedItem
         {
-            ClientModels = new ObservableCollection<ClientModel>();
-            DeleteCommand = new RelayCommand((obj) => Delete());
-            Update();
+            get => selectedItem;
+            set
+            {
+                if (value != selectedItem)
+                {
+                    selectedItem = value;
+                    OnPropertyChanged(nameof(SearchText));
+                    if(ClientLocationSource != selectedItem.Adress)
+                    {
+                        ClientLocationSource = new BaseQuery().GetAdress(selectedItem.Adress);
+                        OnPropertyChanged(nameof(ClientLocationSource));
+                    }
+                }
+            }
         }
 
-        private string searchText;
         public string SearchText
         {
             get => searchText;
@@ -42,6 +56,15 @@ namespace InventoryApp.ViewModels.User
                     }
                 }
             }
+        }
+
+        public ClientViewModel()
+        {
+            ClientModels = new ObservableCollection<ClientModel>();
+            DeleteCommand = new RelayCommand((obj) => Delete());
+            Update();
+            //TODO Replace with current location
+            ClientLocationSource = new BaseQuery().GetAdress(null);
         }
 
         private void Update()

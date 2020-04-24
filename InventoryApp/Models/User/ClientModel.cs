@@ -1,6 +1,5 @@
 ﻿namespace InventoryApp.Models.User
 {
-    //replace statusID with status desc
     public class ClientModel : BaseUser
     {
         private enum StatusEnum
@@ -12,5 +11,6 @@
         }
 
         public string Status { get; set; }
+        public string StoreType { get; set; }
     }
 }

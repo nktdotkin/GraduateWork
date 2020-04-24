@@ -13,17 +13,18 @@
         <Button ToolTip="Search" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70" Margin="140,60,0,0">
             <materialDesign:PackIcon Kind="Search" Height="30" Width="30" Foreground="Black" />
         </Button>
-        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="100" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="200,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="Auto" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="200,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         <Grid Margin="0,180,0,0">
-            <DataGrid HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProductModels}" SelectedItem="{Binding SelectedItem}">
+            <DataGrid Width="Auto" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProductModels}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Name}" Header="Name"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Description}" Header="Description"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Price}" Header="Price"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Tax}" Header="Tax"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=TotalPrice}" Header="TotalPrice"/>
-                    <DataGridTextColumn Width="100" Binding="{Binding Path=Group}" Header="Group"/>
+                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name"/>
+                    <DataGridTextColumn Binding="{Binding Path=Description}" Header="Description"/>
+                    <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays}" Header="Expiration date"/>
+                    <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
+                    <DataGridTextColumn Binding="{Binding Path=Price}" Header="Price"/>
+                    <DataGridTextColumn Binding="{Binding Path=Tax}" Header="Tax"/>
+                    <DataGridTextColumn Binding="{Binding Path=TotalPrice}" Header="Total price"/>
+                    <DataGridTextColumn Binding="{Binding Path=Group}" Header="Group"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

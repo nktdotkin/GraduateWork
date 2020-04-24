@@ -15,24 +15,26 @@
         </Button>
         <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="100" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="200,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         <Grid Margin="0,180,0,0">
-            <DataGrid Width="800" HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ShipmentModels}" SelectedItem="{Binding SelectedItem}">
+            <DataGrid Width="Auto" ColumnWidth="Auto" HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ShipmentModels}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Date}" Header="Date"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Id}" Header="Product"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Name}" Header="Product"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Description}" Header="Product"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Price}" Header="Product"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Tax}" Header="Product"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.TotalPrice}" Header="Product"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Group}" Header="Product"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Id}" Header="Client"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Name}" Header="Client"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Surname}" Header="Client"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Phone}" Header="Client"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Adress}" Header="Client"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Email}" Header="Client"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Status}" Header="Client"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Id}" Header="Product ID"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Name}" Header="Product Name"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Description}" Header="Description"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.ExpirationDateDays}" Header="Expiration date"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Price}" Header="Price"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Tax}" Header="Tax"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.TotalPrice}" Header="Total price"/>
+                    <DataGridTextColumn Binding="{Binding Path=Product.Group}" Header="Group"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.Id}" Header="Client ID"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.Name}" Header="Client Name"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.Surname}" Header="Client Surname"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.Phone}" Header="Phone"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.Adress}" Header="Adress"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.Email}" Header="E-Mail"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.Status}" Header="Status"/>
+                    <DataGridTextColumn Binding="{Binding Path=Client.StoreType}" Header="Store type"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
