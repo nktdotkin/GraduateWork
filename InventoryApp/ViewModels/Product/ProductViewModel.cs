@@ -8,7 +8,6 @@ namespace InventoryApp.ViewModels.Product
 {
     class ProductViewModel : ViewModelsBase
     {
-        private const string CommandToExecute = "GetProduct";
         private const string TableName = "Product";
 
         public ObservableCollection<ProductModel> ProductModels { get; set; }
@@ -47,7 +46,7 @@ namespace InventoryApp.ViewModels.Product
 
         private void Update()
         {
-            ProductModels = new BaseQuery().Fill<ProductModel>(CommandToExecute);
+            ProductModels = new BaseQuery().Fill<ProductModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProductModels));
         }
 

@@ -9,7 +9,6 @@ namespace InventoryApp.ViewModels.Product
 {
     class SupplyViewModel : ViewModelsBase
     {
-        private const string CommandToExecute = "GetSupply";
         private const string TableName = "Supply";
 
         public ObservableCollection<SupplyModel> SupplyModels { get; set; }
@@ -48,7 +47,7 @@ namespace InventoryApp.ViewModels.Product
 
         private void Update()
         {
-            SupplyModels = new BaseQuery().Fill<SupplyModel>(CommandToExecute);
+            SupplyModels = new BaseQuery().Fill<SupplyModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(SupplyModels));
         }
 
@@ -65,6 +64,7 @@ namespace InventoryApp.ViewModels.Product
             items.Product.Group.Contains(searchText) ||
             items.Product.Description.Contains(searchText) ||
             items.Provider.Name.Contains(searchText) ||
+            items.Provider.Phone.Contains(searchText) ||
             items.Provider.Surname.Contains(searchText)
             ).ToList();
             if (!SupplyModels.SequenceEqual(searchResult))

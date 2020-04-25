@@ -4,18 +4,71 @@ using InventoryApp.Models.User;
 using InventoryControl.Models.Base;
 using System.Linq;
 using System;
+using InventoryApp.Models.Base;
 
 namespace InventoryApp.ViewModels.User
 {
     class ClientViewModel : ViewModelsBase
     {
-        private const string CommandToExecute = "GetClient";
+        public ClientViewModel()
+        {
+            ClientModels = new ObservableCollection<ClientModel>();
+            DeleteCommand = new RelayCommand((obj) => Delete());
+            AddCommand = new RelayCommand((obj) => Add());
+            AddNewClient = new ClientModel();
+            ClientLocationSource = new BaseQuery().GetAdress(null);
+            Update();
+        }
+
+        #region Properties
         private const string TableName = "Client";
-        private string searchText;
         public string ClientLocationSource { get; set; }
 
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public RelayCommand DeleteCommand { get; set; }
+        public RelayCommand AddCommand { get; set; }
+
+        private string notificationMessage;
+        public string NotificationMessage
+        {
+            get => notificationMessage;
+            set
+            {
+                if (value != notificationMessage)
+                {
+                    notificationMessage = value;
+                    OnPropertyChanged(nameof(NotificationMessage));
+                }
+            }
+        }
+
+        private bool isActive;
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                if (value != isActive)
+                {
+                    isActive = value;
+                    OnPropertyChanged(nameof(IsActive));
+                }
+            }
+        }
+
+        private ClientModel addNewClient;
+        public ClientModel AddNewClient
+        {
+            get => addNewClient;
+            set
+            {
+                if (value != addNewClient)
+                {
+                    addNewClient = value;
+                    OnPropertyChanged(nameof(AddNewClient));
+                }
+            }
+        }
 
         private ClientModel selectedItem;
         public ClientModel SelectedItem
@@ -26,16 +79,17 @@ namespace InventoryApp.ViewModels.User
                 if (value != selectedItem)
                 {
                     selectedItem = value;
-                    OnPropertyChanged(nameof(SearchText));
-                    if(ClientLocationSource != selectedItem.Adress)
+                    OnPropertyChanged(nameof(SelectedItem));
+                    if (ClientLocationSource != selectedItem?.Adress)
                     {
-                        ClientLocationSource = new BaseQuery().GetAdress(selectedItem.Adress);
+                        ClientLocationSource = new BaseQuery().GetAdress(selectedItem?.Adress);
                         OnPropertyChanged(nameof(ClientLocationSource));
                     }
                 }
             }
         }
 
+        private string searchText;
         public string SearchText
         {
             get => searchText;
@@ -57,26 +111,57 @@ namespace InventoryApp.ViewModels.User
                 }
             }
         }
+        #endregion
 
-        public ClientViewModel()
-        {
-            ClientModels = new ObservableCollection<ClientModel>();
-            DeleteCommand = new RelayCommand((obj) => Delete());
-            Update();
-            //TODO Replace with current location
-            ClientLocationSource = new BaseQuery().GetAdress(null);
-        }
-
+        #region Functions
         private void Update()
         {
-            ClientModels = new BaseQuery().Fill<ClientModel>(CommandToExecute);
+            ClientModels = new BaseQuery().Fill<ClientModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ClientModels));
         }
 
         private void Delete()
         {
-            new BaseQuery().Delete(TableName, SelectedItem.Id);
-            ClientModels.Remove(SelectedItem);
+            if (SelectedItem?.Id != null)
+            {
+                bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
+                ClientModels.Remove(SelectedItem);
+                if (isCompleted)
+                {
+                    NotificationMessage = $"Info: Client is deleted.";
+                    IsActive = true;
+                }
+                else
+                {
+                    NotificationMessage = "Error: Deleting client failed.";
+                    IsActive = true;
+                }
+            }
+            else
+            {
+                NotificationMessage = "Error: No clients selected.";
+                IsActive = true;
+            }
+            //Set timer as setting
+            BaseModel.DelayAction(5000, () => HideNotification());
+        }
+
+        private void Add()
+        {
+            bool isCompleted = new BaseQuery().Add(TableName, AddNewClient);
+            ClientModels.Add(AddNewClient);
+            if (isCompleted)
+            {
+                NotificationMessage = $"Info: {AddNewClient.Name} is added.";
+                IsActive = true;
+            }
+            else
+            {
+                NotificationMessage = "Error: Adding new client failed.";
+                IsActive = true;
+            }
+            //Set timer as setting
+            BaseModel.DelayAction(5000, () => HideNotification());
         }
 
         private void Find(string searchText)
@@ -85,6 +170,7 @@ namespace InventoryApp.ViewModels.User
             items.Name.Contains(searchText) ||
             items.Surname.Contains(searchText) ||
             items.Status.Contains(searchText) ||
+            items.Phone.Contains(searchText) ||
             items.Adress.Contains(searchText)
             ).ToList();
             if (!ClientModels.SequenceEqual(searchResult))
@@ -97,5 +183,11 @@ namespace InventoryApp.ViewModels.User
                 OnPropertyChanged(nameof(ClientModels));
             }
         }
+
+        public void HideNotification()
+        {
+            IsActive = false;
+        }
+        #endregion
     }
 }

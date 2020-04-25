@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Windows.Threading;
 
 namespace InventoryApp.Models.Base
 {
@@ -18,6 +19,18 @@ namespace InventoryApp.Models.Base
         public static string RemoveSpecialCharacters(string value)
         {
             return Regex.Replace(value, "[^a-zA-Z0-9_.]+", "", RegexOptions.Compiled);
+        }
+
+        public static void DelayAction(int millisecond, Action action)
+        {
+            var timer = new DispatcherTimer();
+            timer.Tick += delegate
+            {
+                action.Invoke();
+                timer.Stop();
+            };
+            timer.Interval = TimeSpan.FromMilliseconds(millisecond);
+            timer.Start();
         }
     }
 }

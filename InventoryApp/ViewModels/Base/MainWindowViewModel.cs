@@ -142,7 +142,7 @@ namespace InventoryApp.ViewModels.Base
 
         private void Backup()
         {
-            if (baseQuery.ExecuteQuery("") == true)
+            if (baseQuery.ExecuteQuery<MainWindowViewModel>("") == true)
             {
                 MessageBox.Show("Backup complete. Path to backup folder: " + Properties.Settings.Default.RestorePath);
             }
@@ -154,7 +154,7 @@ namespace InventoryApp.ViewModels.Base
 
         private void Restore()
         {
-            if (baseQuery.ExecuteQuery("") == true)
+            if (baseQuery.ExecuteQuery<MainWindowViewModel>("") == true)
             {
                 MessageBox.Show("Restore complete. Please reload application.");
             }

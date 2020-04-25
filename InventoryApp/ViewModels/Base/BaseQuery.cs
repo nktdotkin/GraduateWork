@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using InventoryApp.Models.Base;
 using Microsoft.VisualStudio.PlatformUI;
 
@@ -69,14 +70,14 @@ namespace InventoryApp.ViewModels.Base
             return collection;
         }
 
-        public void Add()
+        public bool Add<T>(string tableName, T instanse) where T : class
         {
-
+            return ExecuteQuery(null, $"Set{tableName}", instanse, true);
         }
 
-        public void Delete(string tableName, int id)
+        public bool Delete(string tableName, int id)
         {
-            ExecuteQuery($"DELETE FROM {tableName} WHERE {tableName}Id = {id}");
+            return ExecuteQuery<BaseQuery>($"DELETE FROM {tableName} WHERE {tableName}Id = {id}");
         }
 
         public ObservableCollection<T> Find<T>(ObservableCollection<T> searchInCollection, string searchItem) where T : class
@@ -94,21 +95,36 @@ namespace InventoryApp.ViewModels.Base
         }
 
         //redo because of recover\save DB
-        public bool ExecuteQuery(string Expression, bool isCompleted = false)
+        public bool ExecuteQuery<T>(string Expression, string parametlessProcedureName = null, T instanse = null, bool parametlessQuery = false, bool isCompleted = false) where T : class
         {
             try
             {
                 connection = new SqlConnection(connectionString);
                 connection.Open();
-                command = new SqlCommand(Expression, connection);              
-                var exetudedCommand = command.ExecuteReader();
-                isCompleted = exetudedCommand.HasRows;
-                connection.Close();
+                switch (parametlessQuery)
+                {
+                    case true:
+                        command = new SqlCommand(parametlessProcedureName, connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        foreach (var fields in instanse.GetType().GetProperties())
+                        {
+                            command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.VarChar)).Value = fields.GetValue(instanse);
+                        }                     
+                        command.ExecuteNonQuery();
+                        isCompleted = true;
+                        break;
+                    case false:
+                        command = new SqlCommand(Expression, connection);
+                        var exetudedCommand = command.ExecuteReader();
+                        isCompleted = true;
+                        break;
+                }
             }
             catch(Exception e)
             {
                 MessageBox.Show(e.Message + e.HelpLink);
             }
+            connection.Close();
             return isCompleted;
         }
 

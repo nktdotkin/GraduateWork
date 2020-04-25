@@ -27,6 +27,6 @@
             <materialDesign:PackIcon Kind="PowerOff" Foreground="Black"/>
         </Button>
         <TextBox materialDesign:HintAssist.Hint="Login" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="10" Margin="80,150,40,255" Text="{Binding UserName}" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
-        <PasswordBox x:Name="PasswordBox" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" MaxLength="12" Margin="80,230,39,175" FontFamily="Arial" FontSize="18" />
+        <PasswordBox x:Name="PasswordBox" materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.HelperText="At least 8 characters" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" MaxLength="12" Margin="80,230,39,175" FontFamily="Arial" FontSize="18" />
     </Grid>
 </Window>

@@ -17,9 +17,8 @@
         </Button>
         <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="100" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="200,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         <Grid Margin="0,180,0,0">
-            <DataGrid Width="Auto" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ClientModels}" SelectedItem="{Binding SelectedItem}">
+            <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ClientModels}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <!--Add a setting to change column visibility-->
                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name"/>
                     <DataGridTextColumn Binding="{Binding Path=Surname}" Header="Surname"/>
                     <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Adress"/>
@@ -30,8 +29,56 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <Border Margin="0,120,60,60" Width="600" HorizontalAlignment="Right">
-            <browser:ChromiumWebBrowser Address="{Binding ClientLocationSource, UpdateSourceTrigger=PropertyChanged}"/>
-        </Border>
+        <Expander Margin="900,120,60,60" HorizontalAlignment="Left" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+            <Expander.Header>
+                <TextBlock Text="Show client adress" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="90"/>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Expander.Header>
+            <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                <TextBlock Text="Adress:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                <browser:ChromiumWebBrowser Height="800" Width="600" Address="{Binding ClientLocationSource, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+        </Expander>
+        <Expander Margin="900,360,60,60" HorizontalAlignment="Left" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+            <Expander.Header>
+                <TextBlock Text="Add new client" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="90"/>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </Expander.Header>
+            <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                <TextBlock Text="Client:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                <StackPanel Width="300" Background="{DynamicResource MaterialDesignPaper}">
+                    <TextBox Text="{Binding AddNewClient.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name" MaxLength="30"/>
+                    <TextBox Text="{Binding AddNewClient.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Surname" MaxLength="30"/>
+                    <TextBox Text="{Binding AddNewClient.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Adress" MaxLength="50"/>
+                    <TextBox Text="{Binding AddNewClient.Phone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Phone" MaxLength="11"/>
+                    <TextBox Text="{Binding AddNewClient.Email, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Email" MaxLength="50"/>
+                    <ComboBox Height="35" materialDesign:HintAssist.Hint="Status"  ItemsSource="{Binding ClientModels}"
+                    DisplayMemberPath="Status"
+                    SelectedValuePath="Status"
+                    SelectedValue="{Binding AddNewClient.Status}" />
+                    <ComboBox Height="35" materialDesign:HintAssist.Hint="StoreType"  ItemsSource="{Binding ClientModels}"
+                    DisplayMemberPath="StoreType"
+                    SelectedValuePath="StoreType"
+                    SelectedValue="{Binding AddNewClient.StoreType}" />
+                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddCommand}">
+                            ADD
+                        </Button>
+                        <Button Command="{Binding DeleteCommand}" ToolTip="Select client in the grid to delete" Style="{DynamicResource MaterialDesignFlatButton}">
+                            DELETE
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+        <materialDesign:Snackbar Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}">
+            <materialDesign:SnackbarMessage HorizontalAlignment="Center" Content="{Binding NotificationMessage}" />
+        </materialDesign:Snackbar>
     </Grid>
 </UserControl>
