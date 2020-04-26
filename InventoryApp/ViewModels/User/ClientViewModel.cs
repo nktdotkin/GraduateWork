@@ -1,10 +1,9 @@
 ﻿using InventoryApp.ViewModels.Base;
 using System.Collections.ObjectModel;
 using InventoryApp.Models.User;
-using InventoryControl.Models.Base;
+using InventoryApp.Models.Base;
 using System.Linq;
 using System;
-using InventoryApp.Models.Base;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -143,7 +142,7 @@ namespace InventoryApp.ViewModels.User
                 IsActive = true;
             }
             //Set timer as setting
-            BaseModel.DelayAction(5000, () => HideNotification());
+            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void Add()
@@ -161,7 +160,7 @@ namespace InventoryApp.ViewModels.User
                 IsActive = true;
             }
             //Set timer as setting
-            BaseModel.DelayAction(5000, () => HideNotification());
+            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void Find(string searchText)
@@ -184,7 +183,7 @@ namespace InventoryApp.ViewModels.User
             }
         }
 
-        public void HideNotification()
+        private void HideNotification()
         {
             IsActive = false;
         }

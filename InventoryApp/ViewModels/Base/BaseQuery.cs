@@ -116,13 +116,13 @@ namespace InventoryApp.ViewModels.Base
                     case false:
                         command = new SqlCommand(Expression, connection);
                         var exetudedCommand = command.ExecuteReader();
-                        isCompleted = true;
+                        isCompleted = exetudedCommand.HasRows;
                         break;
                 }
             }
             catch(Exception e)
             {
-                MessageBox.Show(e.Message + e.HelpLink);
+                //MessageBox.Show(e.Message + e.HelpLink);
             }
             connection.Close();
             return isCompleted;

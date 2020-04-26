@@ -1,14 +1,12 @@
 ﻿using InventoryApp.ViewModels.Base;
-using InventoryControl.Models.Base;
 using System;
-using System.Configuration;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Windows.Controls;
 using InventoryApp.Security;
 using System.Windows;
 using System.Data;
 using InventoryApp.Views.Main;
+using InventoryApp.Models.Base;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -20,13 +18,37 @@ namespace InventoryApp.ViewModels.User
             SingUpCommand = new RelayCommand(SingUp);
         }
 
-        public RelayCommand SignInCommand { get ; set ; }
-        public RelayCommand SingUpCommand { get; set; }
+        #region Properties
+        private bool isActive;
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                if (value != isActive)
+                {
+                    isActive = value;
+                    OnPropertyChanged(nameof(IsActive));
+                }
+            }
+        }
 
-        private readonly string connectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
-        private SqlConnection connection;
-        private SqlCommand command;
-        private SqlDataReader reader;
+        private string notificationMessage;
+        public string NotificationMessage
+        {
+            get => notificationMessage;
+            set
+            {
+                if (value != notificationMessage)
+                {
+                    notificationMessage = value;
+                    OnPropertyChanged(nameof(NotificationMessage));
+                }
+            }
+        }
+
+        public RelayCommand SignInCommand { get; set; }
+        public RelayCommand SingUpCommand { get; set; }
 
         public string UserName
         {
@@ -40,68 +62,58 @@ namespace InventoryApp.ViewModels.User
                 else { Properties.Settings.Default.UserName = GenerateUserName(); }
             }
         }
+        #endregion
 
+        #region Functions
         private void SignIn(object param)
         {
-            var passwordBox = param as PasswordBox;
-            try
+            var signInQuery = $"SELECT UserName, UserPass FROM [ManagerLogInfo] WHERE UserName = '{UserName}' and UserPass = '{PasswordSecurity.PasswordEncrypt(param as PasswordBox)}'";
+            bool isSignedIn = new BaseQuery().ExecuteQuery<LoginViewModel>(signInQuery);
+            if (isSignedIn)
             {
-                connection = new SqlConnection(connectionString);
-                connection.Open();
-                command = new SqlCommand($"SELECT UserName, UserPass FROM [ManagerLogInfo] WHERE UserName = '{UserName}' and UserPass = '{PasswordSecurity.PasswordEncrypt(passwordBox)}'", connection);
-                reader = command.ExecuteReader();
-                if (reader.Read())
-                {
-                    Properties.Settings.Default.CurrentUser = UserName;
-                    new MainWindow().Show();
-                    Application.Current.Windows[0].Close();
-                }
-                else
-                {
-                    MessageBox.Show("Unknown Credentials. Try Again.");
-                }
+                Properties.Settings.Default.CurrentUser = UserName;
+                new MainWindow().Show();
+                Application.Current.Windows[0].Close();
             }
-            catch (Exception e)
+            else
             {
-                MessageBox.Show(e.Message);
+                NotificationMessage = $"Error: Login failed.";
+                IsActive = true;
             }
-            finally
-            {
-                reader.Close();
-                connection.Close();
-            }
+            //Set timer as setting
+            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void SingUp(object param)
         {
-            var passwordBox = param as PasswordBox;
-            try
+            var signUpQuery = $"INSERTI INTO [ManagerLogInfo] VALUES ({UserName}, {PasswordSecurity.PasswordEncrypt(param as PasswordBox)})";
+            bool isSignedUp = new BaseQuery().ExecuteQuery<LoginViewModel>(signUpQuery);
+            if (isSignedUp)
             {
-                connection = new SqlConnection(connectionString);
-                command = new SqlCommand("CreateManager", connection);
-                command.Parameters.Add(new SqlParameter("@userName", SqlDbType.VarChar)).Value = UserName;
-                command.Parameters.Add(new SqlParameter("@userPass", SqlDbType.VarChar)).Value = PasswordSecurity.PasswordEncrypt(passwordBox);
-                command.CommandType = CommandType.StoredProcedure;
-                connection.Open();
-                command.ExecuteNonQuery();
-                Properties.Settings.Default.UserName = UserName;
-                MessageBox.Show("You succesfully registered.");
+                NotificationMessage = $"Info: Successfully registered.";
+                IsActive = true;
             }
-            catch (Exception e)
+            else
             {
-                MessageBox.Show(e.Message);
+                NotificationMessage = $"Error: Registration failed.";
+                IsActive = true;
             }
-            finally
-            {
-                connection.Close();
-            }
+            //Set timer as setting
+            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
+        //Remove?
         private string GenerateUserName()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();
             return new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
         }
+
+        private void HideNotification()
+        {
+            IsActive = false;
+        }
+        #endregion
     }
 }

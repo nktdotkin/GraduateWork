@@ -1,7 +1,7 @@
 ﻿using InventoryApp.ViewModels.Base;
 using System.Collections.ObjectModel;
 using InventoryApp.Models.Product;
-using InventoryControl.Models.Base;
+using InventoryApp.Models.Base;
 using System.Linq;
 
 namespace InventoryApp.ViewModels.Product
