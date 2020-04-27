@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 
@@ -31,6 +32,19 @@ namespace InventoryApp.Models.Base
             };
             timer.Interval = TimeSpan.FromMilliseconds(millisecond);
             timer.Start();
+        }
+
+        public static bool EmailCheck(string email)
+        {
+            var emailPattern = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            return emailPattern.Match(email).Success;
+        }
+
+        public static string GenerateUserName()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

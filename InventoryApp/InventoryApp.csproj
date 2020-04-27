@@ -221,6 +221,7 @@
     <Compile Include="ViewModels\Product\SupplyViewModel.cs" />
     <Compile Include="ViewModels\Service\ExportViewModel.cs" />
     <Compile Include="ViewModels\Service\ImportViewModel.cs" />
+    <Compile Include="ViewModels\Service\NotificationServiceViewModel.cs" />
     <Compile Include="ViewModels\Service\SearchViewModel.cs" />
     <Compile Include="ViewModels\Service\StatsViewModel.cs" />
     <Compile Include="ViewModels\User\ClientViewModel.cs" />

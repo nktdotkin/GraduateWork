@@ -1,12 +1,10 @@
 ﻿using InventoryApp.ViewModels.Base;
-using System;
-using System.Linq;
 using System.Windows.Controls;
 using InventoryApp.Security;
 using System.Windows;
-using System.Data;
 using InventoryApp.Views.Main;
 using InventoryApp.Models.Base;
+using InventoryApp.ViewModels.Service;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -16,50 +14,25 @@ namespace InventoryApp.ViewModels.User
         {
             SignInCommand = new RelayCommand(SignIn);
             SingUpCommand = new RelayCommand(SingUp);
+            Notification = new NotificationServiceViewModel();
         }
 
         #region Properties
-        private bool isActive;
-        public bool IsActive
-        {
-            get => isActive;
-            set
-            {
-                if (value != isActive)
-                {
-                    isActive = value;
-                    OnPropertyChanged(nameof(IsActive));
-                }
-            }
-        }
-
-        private string notificationMessage;
-        public string NotificationMessage
-        {
-            get => notificationMessage;
-            set
-            {
-                if (value != notificationMessage)
-                {
-                    notificationMessage = value;
-                    OnPropertyChanged(nameof(NotificationMessage));
-                }
-            }
-        }
 
         public RelayCommand SignInCommand { get; set; }
         public RelayCommand SingUpCommand { get; set; }
+        public NotificationServiceViewModel Notification { get; set; }
 
         public string UserName
         {
-            get { return string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? GenerateUserName() : Properties.Settings.Default.UserName; }
+            get { return string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? BaseModel.GenerateUserName() : Properties.Settings.Default.UserName; }
             set
             {
                 if (Properties.Settings.Default.UserName != value && value.Length > 7)
                 {
                     Properties.Settings.Default.UserName = value; Properties.Settings.Default.Save(); OnPropertyChanged(nameof(UserName));
                 }
-                else { Properties.Settings.Default.UserName = GenerateUserName(); }
+                else { Properties.Settings.Default.UserName = BaseModel.GenerateUserName(); }
             }
         }
         #endregion
@@ -77,11 +50,8 @@ namespace InventoryApp.ViewModels.User
             }
             else
             {
-                NotificationMessage = $"Error: Login failed.";
-                IsActive = true;
+                Notification.ShowNotification("Error: Login failed.");
             }
-            //Set timer as setting
-            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void SingUp(object param)
@@ -90,29 +60,12 @@ namespace InventoryApp.ViewModels.User
             bool isSignedUp = new BaseQuery().ExecuteQuery<LoginViewModel>(signUpQuery);
             if (isSignedUp)
             {
-                NotificationMessage = $"Info: Successfully registered.";
-                IsActive = true;
+                Notification.ShowNotification("Info: Successfully registered.");
             }
             else
             {
-                NotificationMessage = $"Error: Registration failed.";
-                IsActive = true;
+                Notification.ShowNotification("Error: Registration failed.");
             }
-            //Set timer as setting
-            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
-        }
-
-        //Remove?
-        private string GenerateUserName()
-        {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var random = new Random();
-            return new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
-        }
-
-        private void HideNotification()
-        {
-            IsActive = false;
         }
         #endregion
     }

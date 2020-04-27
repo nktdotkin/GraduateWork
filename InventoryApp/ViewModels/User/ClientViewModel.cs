@@ -4,6 +4,7 @@ using InventoryApp.Models.User;
 using InventoryApp.Models.Base;
 using System.Linq;
 using System;
+using InventoryApp.ViewModels.Service;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -16,6 +17,7 @@ namespace InventoryApp.ViewModels.User
             AddCommand = new RelayCommand((obj) => Add());
             AddNewClient = new ClientModel();
             ClientLocationSource = new BaseQuery().GetAdress(null);
+            Notification = new NotificationServiceViewModel();
             Update();
         }
 
@@ -27,33 +29,7 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
-        private string notificationMessage;
-        public string NotificationMessage
-        {
-            get => notificationMessage;
-            set
-            {
-                if (value != notificationMessage)
-                {
-                    notificationMessage = value;
-                    OnPropertyChanged(nameof(NotificationMessage));
-                }
-            }
-        }
-
-        private bool isActive;
-        public bool IsActive
-        {
-            get => isActive;
-            set
-            {
-                if (value != isActive)
-                {
-                    isActive = value;
-                    OnPropertyChanged(nameof(IsActive));
-                }
-            }
-        }
+        public NotificationServiceViewModel Notification { get; set; }
 
         private ClientModel addNewClient;
         public ClientModel AddNewClient
@@ -127,40 +103,31 @@ namespace InventoryApp.ViewModels.User
                 ClientModels.Remove(SelectedItem);
                 if (isCompleted)
                 {
-                    NotificationMessage = $"Info: Client is deleted.";
-                    IsActive = true;
+                    Notification.ShowNotification("Info: Client is deleted.");
                 }
                 else
                 {
-                    NotificationMessage = "Error: Deleting client failed.";
-                    IsActive = true;
+                    Notification.ShowNotification("Error: Deleting client failed.");
                 }
             }
             else
             {
-                NotificationMessage = "Error: No clients selected.";
-                IsActive = true;
+                Notification.ShowNotification("Error: No clients selected.");
             }
-            //Set timer as setting
-            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void Add()
         {
-            bool isCompleted = new BaseQuery().Add(TableName, AddNewClient);
-            ClientModels.Add(AddNewClient);
+            bool isCompleted = new BaseQuery().Add(TableName, AddNewClient);           
             if (isCompleted)
             {
-                NotificationMessage = $"Info: {AddNewClient.Name} is added.";
-                IsActive = true;
+                ClientModels.Add(AddNewClient);
+                Notification.ShowNotification($"Info: {AddNewClient.Name} is added.");
             }
             else
             {
-                NotificationMessage = "Error: Adding new client failed.";
-                IsActive = true;
+                Notification.ShowNotification("Error: Adding new client failed.");
             }
-            //Set timer as setting
-            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void Find(string searchText)
@@ -181,11 +148,6 @@ namespace InventoryApp.ViewModels.User
                 }
                 OnPropertyChanged(nameof(ClientModels));
             }
-        }
-
-        private void HideNotification()
-        {
-            IsActive = false;
         }
         #endregion
     }

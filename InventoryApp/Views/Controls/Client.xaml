@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InventoryApp.ViewModels.User"
+             xmlns:notify="clr-namespace:InventoryApp.ViewModels.Service"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:browser="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              mc:Ignorable="d" 
@@ -56,8 +57,8 @@
                     <TextBox Text="{Binding AddNewClient.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name" MaxLength="30"/>
                     <TextBox Text="{Binding AddNewClient.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Surname" MaxLength="30"/>
                     <TextBox Text="{Binding AddNewClient.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Adress" MaxLength="50"/>
-                    <TextBox Text="{Binding AddNewClient.Phone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Phone" MaxLength="11"/>
-                    <TextBox Text="{Binding AddNewClient.Email, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Email" MaxLength="50"/>
+                    <TextBox Text="{Binding AddNewClient.Phone, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Phone" MaxLength="20"/>
+                    <TextBox Text="{Binding AddNewClient.Email, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Email" MaxLength="50"/>
                     <ComboBox Height="35" materialDesign:HintAssist.Hint="Status"  ItemsSource="{Binding ClientModels}"
                     DisplayMemberPath="Status"
                     SelectedValuePath="Status"
@@ -77,8 +78,8 @@
                 </StackPanel>
             </StackPanel>
         </Expander>
-        <materialDesign:Snackbar Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}">
-            <materialDesign:SnackbarMessage HorizontalAlignment="Center" Content="{Binding NotificationMessage}" />
+        <materialDesign:Snackbar Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}">
+            <materialDesign:SnackbarMessage HorizontalAlignment="Center" Content="{Binding Notification.NotificationMessage, UpdateSourceTrigger=PropertyChanged}" />
         </materialDesign:Snackbar>
     </Grid>
 </UserControl>

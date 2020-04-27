@@ -1,6 +1,7 @@
 ﻿using InventoryApp.Models.Base;
 using InventoryApp.Models.User;
 using InventoryApp.ViewModels.Base;
+using InventoryApp.ViewModels.Service;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -15,6 +16,7 @@ namespace InventoryApp.ViewModels.User
             AddCommand = new RelayCommand((obj) => Add());
             AddNewProvider = new ProviderModel();
             ProviderLocationSource = new BaseQuery().GetAdress(null);
+            Notification = new NotificationServiceViewModel();
             Update();
         }
 
@@ -26,33 +28,7 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
-        private string notificationMessage;
-        public string NotificationMessage
-        {
-            get => notificationMessage;
-            set
-            {
-                if (value != notificationMessage)
-                {
-                    notificationMessage = value;
-                    OnPropertyChanged(nameof(NotificationMessage));
-                }
-            }
-        }
-
-        private bool isActive;
-        public bool IsActive
-        {
-            get => isActive;
-            set
-            {
-                if (value != isActive)
-                {
-                    isActive = value;
-                    OnPropertyChanged(nameof(IsActive));
-                }
-            }
-        }
+        public NotificationServiceViewModel Notification { get; set; }
 
         private ProviderModel addNewProvider;
         public ProviderModel AddNewProvider
@@ -127,40 +103,31 @@ namespace InventoryApp.ViewModels.User
                 ProviderModels.Remove(SelectedItem);
                 if (isCompleted)
                 {
-                    NotificationMessage = $"Info: Provider is deleted.";
-                    IsActive = true;
+                    Notification.ShowNotification("Info: Provider is deleted.");
                 }
                 else
                 {
-                    NotificationMessage = "Error: Deleting provider failed.";
-                    IsActive = true;
+                    Notification.ShowNotification("Error: Deleting provider failed.");
                 }
             }
             else
             {
-                NotificationMessage = "Error: No providers selected.";
-                IsActive = true;
+                Notification.ShowNotification("Error: No providers selected.");
             }
-            //Set timer as setting
-            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void Add()
         {
             bool isCompleted = new BaseQuery().Add(TableName, AddNewProvider);
-            ProviderModels.Add(AddNewProvider);
             if (isCompleted)
             {
-                NotificationMessage = $"Info: {AddNewProvider.Name} is added.";
-                IsActive = true;
+                ProviderModels.Add(AddNewProvider);
+                Notification.ShowNotification($"Info: {AddNewProvider.Name} is added.");
             }
             else
             {
-                NotificationMessage = "Error: Adding new provider failed.";
-                IsActive = true;
+                Notification.ShowNotification("Error: Adding new provider failed.");
             }
-            //Set timer as setting
-            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
         }
 
         private void Find(string searchText)
@@ -181,11 +148,6 @@ namespace InventoryApp.ViewModels.User
                 }
                 OnPropertyChanged(nameof(ProviderModels));
             }
-        }
-
-        private void HideNotification()
-        {
-            IsActive = false;
         }
         #endregion
     }

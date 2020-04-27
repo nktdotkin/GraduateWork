@@ -55,8 +55,8 @@
                     <TextBox Text="{Binding AddNewProvider.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name" MaxLength="30"/>
                     <TextBox Text="{Binding AddNewProvider.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Surname" MaxLength="30"/>
                     <TextBox Text="{Binding AddNewProvider.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Adress" MaxLength="50"/>
-                    <TextBox Text="{Binding AddNewProvider.Phone, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Phone" MaxLength="11"/>
-                    <TextBox Text="{Binding AddNewProvider.Email, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Email" MaxLength="50"/>
+                    <TextBox Text="{Binding AddNewProvider.Phone, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Phone" MaxLength="11"/>
+                    <TextBox Text="{Binding AddNewProvider.Email, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Email" MaxLength="50"/>
                     <TextBox Text="{Binding AddNewProvider.Company, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Company" MaxLength="50"/>
                     <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
                         <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddCommand}">
@@ -69,8 +69,8 @@
                 </StackPanel>
             </StackPanel>
         </Expander>
-        <materialDesign:Snackbar Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}">
-            <materialDesign:SnackbarMessage HorizontalAlignment="Center" Content="{Binding NotificationMessage}" />
+        <materialDesign:Snackbar Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}">
+            <materialDesign:SnackbarMessage HorizontalAlignment="Center" Content="{Binding Notification.NotificationMessage, UpdateSourceTrigger=PropertyChanged}" />
         </materialDesign:Snackbar>
     </Grid>
 </UserControl>
