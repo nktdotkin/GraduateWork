@@ -1,24 +1,13 @@
-﻿using InventoryApp.Models.Base;
-using InventoryApp.ViewModels.Base;
+﻿using InventoryApp.ViewModels.Base;
+using MaterialDesignThemes.Wpf;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace InventoryApp.ViewModels.Service
 {
     class NotificationServiceViewModel : ViewModelsBase
     {
-        private string notificationMessage;
-        public string NotificationMessage
-        {
-            get => notificationMessage;
-            set
-            {
-                if (value != notificationMessage)
-                {
-                    notificationMessage = value;
-                    OnPropertyChanged(nameof(NotificationMessage));
-                }
-            }
-        }
-
         private bool isActive;
         public bool IsActive
         {
@@ -33,16 +22,33 @@ namespace InventoryApp.ViewModels.Service
             }
         }
 
-        public void ShowNotification(string message)
+        private SnackbarMessageQueue notificationMessageQueue;
+        public SnackbarMessageQueue NotificationMessageQueue
         {
-            NotificationMessage = message;
-            IsActive = true;
-            BaseModel.DelayAction(Properties.Settings.Default.NotificationTimer, () => HideNotification());
+            get => notificationMessageQueue;
+            set
+            {
+                if (value != notificationMessageQueue)
+                {
+                    notificationMessageQueue = value;
+                    OnPropertyChanged(nameof(NotificationMessageQueue));
+                }
+            }
         }
 
-        private void HideNotification()
+        public void ShowListNotification(List<ValidationResult> Messages)
         {
-            IsActive = false;
+            NotificationMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3000));
+            IsActive = true;
+            foreach (var message in Messages)
+            {
+                NotificationMessageQueue.Enqueue(message);
+            }
+        }
+
+        public void ShowNotification(string message)
+        {
+            ShowListNotification(new List<ValidationResult>() { new ValidationResult(message) });
         }
     }
 }

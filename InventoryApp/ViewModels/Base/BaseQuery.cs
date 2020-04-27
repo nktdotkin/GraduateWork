@@ -110,15 +110,14 @@ namespace InventoryApp.ViewModels.Base
                         {
                             command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.VarChar)).Value = fields.GetValue(instanse);
                         }                     
-                        command.ExecuteNonQuery();
-                        isCompleted = true;
                         break;
                     case false:
                         command = new SqlCommand(Expression, connection);
-                        var exetudedCommand = command.ExecuteReader();
-                        isCompleted = exetudedCommand.HasRows;
                         break;
                 }
+                var exetudedCommand = command.ExecuteNonQuery();
+                if (exetudedCommand > 0)
+                    isCompleted = true;
             }
             catch(Exception e)
             {

@@ -17,6 +17,7 @@ namespace InventoryApp.ViewModels.User
             AddNewProvider = new ProviderModel();
             ProviderLocationSource = new BaseQuery().GetAdress(null);
             Notification = new NotificationServiceViewModel();
+            ModelValidation = new ValidationViewModel<ProviderModel>();
             Update();
         }
 
@@ -29,6 +30,7 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand AddCommand { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
+        private ValidationViewModel<ProviderModel> ModelValidation { get; set; }
 
         private ProviderModel addNewProvider;
         public ProviderModel AddNewProvider
@@ -43,7 +45,6 @@ namespace InventoryApp.ViewModels.User
                 }
             }
         }
-
 
         private ProviderModel selectedItem;
         public ProviderModel SelectedItem
@@ -100,9 +101,9 @@ namespace InventoryApp.ViewModels.User
             if (SelectedItem?.Id != null)
             {
                 bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
-                ProviderModels.Remove(SelectedItem);
                 if (isCompleted)
                 {
+                    ProviderModels.Remove(SelectedItem);
                     Notification.ShowNotification("Info: Provider is deleted.");
                 }
                 else
@@ -118,15 +119,23 @@ namespace InventoryApp.ViewModels.User
 
         private void Add()
         {
-            bool isCompleted = new BaseQuery().Add(TableName, AddNewProvider);
-            if (isCompleted)
+            var errorList = ModelValidation.ValidateFields(AddNewProvider);
+            if (errorList.Any())
             {
-                ProviderModels.Add(AddNewProvider);
-                Notification.ShowNotification($"Info: {AddNewProvider.Name} is added.");
+                Notification.ShowListNotification(errorList);
             }
             else
             {
-                Notification.ShowNotification("Error: Adding new provider failed.");
+                bool isCompleted = new BaseQuery().Add(TableName, AddNewProvider);
+                if (isCompleted)
+                {
+                    ProviderModels.Add(AddNewProvider);
+                    Notification.ShowNotification($"Info: {AddNewProvider.Name} is added.");
+                }
+                else
+                {
+                    Notification.ShowNotification("Error: Adding new provider failed.");
+                }
             }
         }
 

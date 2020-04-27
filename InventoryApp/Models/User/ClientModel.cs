@@ -1,16 +1,12 @@
-﻿namespace InventoryApp.Models.User
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InventoryApp.Models.User
 {
     public class ClientModel : BaseUser
     {
-        private enum StatusEnum
-        {
-            Default = 0,
-            Bronze = 100,
-            Silver = 200,
-            Gold = 300,
-        }
-
+        [Required(ErrorMessage = "Please select status")]
         public string Status { get; set; }
+        [Required(ErrorMessage = "Please select store type")]
         public string StoreType { get; set; }
     }
 }

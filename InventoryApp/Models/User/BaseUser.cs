@@ -1,5 +1,6 @@
 ﻿using InventoryApp.Models.Base;
 using InventoryApp.ViewModels.Base;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace InventoryApp.Models.User
@@ -10,9 +11,17 @@ namespace InventoryApp.Models.User
         private string _email;
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Uncorrect name")]
+        [StringLength(30, MinimumLength = 3)]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Uncorrect surname")]
+        [StringLength(30, MinimumLength = 3)]
         public string Surname { get; set; }
+        [Required(ErrorMessage = "Uncorrect adress")]
+        [StringLength(50, MinimumLength = 10)]
         public string Adress { get; set; }
+        [Required(ErrorMessage = "Uncorrect phone number")]
+        [StringLength(20, MinimumLength = 7)]
         public string Phone
         {
             get
@@ -41,11 +50,13 @@ namespace InventoryApp.Models.User
                 }
             }
         }
+        [Required(ErrorMessage = "Uncorrect Email")]
+        [StringLength(50, MinimumLength = 7)]
         public string Email
         {
             get
             {
-                if (_phone == null)
+                if (_email == null)
                 {
                     return string.Empty;
                 }

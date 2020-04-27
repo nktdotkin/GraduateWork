@@ -5,6 +5,7 @@ using InventoryApp.Models.Base;
 using System.Linq;
 using System;
 using InventoryApp.ViewModels.Service;
+using InventoryApp.Models.Service;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -18,6 +19,8 @@ namespace InventoryApp.ViewModels.User
             AddNewClient = new ClientModel();
             ClientLocationSource = new BaseQuery().GetAdress(null);
             Notification = new NotificationServiceViewModel();
+            DataBaseStaticModels = new DataBaseStaticModels();
+            ModelValidation = new ValidationViewModel<ClientModel>();
             Update();
         }
 
@@ -30,6 +33,8 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand AddCommand { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
+        public DataBaseStaticModels DataBaseStaticModels { get; set; }
+        private ValidationViewModel<ClientModel> ModelValidation { get; set; }
 
         private ClientModel addNewClient;
         public ClientModel AddNewClient
@@ -100,9 +105,9 @@ namespace InventoryApp.ViewModels.User
             if (SelectedItem?.Id != null)
             {
                 bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
-                ClientModels.Remove(SelectedItem);
                 if (isCompleted)
                 {
+                    ClientModels.Remove(SelectedItem);
                     Notification.ShowNotification("Info: Client is deleted.");
                 }
                 else
@@ -118,15 +123,23 @@ namespace InventoryApp.ViewModels.User
 
         private void Add()
         {
-            bool isCompleted = new BaseQuery().Add(TableName, AddNewClient);           
-            if (isCompleted)
+            var errorList = ModelValidation.ValidateFields(AddNewClient);
+            if (errorList.Any())
             {
-                ClientModels.Add(AddNewClient);
-                Notification.ShowNotification($"Info: {AddNewClient.Name} is added.");
+                Notification.ShowListNotification(errorList);
             }
             else
             {
-                Notification.ShowNotification("Error: Adding new client failed.");
+                bool isCompleted = new BaseQuery().Add(TableName, AddNewClient);
+                if (isCompleted)
+                {
+                    ClientModels.Add(AddNewClient);
+                    Notification.ShowNotification($"Info: {AddNewClient.Name} is added.");
+                }
+                else
+                {
+                    Notification.ShowNotification("Error: Adding new client failed.");
+                }
             }
         }
 

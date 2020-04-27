@@ -28,8 +28,6 @@
         </Button>
         <TextBox materialDesign:HintAssist.Hint="Login" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="10" Margin="80,150,40,255" Text="{Binding UserName}" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         <PasswordBox x:Name="PasswordBox" materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.HelperText="At least 8 characters" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" MaxLength="12" Margin="80,230,39,175" FontFamily="Arial" FontSize="18" />
-        <materialDesign:Snackbar Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}">
-            <materialDesign:SnackbarMessage HorizontalAlignment="Center" Content="{Binding Notification.NotificationMessage, UpdateSourceTrigger=PropertyChanged}" />
-        </materialDesign:Snackbar>
+        <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>

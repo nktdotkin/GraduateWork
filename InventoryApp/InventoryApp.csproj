@@ -212,6 +212,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Base\RelayCommand.cs" />
+    <Compile Include="Models\Service\DataBaseStaticModels.cs" />
     <Compile Include="Security\PasswordSecurity.cs" />
     <Compile Include="ViewModels\Base\BaseQuery.cs" />
     <Compile Include="ViewModels\Base\MainWindowViewModel.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="ViewModels\Service\NotificationServiceViewModel.cs" />
     <Compile Include="ViewModels\Service\SearchViewModel.cs" />
     <Compile Include="ViewModels\Service\StatsViewModel.cs" />
+    <Compile Include="ViewModels\Service\ValidationViewModel.cs" />
     <Compile Include="ViewModels\User\ClientViewModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
     <Compile Include="ViewModels\User\ProviderViewModel.cs" />
@@ -294,7 +296,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataBase\" />
+    <Folder Include="DataBase\ProductImages\" />
     <Folder Include="Resources\Other\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,22 +1,15 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace InventoryApp.Models.Product
 {
     class ProductModel
-    {
-        private enum GroupEnum
-        {
-            Default = 0,
-            Electronics = 5,
-            Computers = 10,
-            Appliances = 15,
-            House = 20,
-            Auto = 25,
-            Work = 30
-        }
-        
+    {        
         public int Id { get; set; }
+        [Required(ErrorMessage = "Uncorrect name")]
+        [StringLength(50, MinimumLength = 5)]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Uncorrect description")]
+        [StringLength(50, MinimumLength = 5)]
         public string Description { get; set; }
         public int ExpirationDateDays { get; set; }
         public int Amount { get; set; }
@@ -24,6 +17,9 @@ namespace InventoryApp.Models.Product
         public decimal Tax { get; set; }
         public decimal TotalPrice { get; set; }
         public int GroupId { get; set; }
+        public string ImageLink { get; set; }
+        [Required(ErrorMessage = "Please select a group")]
+        [StringLength(50, MinimumLength = 5)]
         public string Group { get; set; }
     }
 }
