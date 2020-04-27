@@ -1,10 +1,7 @@
-﻿using InventoryApp.ViewModels.Product;
-using InventoryApp.ViewModels.User;
+﻿using InventoryApp.Models.Base;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
-using InventoryApp.Models.Base;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace InventoryApp.ViewModels.Base
 {
@@ -28,18 +25,7 @@ namespace InventoryApp.ViewModels.Base
             BackupCommand = new RelayCommand((obj) => Backup());
             RestoreCommand = new RelayCommand((obj) => Restore());
             LogoutCommand = new RelayCommand((obj) => Logout());
-            //Add setting to on\off this
-            //InitializeViewModels();
         }
-
-        //private void InitializeViewModels()
-        //{
-        //    new ClientViewModel();
-        //    new ProviderViewModel();
-        //    new ProductViewModel();
-        //    new ShipmentViewModel();
-        //    new SupplyViewModel();
-        //}
 
         public RelayCommand ClickTabCommand { get; set; }
         public RelayCommand BackupCommand { get; set; }
@@ -66,16 +52,17 @@ namespace InventoryApp.ViewModels.Base
             get => tabControl;
             set
             {
-                if (tabControl == value)
-                    return;
-                tabControl = value;
-                OnPropertyChanged(nameof(TabControl));
-                OnPropertyChanged(nameof(ProductSwitch));
-                OnPropertyChanged(nameof(StatsSwitch));
-                OnPropertyChanged(nameof(ShipmentSwitch));
-                OnPropertyChanged(nameof(ClientSwitch));
-                OnPropertyChanged(nameof(ProviderSwitch));
-                OnPropertyChanged(nameof(SupplySwitch));
+                if (value != tabControl)
+                {
+                    tabControl = value;
+                    OnPropertyChanged(nameof(TabControl));
+                    OnPropertyChanged(nameof(ProductSwitch));
+                    OnPropertyChanged(nameof(StatsSwitch));
+                    OnPropertyChanged(nameof(ShipmentSwitch));
+                    OnPropertyChanged(nameof(ClientSwitch));
+                    OnPropertyChanged(nameof(ProviderSwitch));
+                    OnPropertyChanged(nameof(SupplySwitch));
+                }
             }
         }
 

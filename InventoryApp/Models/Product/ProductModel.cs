@@ -3,7 +3,7 @@
 namespace InventoryApp.Models.Product
 {
     class ProductModel
-    {        
+    {
         public int Id { get; set; }
         [Required(ErrorMessage = "Uncorrect name")]
         [StringLength(50, MinimumLength = 5)]
@@ -19,7 +19,6 @@ namespace InventoryApp.Models.Product
         public int GroupId { get; set; }
         public string ImageLink { get; set; }
         [Required(ErrorMessage = "Please select a group")]
-        [StringLength(50, MinimumLength = 5)]
         public string Group { get; set; }
     }
 }

@@ -92,6 +92,7 @@ namespace InventoryApp.ViewModels.User
         #region Functions
         private void Update()
         {
+            ProviderModels.Clear();
             ProviderModels = new BaseQuery().Fill<ProviderModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProviderModels));
         }

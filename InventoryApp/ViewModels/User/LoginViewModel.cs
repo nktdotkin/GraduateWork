@@ -1,10 +1,10 @@
-﻿using InventoryApp.ViewModels.Base;
-using System.Windows.Controls;
+﻿using InventoryApp.Models.Base;
 using InventoryApp.Security;
-using System.Windows;
-using InventoryApp.Views.Main;
-using InventoryApp.Models.Base;
+using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Service;
+using InventoryApp.Views.Main;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace InventoryApp.ViewModels.User
 {

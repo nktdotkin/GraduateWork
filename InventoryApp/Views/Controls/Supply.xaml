@@ -10,10 +10,10 @@
         <local:SupplyViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <Button ToolTip="Search" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70" Margin="140,60,0,0">
+        <Button ToolTip="Search" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70" Margin="30,60,0,0">
             <materialDesign:PackIcon Kind="Search" Height="30" Width="30" Foreground="Black" />
         </Button>
-        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="100" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="200,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="200" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="90,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         <Grid Margin="0,180,0,0">
             <DataGrid Width="Auto" ColumnWidth="Auto" HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding SupplyModels}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>

@@ -1,11 +1,11 @@
-﻿using InventoryApp.ViewModels.Base;
-using System.Collections.ObjectModel;
-using InventoryApp.Models.User;
-using InventoryApp.Models.Base;
-using System.Linq;
-using System;
-using InventoryApp.ViewModels.Service;
+﻿using InventoryApp.Models.Base;
 using InventoryApp.Models.Service;
+using InventoryApp.Models.User;
+using InventoryApp.ViewModels.Base;
+using InventoryApp.ViewModels.Service;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -96,6 +96,7 @@ namespace InventoryApp.ViewModels.User
         #region Functions
         private void Update()
         {
+            ClientModels.Clear();
             ClientModels = new BaseQuery().Fill<ClientModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ClientModels));
         }

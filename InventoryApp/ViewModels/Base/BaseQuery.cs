@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using InventoryApp.Models.Base;
+using Microsoft.VisualStudio.PlatformUI;
+using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
-using InventoryApp.Models.Base;
-using Microsoft.VisualStudio.PlatformUI;
 
 namespace InventoryApp.ViewModels.Base
 {
@@ -61,7 +58,7 @@ namespace InventoryApp.ViewModels.Base
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                //MessageBox.Show(e.Message);
             }
             finally
             {
@@ -94,7 +91,6 @@ namespace InventoryApp.ViewModels.Base
             return searchInCollection;
         }
 
-        //redo because of recover\save DB
         public bool ExecuteQuery<T>(string Expression, string parametlessProcedureName = null, T instanse = null, bool parametlessQuery = false, bool isCompleted = false) where T : class
         {
             try
@@ -109,7 +105,7 @@ namespace InventoryApp.ViewModels.Base
                         foreach (var fields in instanse.GetType().GetProperties())
                         {
                             command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.VarChar)).Value = fields.GetValue(instanse);
-                        }                     
+                        }
                         break;
                     case false:
                         command = new SqlCommand(Expression, connection);
@@ -119,7 +115,7 @@ namespace InventoryApp.ViewModels.Base
                 if (exetudedCommand > 0)
                     isCompleted = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //MessageBox.Show(e.Message + e.HelpLink);
             }

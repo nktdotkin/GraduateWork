@@ -3,7 +3,6 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:local="clr-namespace:InventoryApp.Views.Main"
 	xmlns:Main="clr-namespace:InventoryApp.ViewModels.Base"
 	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
 	xmlns:BaseCommand="clr-namespace:InventoryApp.ViewModels.Base"
@@ -52,24 +51,12 @@
         </Grid>
         <!--Central Grid-->
         <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,60,0,0">
-            <Button ToolTip="Add" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70">
-                <materialDesign:PackIcon Kind="Add" Height="30" Width="30" Foreground="Black"/>
-            </Button>
-            <Button IsEnabled="False" ToolTip="Import from File/Save" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70" Margin="70,0,0,0">
-                <materialDesign:PackIcon Kind="ContentSaveMove" Height="30" Width="30" Foreground="Black" />
-            </Button>
-            <Button IsEnabled="False" ToolTip="Undo" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70" Margin="290,0,0,0">
-                <materialDesign:PackIcon Kind="Undo" Height="30" Width="30" Foreground="Black" />
-            </Button>
-            
-            <Grid HorizontalAlignment="Left">
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding StatsSwitch}" Width="100" Height="50" Content="Stats" Margin="0,65,500,365"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProductSwitch}" Width="100" Height="50" Content="Product" Margin="100,65,0,365"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ShipmentSwitch}" Width="100" Height="50" Content="Order" Margin="0,65,300,365"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ClientSwitch}" Width="100" Height="50" Content="Client"  Margin="500,65,0,365"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProviderSwitch}" Width="100" Height="50" Content="Provider" Margin="300,65,0,365"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding SupplySwitch}" Width="100" Height="50" Content="Supply" Margin="0,65,100,365"/>
-            </Grid>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding StatsSwitch}" Width="100" Height="50" Content="Stats" Margin="0,65,500,365"/>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProductSwitch}" Width="100" Height="50" Content="Product" Margin="100,65,0,365"/>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ShipmentSwitch}" Width="100" Height="50" Content="Order" Margin="0,65,300,365"/>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ClientSwitch}" Width="100" Height="50" Content="Client"  Margin="500,65,0,365"/>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProviderSwitch}" Width="100" Height="50" Content="Provider" Margin="300,65,0,365"/>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding SupplySwitch}" Width="100" Height="50" Content="Supply" Margin="0,65,100,365"/>
         </Grid>
         <ContentControl Content="{Binding TablePanel}"/>
     </Grid>

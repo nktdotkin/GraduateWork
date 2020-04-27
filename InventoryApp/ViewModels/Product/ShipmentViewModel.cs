@@ -1,12 +1,10 @@
-﻿using InventoryApp.Models.Product;
+﻿using InventoryApp.Models.Base;
+using InventoryApp.Models.Product;
 using InventoryApp.ViewModels.Base;
-using InventoryApp.Models.Base;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Controls;
 using System;
+using System.Collections.ObjectModel;
 using System.Data;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace InventoryApp.ViewModels.Product
 {
@@ -51,7 +49,7 @@ namespace InventoryApp.ViewModels.Product
         private void Delete()
         {
             new BaseQuery().Delete(TableName, SelectedItem.Id);
-            ShipmentModels.Remove(SelectedItem);;
+            ShipmentModels.Remove(SelectedItem); ;
         }
 
         private void Update()

@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InventoryApp.ViewModels.User"
-             xmlns:service="clr-namespace:InventoryApp.Models.Service"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:browser="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
              mc:Ignorable="d" 
@@ -13,10 +12,10 @@
         <local:ClientViewModel/>
     </UserControl.DataContext>
     <Grid>
-        <Button ToolTip="Search" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70" Margin="140,60,0,0">
+        <Button ToolTip="Search" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="70" Height="70" Margin="30,60,0,0">
             <materialDesign:PackIcon Kind="Search" Height="30" Width="30" Foreground="Black" />
         </Button>
-        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="100" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="200,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="200" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="90,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         <Grid Margin="0,180,0,0">
             <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ClientModels}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>

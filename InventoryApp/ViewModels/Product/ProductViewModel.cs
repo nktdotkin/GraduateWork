@@ -1,10 +1,11 @@
-﻿using InventoryApp.ViewModels.Base;
-using System.Collections.ObjectModel;
+﻿using InventoryApp.Models.Base;
 using InventoryApp.Models.Product;
-using InventoryApp.Models.Base;
-using System.Linq;
-using InventoryApp.ViewModels.Service;
 using InventoryApp.Models.Service;
+using InventoryApp.ViewModels.Base;
+using InventoryApp.ViewModels.Service;
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace InventoryApp.ViewModels.Product
 {
@@ -15,6 +16,7 @@ namespace InventoryApp.ViewModels.Product
             ProductModels = new ObservableCollection<ProductModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
+            AddProductImageCommand = new RelayCommand((obj) => AddProductImage());
             AddNewProduct = new ProductModel();
             Notification = new NotificationServiceViewModel();
             DataBaseStaticModels = new DataBaseStaticModels();
@@ -29,6 +31,7 @@ namespace InventoryApp.ViewModels.Product
         private ValidationViewModel<ProductModel> ModelValidation { get; set; }
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
+        public RelayCommand AddProductImageCommand { get; set; }
 
         private ProductModel selectedItem;
         public ProductModel SelectedItem
@@ -74,6 +77,7 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         private void Update()
         {
+            ProductModels.Clear();
             ProductModels = new BaseQuery().Fill<ProductModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProductModels));
         }
@@ -119,6 +123,14 @@ namespace InventoryApp.ViewModels.Product
                     Notification.ShowNotification("Error: Adding new product failed.");
                 }
             }
+        }
+
+        private void AddProductImage()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.ShowDialog();
+            AddNewProduct.ImageLink = fileDialog.FileName;
+            Notification.ShowNotification($"Info: File {fileDialog.SafeFileName} is added.");
         }
 
         private void Find(string searchText)
