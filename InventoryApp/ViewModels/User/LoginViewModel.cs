@@ -40,7 +40,7 @@ namespace InventoryApp.ViewModels.User
         #region Functions
         private void SignIn(object param)
         {
-            var signInQuery = $"SELECT UserName, UserPass FROM [ManagerLogInfo] WHERE UserName = '{UserName}' and UserPass = '{PasswordSecurity.PasswordEncrypt(param as PasswordBox)}'";
+            var signInQuery = $"UPDATE [ManagerLogInfo] SET UserName = '{UserName}' WHERE UserName = '{UserName}' and UserPass = '{PasswordSecurity.PasswordEncrypt(param as PasswordBox)}'";
             bool isSignedIn = new BaseQuery().ExecuteQuery<LoginViewModel>(signInQuery);
             if (isSignedIn)
             {
@@ -56,7 +56,7 @@ namespace InventoryApp.ViewModels.User
 
         private void SingUp(object param)
         {
-            var signUpQuery = $"INSERTI INTO [ManagerLogInfo] VALUES ({UserName}, {PasswordSecurity.PasswordEncrypt(param as PasswordBox)})";
+            var signUpQuery = $"INSERT INTO [ManagerLogInfo] (UserName, UserPass) VALUES ('{UserName}', '{PasswordSecurity.PasswordEncrypt(param as PasswordBox)}')";
             bool isSignedUp = new BaseQuery().ExecuteQuery<LoginViewModel>(signUpQuery);
             if (isSignedUp)
             {

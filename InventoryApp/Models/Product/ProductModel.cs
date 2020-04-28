@@ -1,9 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace InventoryApp.Models.Product
 {
     class ProductModel
     {
+        private DateTime expirationDateDays = DateTime.Now;
+
         public int Id { get; set; }
         [Required(ErrorMessage = "Uncorrect name")]
         [StringLength(50, MinimumLength = 5)]
@@ -11,9 +15,26 @@ namespace InventoryApp.Models.Product
         [Required(ErrorMessage = "Uncorrect description")]
         [StringLength(50, MinimumLength = 5)]
         public string Description { get; set; }
-        public int ExpirationDateDays { get; set; }
+        [Required(ErrorMessage = "Uncorrect date")]
+        public DateTime ExpirationDateDays
+        {
+            get => DateTime.ParseExact(expirationDateDays.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            set
+            {
+                if (value != expirationDateDays)
+                {
+                    expirationDateDays = value;
+                }
+            }
+        }
+        [Required(ErrorMessage = "Amount must be more than zero")]
+        [Range(1, Int32.MaxValue)]
         public int Amount { get; set; }
+        [Required(ErrorMessage = "Price must be more than zero")]
+        [Range(0.1, double.MaxValue)]
         public decimal Price { get; set; }
+        [Required(ErrorMessage = "Tax must be more than zero")]
+        [Range(0.1, double.MaxValue)]
         public decimal Tax { get; set; }
         public decimal TotalPrice { get; set; }
         public int GroupId { get; set; }

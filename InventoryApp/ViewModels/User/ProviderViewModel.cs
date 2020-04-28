@@ -2,6 +2,7 @@
 using InventoryApp.Models.User;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Service;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace InventoryApp.ViewModels.User
     {
         public ProviderViewModel()
         {
+            GC.Collect(1, GCCollectionMode.Forced);
             ProviderModels = new ObservableCollection<ProviderModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
@@ -24,8 +26,8 @@ namespace InventoryApp.ViewModels.User
         #region Properties
         private const string TableName = "Provider";
         public string ProviderLocationSource { get; set; }
-
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
+
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
@@ -90,11 +92,11 @@ namespace InventoryApp.ViewModels.User
         #endregion
 
         #region Functions
-        private void Update()
+        public ObservableCollection<ProviderModel> Update()
         {
-            ProviderModels.Clear();
             ProviderModels = new BaseQuery().Fill<ProviderModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProviderModels));
+            return ProviderModels;
         }
 
         private void Delete()
@@ -104,7 +106,6 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    ProviderModels.Remove(SelectedItem);
                     Notification.ShowNotification("Info: Provider is deleted.");
                 }
                 else
@@ -116,6 +117,7 @@ namespace InventoryApp.ViewModels.User
             {
                 Notification.ShowNotification("Error: No providers selected.");
             }
+            Update();
         }
 
         private void Add()
@@ -130,7 +132,6 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQuery().Add(TableName, AddNewProvider);
                 if (isCompleted)
                 {
-                    ProviderModels.Add(AddNewProvider);
                     Notification.ShowNotification($"Info: {AddNewProvider.Name} is added.");
                 }
                 else
@@ -138,6 +139,7 @@ namespace InventoryApp.ViewModels.User
                     Notification.ShowNotification("Error: Adding new provider failed.");
                 }
             }
+            Update();
         }
 
         private void Find(string searchText)

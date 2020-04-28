@@ -1,6 +1,7 @@
 ﻿using InventoryApp.Models.Base;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
+using InventoryApp.Views.Settings;
 using System.Windows;
 
 namespace InventoryApp.ViewModels.Base
@@ -19,14 +20,15 @@ namespace InventoryApp.ViewModels.Base
     {
         public MainWindowViewModel()
         {
-            baseQuery = new BaseQuery();
             tablePanel = new Stats();
             ClickTabCommand = new RelayCommand((obj) => ClickOnTab());
             BackupCommand = new RelayCommand((obj) => Backup());
             RestoreCommand = new RelayCommand((obj) => Restore());
+            SettingsCommand = new RelayCommand((obj) => Settings());
             LogoutCommand = new RelayCommand((obj) => Logout());
         }
 
+        public RelayCommand SettingsCommand { get; set; }
         public RelayCommand ClickTabCommand { get; set; }
         public RelayCommand BackupCommand { get; set; }
         public RelayCommand RestoreCommand { get; set; }
@@ -35,7 +37,6 @@ namespace InventoryApp.ViewModels.Base
 
         private object tablePanel;
         private TabControl tabControl;
-        private BaseQuery baseQuery;
 
         public object TablePanel
         {
@@ -129,7 +130,7 @@ namespace InventoryApp.ViewModels.Base
 
         private void Backup()
         {
-            if (baseQuery.ExecuteQuery<MainWindowViewModel>(""))
+            if (new BaseQuery().ExecuteQuery<MainWindowViewModel>(""))
             {
                 MessageBox.Show("Backup complete. Path to backup folder: " + Properties.Settings.Default.RestorePath);
             }
@@ -141,7 +142,7 @@ namespace InventoryApp.ViewModels.Base
 
         private void Restore()
         {
-            if (baseQuery.ExecuteQuery<MainWindowViewModel>(""))
+            if (new BaseQuery().ExecuteQuery<MainWindowViewModel>(""))
             {
                 MessageBox.Show("Restore complete. Please reload application.");
             }
@@ -149,6 +150,12 @@ namespace InventoryApp.ViewModels.Base
             {
                 MessageBox.Show("Restore failed.");
             }
+        }
+
+        private void Settings()
+        {
+            new Settings().Show();
+            Application.Current.Windows[0].Close();
         }
 
         private void Logout()

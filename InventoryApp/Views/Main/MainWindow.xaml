@@ -11,6 +11,7 @@
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="B" Command="{Binding BackupCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding RestoreCommand}"></KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SettingsCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="L" Command="{Binding LogoutCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.DataContext>
@@ -33,6 +34,11 @@
                             <materialDesign:PackIcon Kind="Restore" />
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Background="#f4f4f4" Header="Settings" InputGestureText="Ctrl+S" Command="{Binding SettingsCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Settings" />
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Background="#f4f4f4" Header="Logout" InputGestureText="Ctrl+L" Command="{Binding LogoutCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="User" />
@@ -49,7 +55,6 @@
                 </MenuItem>
             </Menu>
         </Grid>
-        <!--Central Grid-->
         <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,60,0,0">
             <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding StatsSwitch}" Width="100" Height="50" Content="Stats" Margin="0,65,500,365"/>
             <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProductSwitch}" Width="100" Height="50" Content="Product" Margin="100,65,0,365"/>

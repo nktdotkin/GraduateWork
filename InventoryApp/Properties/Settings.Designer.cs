@@ -69,17 +69,5 @@ namespace InventoryApp.Properties {
                 this["BackUpPath"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
-        public int NotificationTimer {
-            get {
-                return ((int)(this["NotificationTimer"]));
-            }
-            set {
-                this["NotificationTimer"] = value;
-            }
-        }
     }
 }

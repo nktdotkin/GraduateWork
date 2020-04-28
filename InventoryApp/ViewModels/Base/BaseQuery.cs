@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -30,15 +31,13 @@ namespace InventoryApp.ViewModels.Base
                 while (reader.Read())
                 {
                     var instanse = BaseModel.GetClass<T>();
-                    foreach (var fields in instanse.GetType().GetProperties())
+                    foreach (var fields in instanse.GetType().GetProperties().OrderBy(x => x.MetadataToken))
                     {
                         var prop = instanse.GetType().GetProperty(fields.Name);
                         if (fields.PropertyType.FullName.Contains("InventoryApp"))
                         {
-                            //do something with this
                             var baseInstance = Activator.CreateInstance(prop.PropertyType);
-                            //set values to class object in model
-                            foreach (var baseFields in baseInstance.GetType().GetProperties())
+                            foreach (var baseFields in baseInstance.GetType().GetProperties().OrderBy(x => x.MetadataToken))
                             {
                                 var baseProp = baseInstance.GetType().GetProperty(baseFields.Name);
                                 baseProp.SetValue(baseInstance, Convert.ChangeType(reader.GetValue(readerValueCounter), baseProp.PropertyType));
@@ -58,12 +57,9 @@ namespace InventoryApp.ViewModels.Base
             }
             catch (Exception e)
             {
-                //MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message);
             }
-            finally
-            {
-                connection.Close();
-            }
+            connection.Close();
             return collection;
         }
 
@@ -79,15 +75,6 @@ namespace InventoryApp.ViewModels.Base
 
         public ObservableCollection<T> Find<T>(ObservableCollection<T> searchInCollection, string searchItem) where T : class
         {
-            //var tempCollection = new ObservableCollection<T>();
-            //foreach (var fields in searchInCollection)
-            //{
-            //    var prop = fields.GetType();
-            //    if (prop.GetField(prop.Name).GetValue(fields).ToString().Contains(searchItem))
-            //    {
-            //        tempCollection.Add(prop.GetField(prop.Name).GetValue(fields));
-            //    }
-            //}
             return searchInCollection;
         }
 
@@ -104,7 +91,10 @@ namespace InventoryApp.ViewModels.Base
                         command.CommandType = CommandType.StoredProcedure;
                         foreach (var fields in instanse.GetType().GetProperties())
                         {
-                            command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.VarChar)).Value = fields.GetValue(instanse);
+                            if (fields.Name != "Id")
+                            {
+                                command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.VarChar)).Value = fields.GetValue(instanse);
+                            }
                         }
                         break;
                     case false:
@@ -117,7 +107,7 @@ namespace InventoryApp.ViewModels.Base
             }
             catch (Exception e)
             {
-                //MessageBox.Show(e.Message + e.HelpLink);
+                MessageBox.Show(e.Message);
             }
             connection.Close();
             return isCompleted;

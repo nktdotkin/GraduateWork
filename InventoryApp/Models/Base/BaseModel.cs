@@ -34,12 +34,6 @@ namespace InventoryApp.Models.Base
             timer.Start();
         }
 
-        public static bool EmailCheck(string email)
-        {
-            var emailPattern = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-            return emailPattern.Match(email).Success;
-        }
-
         public static string GenerateUserName()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

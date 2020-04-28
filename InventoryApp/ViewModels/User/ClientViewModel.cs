@@ -13,6 +13,7 @@ namespace InventoryApp.ViewModels.User
     {
         public ClientViewModel()
         {
+            GC.Collect(1, GCCollectionMode.Forced);
             ClientModels = new ObservableCollection<ClientModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
@@ -27,8 +28,8 @@ namespace InventoryApp.ViewModels.User
         #region Properties
         private const string TableName = "Client";
         public string ClientLocationSource { get; set; }
-
         public ObservableCollection<ClientModel> ClientModels { get; set; }
+
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
@@ -94,11 +95,11 @@ namespace InventoryApp.ViewModels.User
         #endregion
 
         #region Functions
-        private void Update()
+        public ObservableCollection<ClientModel> Update()
         {
-            ClientModels.Clear();
             ClientModels = new BaseQuery().Fill<ClientModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ClientModels));
+            return ClientModels;
         }
 
         private void Delete()
@@ -108,7 +109,6 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    ClientModels.Remove(SelectedItem);
                     Notification.ShowNotification("Info: Client is deleted.");
                 }
                 else
@@ -120,6 +120,7 @@ namespace InventoryApp.ViewModels.User
             {
                 Notification.ShowNotification("Error: No clients selected.");
             }
+            Update();
         }
 
         private void Add()
@@ -134,7 +135,6 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQuery().Add(TableName, AddNewClient);
                 if (isCompleted)
                 {
-                    ClientModels.Add(AddNewClient);
                     Notification.ShowNotification($"Info: {AddNewClient.Name} is added.");
                 }
                 else
@@ -142,6 +142,7 @@ namespace InventoryApp.ViewModels.User
                     Notification.ShowNotification("Error: Adding new client failed.");
                 }
             }
+            Update();
         }
 
         private void Find(string searchText)

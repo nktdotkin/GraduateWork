@@ -4,6 +4,7 @@ using InventoryApp.Models.Service;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Service;
 using Microsoft.Win32;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace InventoryApp.ViewModels.Product
     {
         public ProductViewModel()
         {
+            GC.Collect(1, GCCollectionMode.Forced);
             ProductModels = new ObservableCollection<ProductModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
@@ -21,6 +23,7 @@ namespace InventoryApp.ViewModels.Product
             Notification = new NotificationServiceViewModel();
             DataBaseStaticModels = new DataBaseStaticModels();
             ModelValidation = new ValidationViewModel<ProductModel>();
+            BaseQuery = new BaseQuery();
             Update();
         }
 
@@ -29,6 +32,9 @@ namespace InventoryApp.ViewModels.Product
         public ObservableCollection<ProductModel> ProductModels { get; set; }
         public DataBaseStaticModels DataBaseStaticModels { get; set; }
         private ValidationViewModel<ProductModel> ModelValidation { get; set; }
+
+        private BaseQuery BaseQuery { get; set; }
+
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
         public RelayCommand AddProductImageCommand { get; set; }
@@ -75,11 +81,11 @@ namespace InventoryApp.ViewModels.Product
         #endregion
 
         #region Functions
-        private void Update()
+        public ObservableCollection<ProductModel> Update()
         {
-            ProductModels.Clear();
-            ProductModels = new BaseQuery().Fill<ProductModel>(($"Get{TableName}"));
+            ProductModels = BaseQuery.Fill<ProductModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProductModels));
+            return ProductModels;
         }
 
         private void Delete()
@@ -89,7 +95,6 @@ namespace InventoryApp.ViewModels.Product
                 bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    ProductModels.Remove(SelectedItem);
                     Notification.ShowNotification("Info: Product is deleted.");
                 }
                 else
@@ -101,6 +106,7 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification("Error: No products selected.");
             }
+            Update();
         }
 
         private void Add()
@@ -115,7 +121,6 @@ namespace InventoryApp.ViewModels.Product
                 bool isCompleted = new BaseQuery().Add(TableName, AddNewProduct);
                 if (isCompleted)
                 {
-                    ProductModels.Add(AddNewProduct);
                     Notification.ShowNotification($"Info: {AddNewProduct.Name} is added.");
                 }
                 else
@@ -123,14 +128,22 @@ namespace InventoryApp.ViewModels.Product
                     Notification.ShowNotification("Error: Adding new product failed.");
                 }
             }
+            Update();
         }
 
         private void AddProductImage()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
-            AddNewProduct.ImageLink = fileDialog.FileName;
-            Notification.ShowNotification($"Info: File {fileDialog.SafeFileName} is added.");
+            if (!string.IsNullOrWhiteSpace(fileDialog.FileName))
+            {
+                AddNewProduct.ImageLink = fileDialog.FileName;
+                Notification.ShowNotification($"Info: File {fileDialog.SafeFileName} is added.");
+            }
+            else
+            {
+                Notification.ShowNotification($"Info: File is not added.");
+            }
         }
 
         private void Find(string searchText)

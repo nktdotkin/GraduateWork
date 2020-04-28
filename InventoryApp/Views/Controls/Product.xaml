@@ -22,7 +22,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name"/>
                     <DataGridTextColumn Binding="{Binding Path=Description}" Header="Description"/>
-                    <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays}" Header="Expiration date"/>
+                    <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Expiration date"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
                     <DataGridTextColumn Binding="{Binding Path=Price}" Header="Price"/>
                     <DataGridTextColumn Binding="{Binding Path=Tax}" Header="Tax"/>
@@ -33,14 +33,14 @@
         </Grid>
         <Expander Margin="900,120,60,60" HorizontalAlignment="Left" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
             <Expander.Header>
-                <TextBlock Text="Show product information" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                <TextBlock Text="Show product preview" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                     <TextBlock.LayoutTransform>
                         <RotateTransform Angle="90"/>
                     </TextBlock.LayoutTransform>
                 </TextBlock>
             </Expander.Header>
             <StackPanel Orientation="Vertical" Margin="8,24,16,24">
-                <TextBlock Text="Product:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                <TextBlock Text="Preview:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
                 <Image Source="{Binding SelectedItem.ImageLink}" />
             </StackPanel>
         </Expander>
@@ -55,15 +55,15 @@
             <StackPanel Orientation="Vertical" Margin="8,24,16,24">
                 <TextBlock Text="Product:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
                 <StackPanel Width="300" Background="{DynamicResource MaterialDesignPaper}">
-                    <TextBox Text="{Binding AddNewProduct.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name" MaxLength="50"/>
-                    <TextBox Text="{Binding AddNewProduct.Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Description" MaxLength="50"/>
+                    <TextBox Text="{Binding AddNewProduct.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name"/>
+                    <TextBox Text="{Binding AddNewProduct.Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Description"/>
                     <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddProductImageCommand}">
                         Find Image
                     </Button>
-                    <TextBox Text="{Binding AddNewProduct.ExpirationDateDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Expuration in days" MaxLength="3"/>
-                    <TextBox Text="{Binding AddNewProduct.Amount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Amount" MaxLength="3"/>
-                    <TextBox Text="{Binding AddNewProduct.Price, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Price" MaxLength="5"/>
-                    <TextBox Text="{Binding AddNewProduct.Tax, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Tax" MaxLength="2"/>
+                    <DatePicker Text="{Binding AddNewProduct.ExpirationDateDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Expiration"/>
+                    <TextBox Text="{Binding AddNewProduct.Amount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Amount"/>
+                    <TextBox Text="{Binding AddNewProduct.Price, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Price"/>
+                    <TextBox Text="{Binding AddNewProduct.Tax, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Tax"/>
                     <ComboBox Height="35" materialDesign:HintAssist.Hint="Group"  ItemsSource="{Binding DataBaseStaticModels.Groups}"
                     SelectedValue="{Binding AddNewProduct.Group}">
                     </ComboBox>
