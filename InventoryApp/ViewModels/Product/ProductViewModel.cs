@@ -146,6 +146,11 @@ namespace InventoryApp.ViewModels.Product
             }
         }
 
+        private void DeleteExpiratingProducts()
+        {
+
+        }
+
         private void Find(string searchText)
         {
             var searchResult = ProductModels.Where(items =>

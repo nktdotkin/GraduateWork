@@ -22,8 +22,6 @@ namespace InventoryApp.ViewModels.Product
             AddNewShipment = new ShipmentModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationViewModel<ShipmentModel>();
-            ClientModels = new ClientViewModel().Update();
-            ProductModels = new ProductViewModel().Update();
             Update();
         }
 
@@ -83,6 +81,8 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         private void Update()
         {
+            ClientModels = new ClientViewModel().Update();
+            ProductModels = new ProductViewModel().Update();
             ShipmentModels = new BaseQuery().Fill<ShipmentModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ShipmentModels));
         }

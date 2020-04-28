@@ -17,23 +17,64 @@
         <Grid Margin="0,180,0,0">
             <DataGrid Width="900" ColumnWidth="Auto" HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding SupplyModels}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path=Date}" Header="Date"/>
+                    <DataGridTextColumn Binding="{Binding Path=Date, StringFormat=dd-MM-yyyy}" Header="Date"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Id}" Header="Product ID"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Name}" Header="Product Name"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Description}" Header="Description"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.ExpirationDateDays}" Header="Expiration date"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Price}" Header="Price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Tax}" Header="Tax"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.TotalPrice}" Header="Total price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Group}" Header="Group"/>
-                    <DataGridTextColumn Binding="{Binding Path=Provider.Id}" Header="Provider ID"/>
-                    <DataGridTextColumn Binding="{Binding Path=Provider.Name}" Header="Provider Name"/>
-                    <DataGridTextColumn Binding="{Binding Path=Provider.Surname}" Header="Provider Surname"/>
-                    <DataGridTextColumn Binding="{Binding Path=Provider.Phone}" Header="Provider Phone"/>
-                    <DataGridTextColumn Binding="{Binding Path=Provider.Adress}" Header="Provider Adress"/>
-                    <DataGridTextColumn Binding="{Binding Path=Provider.Email}" Header="Provider E-mail"/>
-                    <DataGridTextColumn Binding="{Binding Path=Provider.Company}" Header="Provider Company"/>
+                    <DataGridTemplateColumn Header="Product">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="Product name: "/>
+                                    <TextBlock Text="Product description: "/>
+                                    <TextBlock Text="Product expiration date: "/>
+                                    <TextBlock Text="Product price: "/>
+                                    <TextBlock Text="Product total price: "/>
+                                    <TextBlock Text="Product group: "/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Product.Name}"/>
+                                    <TextBlock Text="{Binding Path=Product.Description}"/>
+                                    <TextBlock Text="{Binding Path=Product.ExpirationDateDays, StringFormat=dd-MM-yyyy}"/>
+                                    <TextBlock Text="{Binding Path=Product.Price}"/>
+                                    <TextBlock Text="{Binding Path=Product.TotalPrice}"/>
+                                    <TextBlock Text="{Binding Path=Product.Group}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Provider">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="Provider name: "/>
+                                    <TextBlock Text="Provider surname: "/>
+                                    <TextBlock Text="Provider phone: "/>
+                                    <TextBlock Text="Provider adress: "/>
+                                    <TextBlock Text="Provider email: "/>
+                                    <TextBlock Text="Provider company: "/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Provider.Name}"/>
+                                    <TextBlock Text="{Binding Path=Provider.Surname}"/>
+                                    <TextBlock Text="{Binding Path=Provider.Phone}"/>
+                                    <TextBlock Text="{Binding Path=Provider.Adress}"/>
+                                    <TextBlock Text="{Binding Path=Provider.Email}"/>
+                                    <TextBlock Text="{Binding Path=Provider.Company}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -63,8 +104,8 @@
                 <StackPanel Width="300" Background="{DynamicResource MaterialDesignPaper}">
                     <DatePicker SelectedDate="{Binding AddNewSupply.Date, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Date"/>
                     <TextBox Text="{Binding AddNewSupply.Amount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Amount"/>
-                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Client"  ItemsSource="{Binding ProviderModels}"
-                    SelectedValue="{Binding AddNewSupply.Provider}">
+                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Provider"  ItemsSource="{Binding ProviderModels, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding AddNewSupply.Provider, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -76,8 +117,8 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Product"  ItemsSource="{Binding ProductModels}"
-                    SelectedValue="{Binding AddNewSupply.Product}">
+                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Product"  ItemsSource="{Binding ProductModels, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding AddNewSupply.Product, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>

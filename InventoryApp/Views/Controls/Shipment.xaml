@@ -19,22 +19,64 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Date, StringFormat=dd-MM-yyyy}" Header="Date"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Id}" Header="Product ID"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Name}" Header="Product Name"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Description}" Header="Description"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Expiration date"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Price}" Header="Price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Tax}" Header="Tax"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.TotalPrice}" Header="Total price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Product.Group}" Header="Group"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Id}" Header="Client ID"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Name}" Header="Client Name"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Surname}" Header="Client Surname"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Phone}" Header="Phone"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Adress}" Header="Adress"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Email}" Header="E-Mail"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.Status}" Header="Status"/>
-                    <DataGridTextColumn Binding="{Binding Path=Client.StoreType}" Header="Store type"/>
+                    <DataGridTemplateColumn Header="Product">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="Product name: "/>
+                                    <TextBlock Text="Product description: "/>
+                                    <TextBlock Text="Product expiration date: "/>
+                                    <TextBlock Text="Product price: "/>
+                                    <TextBlock Text="Product total price: "/>
+                                    <TextBlock Text="Product group: "/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Product.Name}"/>
+                                    <TextBlock Text="{Binding Path=Product.Description}"/>
+                                    <TextBlock Text="{Binding Path=Product.ExpirationDateDays, StringFormat=dd-MM-yyyy}"/>
+                                    <TextBlock Text="{Binding Path=Product.Price}"/>
+                                    <TextBlock Text="{Binding Path=Product.TotalPrice}"/>
+                                    <TextBlock Text="{Binding Path=Product.Group}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Client">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="Client name: "/>
+                                    <TextBlock Text="Client surname: "/>
+                                    <TextBlock Text="Client phone: "/>
+                                    <TextBlock Text="Client adress: "/>
+                                    <TextBlock Text="Client email: "/>
+                                    <TextBlock Text="Client status: "/>
+                                    <TextBlock Text="Client store type: "/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Client.Name}"/>
+                                    <TextBlock Text="{Binding Path=Client.Surname}"/>
+                                    <TextBlock Text="{Binding Path=Client.Phone}"/>
+                                    <TextBlock Text="{Binding Path=Client.Adress}"/>
+                                    <TextBlock Text="{Binding Path=Client.Email}"/>
+                                    <TextBlock Text="{Binding Path=Client.Status}"/>
+                                    <TextBlock Text="{Binding Path=Client.StoreType}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -64,8 +106,8 @@
                 <StackPanel Width="300" Background="{DynamicResource MaterialDesignPaper}">
                     <DatePicker SelectedDate="{Binding AddNewShipment.Date, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Date"/>
                     <TextBox Text="{Binding AddNewShipment.Amount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Amount"/>
-                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Client"  ItemsSource="{Binding ClientModels}"
-                    SelectedValue="{Binding AddNewShipment.Client}">
+                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Client"  ItemsSource="{Binding ClientModels, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding AddNewShipment.Client, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -76,8 +118,8 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Product"  ItemsSource="{Binding ProductModels}"
-                    SelectedValue="{Binding AddNewShipment.Product}">
+                    <ComboBox Height="65" materialDesign:HintAssist.Hint="Product"  ItemsSource="{Binding ProductModels, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding AddNewShipment.Product, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
