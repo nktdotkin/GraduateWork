@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace InventoryApp.Models.Base
+namespace InventoryApp.Service
 {
     public class RelayCommand : ICommand
     {

@@ -1,8 +1,7 @@
-﻿using InventoryApp.Models.Base;
-using InventoryApp.Models.Service;
-using InventoryApp.Models.User;
+﻿using InventoryApp.Models.User;
+using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
-using InventoryApp.ViewModels.Service;
+using InventoryApp.ViewModels.Common;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,10 +17,10 @@ namespace InventoryApp.ViewModels.User
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewClient = new ClientModel();
-            ClientLocationSource = new BaseQuery().GetAdress(null);
+            ClientLocationSource = new BaseQueryService().GetAdress(null);
             Notification = new NotificationServiceViewModel();
-            DataBaseStaticModels = new DataBaseStaticModels();
-            ModelValidation = new ValidationViewModel<ClientModel>();
+            DataBaseStaticModels = new DataBaseStaticObjects();
+            ModelValidation = new ValidationService<ClientModel>();
             Update();
         }
 
@@ -34,8 +33,8 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand AddCommand { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
-        public DataBaseStaticModels DataBaseStaticModels { get; set; }
-        private ValidationViewModel<ClientModel> ModelValidation { get; set; }
+        public DataBaseStaticObjects DataBaseStaticModels { get; set; }
+        private ValidationService<ClientModel> ModelValidation { get; set; }
 
         private ClientModel addNewClient;
         public ClientModel AddNewClient
@@ -63,7 +62,7 @@ namespace InventoryApp.ViewModels.User
                     OnPropertyChanged(nameof(SelectedItem));
                     if (ClientLocationSource != selectedItem?.Adress)
                     {
-                        ClientLocationSource = new BaseQuery().GetAdress(selectedItem?.Adress);
+                        ClientLocationSource = new BaseQueryService().GetAdress(selectedItem?.Adress);
                         OnPropertyChanged(nameof(ClientLocationSource));
                     }
                 }
@@ -97,7 +96,7 @@ namespace InventoryApp.ViewModels.User
         #region Functions
         public ObservableCollection<ClientModel> Update()
         {
-            ClientModels = new BaseQuery().Fill<ClientModel>($"Get{TableName}");
+            ClientModels = new BaseQueryService().Fill<ClientModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ClientModels));
             return ClientModels;
         }
@@ -106,7 +105,7 @@ namespace InventoryApp.ViewModels.User
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Info: Client is deleted.");
@@ -132,7 +131,7 @@ namespace InventoryApp.ViewModels.User
             }
             else
             {
-                bool isCompleted = new BaseQuery().Add(TableName, AddNewClient);
+                bool isCompleted = new BaseQueryService().Add(TableName, AddNewClient);
                 if (isCompleted)
                 {
                     Notification.ShowNotification($"Info: {AddNewClient.Name} is added.");

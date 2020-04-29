@@ -3,9 +3,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
 
-namespace InventoryApp.Models.Base
+namespace InventoryApp.Service
 {
-    static class BaseModel
+    static class BaseService
     {
         public static T ToEnum<T>(this string value)
         {

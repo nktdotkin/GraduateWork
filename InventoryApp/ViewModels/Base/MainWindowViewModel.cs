@@ -1,4 +1,4 @@
-﻿using InventoryApp.Models.Base;
+﻿using InventoryApp.Service;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
 using InventoryApp.Views.Settings;
@@ -130,7 +130,7 @@ namespace InventoryApp.ViewModels.Base
 
         private void Backup()
         {
-            if (new BaseQuery().ExecuteQuery<MainWindowViewModel>(""))
+            if (new BaseQueryService().ExecuteQuery<MainWindowViewModel>(""))
             {
                 MessageBox.Show("Backup complete. Path to backup folder: " + Properties.Settings.Default.RestorePath);
             }
@@ -142,7 +142,7 @@ namespace InventoryApp.ViewModels.Base
 
         private void Restore()
         {
-            if (new BaseQuery().ExecuteQuery<MainWindowViewModel>(""))
+            if (new BaseQueryService().ExecuteQuery<MainWindowViewModel>(""))
             {
                 MessageBox.Show("Restore complete. Please reload application.");
             }

@@ -1,7 +1,6 @@
-﻿using InventoryApp.Models.Base;
-using InventoryApp.Security;
+﻿using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
-using InventoryApp.ViewModels.Service;
+using InventoryApp.ViewModels.Common;
 using InventoryApp.Views.Main;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,14 +24,14 @@ namespace InventoryApp.ViewModels.User
 
         public string UserName
         {
-            get { return string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? BaseModel.GenerateUserName() : Properties.Settings.Default.UserName; }
+            get { return string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? BaseService.GenerateUserName() : Properties.Settings.Default.UserName; }
             set
             {
                 if (Properties.Settings.Default.UserName != value && value.Length > 7)
                 {
                     Properties.Settings.Default.UserName = value; Properties.Settings.Default.Save(); OnPropertyChanged(nameof(UserName));
                 }
-                else { Properties.Settings.Default.UserName = BaseModel.GenerateUserName(); }
+                else { Properties.Settings.Default.UserName = BaseService.GenerateUserName(); }
             }
         }
         #endregion
@@ -40,8 +39,8 @@ namespace InventoryApp.ViewModels.User
         #region Functions
         private void SignIn(object param)
         {
-            var signInQuery = $"UPDATE [ManagerLogInfo] SET UserName = '{UserName}' WHERE UserName = '{UserName}' and UserPass = '{PasswordSecurity.PasswordEncrypt(param as PasswordBox)}'";
-            bool isSignedIn = new BaseQuery().ExecuteQuery<LoginViewModel>(signInQuery);
+            var signInQuery = $"UPDATE [ManagerLogInfo] SET UserName = '{UserName}' WHERE UserName = '{UserName}' and UserPass = '{PasswordSecurityService.PasswordEncrypt(param as PasswordBox)}'";
+            bool isSignedIn = new BaseQueryService().ExecuteQuery<LoginViewModel>(signInQuery);
             if (isSignedIn)
             {
                 Properties.Settings.Default.CurrentUser = UserName;
@@ -56,8 +55,8 @@ namespace InventoryApp.ViewModels.User
 
         private void SingUp(object param)
         {
-            var signUpQuery = $"INSERT INTO [ManagerLogInfo] (UserName, UserPass) VALUES ('{UserName}', '{PasswordSecurity.PasswordEncrypt(param as PasswordBox)}')";
-            bool isSignedUp = new BaseQuery().ExecuteQuery<LoginViewModel>(signUpQuery);
+            var signUpQuery = $"INSERT INTO [ManagerLogInfo] (UserName, UserPass) VALUES ('{UserName}', '{PasswordSecurityService.PasswordEncrypt(param as PasswordBox)}')";
+            bool isSignedUp = new BaseQueryService().ExecuteQuery<LoginViewModel>(signUpQuery);
             if (isSignedUp)
             {
                 Notification.ShowNotification("Info: Successfully registered.");

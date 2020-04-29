@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:InventoryApp.ViewModels.Base"
+        xmlns:local="clr-namespace:InventoryApp.Service"
         xmlns:Login="clr-namespace:InventoryApp.ViewModels.User"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -22,7 +22,7 @@
         <Button HorizontalAlignment="Center" Width="220" Margin="0,370,0,40" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Sign Up" Command="{Binding SingUpCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,20" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding ExitCommand}">
             <Button.DataContext>
-                <local:BaseQuery/>
+                <local:BaseQueryService/>
             </Button.DataContext>
             <materialDesign:PackIcon Kind="PowerOff" Foreground="Black"/>
         </Button>

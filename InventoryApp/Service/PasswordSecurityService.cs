@@ -1,17 +1,16 @@
-﻿using InventoryApp.Models.Base;
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Controls;
 
-namespace InventoryApp.Security
+namespace InventoryApp.Service
 {
-    static class PasswordSecurity
+    static class PasswordSecurityService
     {
         public static string PasswordEncrypt(PasswordBox password)
         {
-            return BaseModel.RemoveSpecialCharacters(Encoding.ASCII.GetString(Encrypt(Encoding.ASCII.GetBytes(password.Password))));
+            return BaseService.RemoveSpecialCharacters(Encoding.ASCII.GetString(Encrypt(Encoding.ASCII.GetBytes(password.Password))));
         }
 
         private static class Global

@@ -5,7 +5,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:Main="clr-namespace:InventoryApp.ViewModels.Base"
 	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-	xmlns:BaseCommand="clr-namespace:InventoryApp.ViewModels.Base"
+	xmlns:BaseCommand="clr-namespace:InventoryApp.Service"
 	mc:Ignorable="d"
 	Width="auto" Height="auto" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#fafafa" WindowState="Maximized">
     <Window.InputBindings>
@@ -49,7 +49,7 @@
                             <materialDesign:PackIcon Kind="ExitToApp" />
                         </MenuItem.Icon>
                         <MenuItem.DataContext>
-                            <BaseCommand:BaseQuery/>
+                            <BaseCommand:BaseQueryService/>
                         </MenuItem.DataContext>
                     </MenuItem>
                 </MenuItem>

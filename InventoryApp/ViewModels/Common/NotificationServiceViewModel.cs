@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace InventoryApp.ViewModels.Service
+namespace InventoryApp.ViewModels.Common
 {
     class NotificationServiceViewModel : ViewModelsBase
     {

@@ -1,4 +1,4 @@
-﻿using InventoryApp.Models.Base;
+﻿using InventoryApp.ViewModels.Base;
 using Microsoft.VisualStudio.PlatformUI;
 using System;
 using System.Collections.ObjectModel;
@@ -9,9 +9,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
-namespace InventoryApp.ViewModels.Base
+namespace InventoryApp.Service
 {
-    class BaseQuery : ViewModelsBase
+    class BaseQueryService : ViewModelsBase
     {
         private static string connectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
         private SqlConnection connection = new SqlConnection(connectionString);
@@ -30,7 +30,7 @@ namespace InventoryApp.ViewModels.Base
                 int readerValueCounter = 0;
                 while (reader.Read())
                 {
-                    var instanse = BaseModel.GetClass<T>();
+                    var instanse = BaseService.GetClass<T>();
                     foreach (var fields in instanse.GetType().GetProperties().OrderBy(x => x.MetadataToken))
                     {
                         var prop = instanse.GetType().GetProperty(fields.Name);
@@ -57,7 +57,7 @@ namespace InventoryApp.ViewModels.Base
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                //MessageBox.Show(e.Message);
             }
             connection.Close();
             return collection;
@@ -70,7 +70,7 @@ namespace InventoryApp.ViewModels.Base
 
         public bool Delete(string tableName, int id)
         {
-            return ExecuteQuery<BaseQuery>($"DELETE FROM {tableName} WHERE {tableName}Id = {id}");
+            return ExecuteQuery<BaseQueryService>($"DELETE FROM {tableName} WHERE {tableName}Id = {id}");
         }
 
         public ObservableCollection<T> Find<T>(ObservableCollection<T> searchInCollection, string searchItem) where T : class
@@ -107,7 +107,7 @@ namespace InventoryApp.ViewModels.Base
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                //MessageBox.Show(e.Message);
             }
             connection.Close();
             return isCompleted;
@@ -127,12 +127,6 @@ namespace InventoryApp.ViewModels.Base
                     Application.Current.Shutdown();
                 });
             }
-        }
-
-        //add to configure columns in grid
-        public bool BorderVisible()
-        {
-            return false;
         }
     }
 }

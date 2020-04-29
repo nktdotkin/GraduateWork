@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace InventoryApp.Models.Service
+namespace InventoryApp.Service
 {
     //Create with get from database
-    class DataBaseStaticModels
+    class DataBaseStaticObjects
     {
         public List<string> Statuses { get; set; }
         public List<string> StoreTypes { get; set; }
         public List<string> Groups { get; set; }
 
-        public DataBaseStaticModels()
+        public DataBaseStaticObjects()
         {
             Statuses = new List<string>() { "Default", "Bronze", "Silver", "Gold" };
             StoreTypes = new List<string>() { "Small shop", "Supermarket", "Trade tent", "Warehouse" };

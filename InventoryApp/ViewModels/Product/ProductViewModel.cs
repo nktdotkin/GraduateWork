@@ -1,8 +1,7 @@
-﻿using InventoryApp.Models.Base;
-using InventoryApp.Models.Product;
-using InventoryApp.Models.Service;
+﻿using InventoryApp.Models.Product;
+using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
-using InventoryApp.ViewModels.Service;
+using InventoryApp.ViewModels.Common;
 using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
@@ -21,19 +20,17 @@ namespace InventoryApp.ViewModels.Product
             AddProductImageCommand = new RelayCommand((obj) => AddProductImage());
             AddNewProduct = new ProductModel();
             Notification = new NotificationServiceViewModel();
-            DataBaseStaticModels = new DataBaseStaticModels();
-            ModelValidation = new ValidationViewModel<ProductModel>();
-            BaseQuery = new BaseQuery();
+            DataBaseStaticModels = new DataBaseStaticObjects();
+            ModelValidation = new ValidationService<ProductModel>();
             Update();
+            DeleteOutdatingProducts();
         }
 
         #region Properties
         private const string TableName = "Product";
         public ObservableCollection<ProductModel> ProductModels { get; set; }
-        public DataBaseStaticModels DataBaseStaticModels { get; set; }
-        private ValidationViewModel<ProductModel> ModelValidation { get; set; }
-
-        private BaseQuery BaseQuery { get; set; }
+        public DataBaseStaticObjects DataBaseStaticModels { get; set; }
+        private ValidationService<ProductModel> ModelValidation { get; set; }
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
@@ -83,7 +80,7 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         public ObservableCollection<ProductModel> Update()
         {
-            ProductModels = BaseQuery.Fill<ProductModel>(($"Get{TableName}"));
+            ProductModels = new BaseQueryService().Fill<ProductModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProductModels));
             return ProductModels;
         }
@@ -92,7 +89,7 @@ namespace InventoryApp.ViewModels.Product
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Info: Product is deleted.");
@@ -118,7 +115,7 @@ namespace InventoryApp.ViewModels.Product
             }
             else
             {
-                bool isCompleted = new BaseQuery().Add(TableName, AddNewProduct);
+                bool isCompleted = new BaseQueryService().Add(TableName, AddNewProduct);
                 if (isCompleted)
                 {
                     Notification.ShowNotification($"Info: {AddNewProduct.Name} is added.");
@@ -146,9 +143,21 @@ namespace InventoryApp.ViewModels.Product
             }
         }
 
-        private void DeleteExpiratingProducts()
+        private void DeleteOutdatingProducts()
         {
-
+            foreach (var oudatedPorducts in ProductModels.Where(items => (items.ExpirationDateDays.DayOfYear.Equals(DateTime.Now.DayOfYear - 1)) && items.ExpirationDateDays.Year.Equals(DateTime.Now.Year)))
+            {
+                bool isCompleted = new BaseQueryService().Delete(TableName, oudatedPorducts.Id);
+                if (isCompleted)
+                {
+                    Notification.ShowNotification("Info: Outdated product is deleted.");
+                }
+                else
+                {
+                    Notification.ShowNotification("Error: Deleting outdated product failed.\n\t It can be referenced in Shipment");
+                }
+            }
+            Update();
         }
 
         private void Find(string searchText)

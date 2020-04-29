@@ -211,21 +211,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\Base\RelayCommand.cs" />
-    <Compile Include="Models\Service\DataBaseStaticModels.cs" />
-    <Compile Include="Security\PasswordSecurity.cs" />
-    <Compile Include="ViewModels\Base\BaseQuery.cs" />
+    <Compile Include="Service\RelayCommand.cs" />
+    <Compile Include="Service\DataBaseStaticObjects.cs" />
+    <Compile Include="Service\PasswordSecurityService.cs" />
+    <Compile Include="Service\BaseQueryService.cs" />
     <Compile Include="ViewModels\Base\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelsBase.cs" />
     <Compile Include="ViewModels\Product\ProductViewModel.cs" />
     <Compile Include="ViewModels\Product\ShipmentViewModel.cs" />
     <Compile Include="ViewModels\Product\SupplyViewModel.cs" />
-    <Compile Include="ViewModels\Service\ExportViewModel.cs" />
-    <Compile Include="ViewModels\Service\ImportViewModel.cs" />
-    <Compile Include="ViewModels\Service\NotificationServiceViewModel.cs" />
-    <Compile Include="ViewModels\Service\SearchViewModel.cs" />
-    <Compile Include="ViewModels\Service\StatsViewModel.cs" />
-    <Compile Include="ViewModels\Service\ValidationViewModel.cs" />
+    <Compile Include="Service\ExportService.cs" />
+    <Compile Include="Service\ImportService.cs" />
+    <Compile Include="ViewModels\Common\NotificationServiceViewModel.cs" />
+    <Compile Include="ViewModels\Common\StatsViewModel.cs" />
+    <Compile Include="Service\ValidationService.cs" />
     <Compile Include="ViewModels\User\ClientViewModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
     <Compile Include="ViewModels\User\ProviderViewModel.cs" />
@@ -258,14 +257,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Base\BaseModel.cs" />
+    <Compile Include="Service\BaseService.cs" />
     <Compile Include="Models\Product\ProductModel.cs" />
     <Compile Include="Models\Product\ShipmentModel.cs" />
     <Compile Include="Models\Product\SupplyModel.cs" />
-    <Compile Include="Models\Service\ExportModel.cs" />
-    <Compile Include="Models\Service\ImportModel.cs" />
-    <Compile Include="Models\Service\SearchModel.cs" />
-    <Compile Include="Models\Service\StatsModel.cs" />
+    <Compile Include="Models\Common\StatsModel.cs" />
     <Compile Include="Models\User\BaseUser.cs" />
     <Compile Include="Models\User\ClientModel.cs" />
     <Compile Include="Models\User\ProviderModel.cs" />

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace InventoryApp.ViewModels.Service
+namespace InventoryApp.Service
 {
-    class ValidationViewModel<T> where T : class
+    class ValidationService<T> where T : class
     {
         public List<ValidationResult> ValidateFields(T instanse)
         {

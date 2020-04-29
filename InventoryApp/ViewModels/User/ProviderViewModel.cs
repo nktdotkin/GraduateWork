@@ -1,7 +1,7 @@
-﻿using InventoryApp.Models.Base;
-using InventoryApp.Models.User;
+﻿using InventoryApp.Models.User;
+using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
-using InventoryApp.ViewModels.Service;
+using InventoryApp.ViewModels.Common;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,9 +17,9 @@ namespace InventoryApp.ViewModels.User
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewProvider = new ProviderModel();
-            ProviderLocationSource = new BaseQuery().GetAdress(null);
+            ProviderLocationSource = new BaseQueryService().GetAdress(null);
             Notification = new NotificationServiceViewModel();
-            ModelValidation = new ValidationViewModel<ProviderModel>();
+            ModelValidation = new ValidationService<ProviderModel>();
             Update();
         }
 
@@ -32,7 +32,7 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand AddCommand { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
-        private ValidationViewModel<ProviderModel> ModelValidation { get; set; }
+        private ValidationService<ProviderModel> ModelValidation { get; set; }
 
         private ProviderModel addNewProvider;
         public ProviderModel AddNewProvider
@@ -60,7 +60,7 @@ namespace InventoryApp.ViewModels.User
                     OnPropertyChanged(nameof(SelectedItem));
                     if (ProviderLocationSource != selectedItem?.Adress)
                     {
-                        ProviderLocationSource = new BaseQuery().GetAdress(selectedItem?.Adress);
+                        ProviderLocationSource = new BaseQueryService().GetAdress(selectedItem?.Adress);
                         OnPropertyChanged(nameof(ProviderLocationSource));
                     }
                 }
@@ -94,7 +94,7 @@ namespace InventoryApp.ViewModels.User
         #region Functions
         public ObservableCollection<ProviderModel> Update()
         {
-            ProviderModels = new BaseQuery().Fill<ProviderModel>(($"Get{TableName}"));
+            ProviderModels = new BaseQueryService().Fill<ProviderModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProviderModels));
             return ProviderModels;
         }
@@ -103,7 +103,7 @@ namespace InventoryApp.ViewModels.User
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Info: Provider is deleted.");
@@ -129,7 +129,7 @@ namespace InventoryApp.ViewModels.User
             }
             else
             {
-                bool isCompleted = new BaseQuery().Add(TableName, AddNewProvider);
+                bool isCompleted = new BaseQueryService().Add(TableName, AddNewProvider);
                 if (isCompleted)
                 {
                     Notification.ShowNotification($"Info: {AddNewProvider.Name} is added.");

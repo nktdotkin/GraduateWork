@@ -1,8 +1,8 @@
-﻿using InventoryApp.Models.Base;
-using InventoryApp.Models.Product;
+﻿using InventoryApp.Models.Product;
 using InventoryApp.Models.User;
+using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
-using InventoryApp.ViewModels.Service;
+using InventoryApp.ViewModels.Common;
 using InventoryApp.ViewModels.User;
 using System;
 using System.Collections.ObjectModel;
@@ -20,7 +20,7 @@ namespace InventoryApp.ViewModels.Product
             AddCommand = new RelayCommand((obj) => Add());
             AddNewSupply = new SupplyModel();
             Notification = new NotificationServiceViewModel();
-            ModelValidation = new ValidationViewModel<SupplyModel>();
+            ModelValidation = new ValidationService<SupplyModel>();
             Update();
         }
 
@@ -30,7 +30,7 @@ namespace InventoryApp.ViewModels.Product
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
         public ObservableCollection<ProductModel> ProductModels { get; set; }
 
-        private ValidationViewModel<SupplyModel> ModelValidation { get; set; }
+        private ValidationService<SupplyModel> ModelValidation { get; set; }
         public NotificationServiceViewModel Notification { get; set; }
 
         public RelayCommand DeleteCommand { get; set; }
@@ -81,7 +81,7 @@ namespace InventoryApp.ViewModels.Product
         {
             ProviderModels = new ProviderViewModel().Update();
             ProductModels = new ProductViewModel().Update();
-            SupplyModels = new BaseQuery().Fill<SupplyModel>(($"Get{TableName}"));
+            SupplyModels = new BaseQueryService().Fill<SupplyModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(SupplyModels));
         }
 
@@ -89,7 +89,7 @@ namespace InventoryApp.ViewModels.Product
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQuery().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Info: Supply information is deleted.");
@@ -115,11 +115,11 @@ namespace InventoryApp.ViewModels.Product
             }
             else
             {
-                bool isCompleted = new BaseQuery().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
+                bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
                 if (isCompleted)
                 {
                     Notification.ShowNotification($"Info: Supply for {AddNewSupply.Product.Name} is added.");
-                    new BaseQuery().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
+                    new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
                 }
                 else
                 {
