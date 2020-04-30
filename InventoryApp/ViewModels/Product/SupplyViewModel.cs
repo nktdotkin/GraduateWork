@@ -7,6 +7,7 @@ using InventoryApp.ViewModels.User;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Product
 {
@@ -21,7 +22,7 @@ namespace InventoryApp.ViewModels.Product
             AddNewSupply = new SupplyModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<SupplyModel>();
-            Update();
+            Task.Run(() => Update());
         }
 
         #region Properties
@@ -64,12 +65,13 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        Update();
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Update();
+                        Task.Run(() => Update());
                     }
                 }
             }
@@ -103,7 +105,7 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification("Error: No supply information selected.");
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Add()
@@ -115,18 +117,21 @@ namespace InventoryApp.ViewModels.Product
             }
             else
             {
-                bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
-                if (isCompleted)
+                if ((Properties.Settings.Default.MaxCapacity - Properties.Settings.Default.ActualCapacity) > AddNewSupply.Amount)
                 {
-                    Notification.ShowNotification($"Info: Supply for {AddNewSupply.Product.Name} is added.");
-                    new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
+                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
+                    if (isCompleted)
+                    {
+                        Notification.ShowNotification($"Info: Supply for {AddNewSupply.Product.Name} is added.");
+                        new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
+                    }
                 }
                 else
                 {
                     Notification.ShowNotification("Error: Adding new supply information failed.");
                 }
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Find(string searchText)

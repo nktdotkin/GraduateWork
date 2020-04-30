@@ -1,4 +1,6 @@
 ﻿using InventoryApp.Service;
+using InventoryApp.ViewModels.Product;
+using InventoryApp.ViewModels.User;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
 using InventoryApp.Views.Settings;
@@ -26,6 +28,17 @@ namespace InventoryApp.ViewModels.Base
             RestoreCommand = new RelayCommand((obj) => Restore());
             SettingsCommand = new RelayCommand((obj) => Settings());
             LogoutCommand = new RelayCommand((obj) => Logout());
+            //Set as setting
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            new ProviderViewModel();
+            new ClientViewModel();
+            new ProductViewModel();
+            new ShipmentViewModel();
+            new SupplyViewModel();
         }
 
         public RelayCommand SettingsCommand { get; set; }

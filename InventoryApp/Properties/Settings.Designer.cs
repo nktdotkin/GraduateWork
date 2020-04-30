@@ -69,5 +69,28 @@ namespace InventoryApp.Properties {
                 this["BackUpPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int MaxCapacity {
+            get {
+                return ((int)(this["MaxCapacity"]));
+            }
+            set {
+                this["MaxCapacity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public double ActualCapacity {
+            get {
+                return ((double)(this["ActualCapacity"]));
+            }
+            set {
+                this["ActualCapacity"] = value;
+            }
+        }
     }
 }

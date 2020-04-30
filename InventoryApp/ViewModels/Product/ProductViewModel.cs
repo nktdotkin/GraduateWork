@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Product
 {
@@ -22,8 +23,8 @@ namespace InventoryApp.ViewModels.Product
             Notification = new NotificationServiceViewModel();
             DataBaseStaticModels = new DataBaseStaticObjects();
             ModelValidation = new ValidationService<ProductModel>();
-            Update();
-            DeleteOutdatingProducts();
+            Task.Run(() => Update(true));
+            Task.Run(() => DeleteOutdatingProducts());
         }
 
         #region Properties
@@ -65,12 +66,13 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        Update();
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Update();
+                        Task.Run(() => Update());
                     }
                 }
             }
@@ -78,10 +80,12 @@ namespace InventoryApp.ViewModels.Product
         #endregion
 
         #region Functions
-        public ObservableCollection<ProductModel> Update()
+        public ObservableCollection<ProductModel> Update(bool isFirstStart = false)
         {
             ProductModels = new BaseQueryService().Fill<ProductModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProductModels));
+            if (isFirstStart)
+                CheckStorageCapacity();
             return ProductModels;
         }
 
@@ -103,7 +107,7 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification("Error: No products selected.");
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Add()
@@ -115,17 +119,20 @@ namespace InventoryApp.ViewModels.Product
             }
             else
             {
-                bool isCompleted = new BaseQueryService().Add(TableName, AddNewProduct);
-                if (isCompleted)
+                if (CheckStorageCapacity())
                 {
-                    Notification.ShowNotification($"Info: {AddNewProduct.Name} is added.");
+                    bool isCompleted = new BaseQueryService().Add(TableName, AddNewProduct);
+                    if (isCompleted)
+                    {
+                        Notification.ShowNotification($"Info: {AddNewProduct.Name} is added.");
+                    }
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Adding new product failed.");
+                    Notification.ShowNotification("Error: Adding new supply information failed.");
                 }
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void AddProductImage()
@@ -157,7 +164,16 @@ namespace InventoryApp.ViewModels.Product
                     Notification.ShowNotification("Error: Deleting outdated product failed.\n\t It can be referenced in Shipment");
                 }
             }
-            Update();
+            Task.Run(() => Update());
+        }
+
+        public bool CheckStorageCapacity()
+        {
+            var productCount = ProductModels.Select(items => items.Amount).Sum();
+            var occupiedSpace = (productCount * 100) / Properties.Settings.Default.MaxCapacity;
+            Properties.Settings.Default.ActualCapacity = productCount;
+            Notification.ShowNotification($"Info: Used storage space is {occupiedSpace}%");
+            return (occupiedSpace < 99) ? true : false;
         }
 
         private void Find(string searchText)

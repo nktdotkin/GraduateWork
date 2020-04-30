@@ -18,7 +18,7 @@
         </Button>
         <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="200" materialDesign:HintAssist.Hint="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" Margin="90,70,0,0" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         <Grid Margin="0,180,0,0">
-            <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProductModels}" SelectedItem="{Binding SelectedItem}">
+            <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProductModels, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name"/>
                     <DataGridTextColumn Binding="{Binding Path=Description}" Header="Description"/>

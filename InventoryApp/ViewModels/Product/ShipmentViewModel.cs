@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Product
 {
@@ -22,7 +23,7 @@ namespace InventoryApp.ViewModels.Product
             AddNewShipment = new ShipmentModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ShipmentModel>();
-            Update();
+            Task.Run(() => Update());
         }
 
         #region Properties
@@ -66,12 +67,13 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        Update();
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Update();
+                        Task.Run(() => Update());
                     }
                 }
             }
@@ -105,7 +107,7 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification("Error: No shipment information selected.");
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Add()
@@ -146,7 +148,7 @@ namespace InventoryApp.ViewModels.Product
                     }
                 }
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Find(string searchText)

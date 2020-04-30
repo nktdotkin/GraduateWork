@@ -211,6 +211,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\RelayCommand.cs" />
     <Compile Include="Service\DataBaseStaticObjects.cs" />
     <Compile Include="Service\PasswordSecurityService.cs" />

@@ -2,5 +2,9 @@
 {
     class ImportService
     {
+        public void ImportFromFile()
+        {
+
+        }
     }
 }

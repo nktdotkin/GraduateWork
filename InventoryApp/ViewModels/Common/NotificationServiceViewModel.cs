@@ -3,6 +3,7 @@ using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Common
 {
@@ -38,6 +39,11 @@ namespace InventoryApp.ViewModels.Common
 
         public void ShowListNotification(List<ValidationResult> Messages)
         {
+            Task.Run(() => ShowNotificationAsync(Messages));
+        }
+
+        private void ShowNotificationAsync(List<ValidationResult> Messages)
+        {
             NotificationMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3000));
             IsActive = true;
             foreach (var message in Messages)
@@ -48,7 +54,7 @@ namespace InventoryApp.ViewModels.Common
 
         public void ShowNotification(string message)
         {
-            ShowListNotification(new List<ValidationResult>() { new ValidationResult(message) });
+            Task.Run(() => ShowListNotification(new List<ValidationResult>() { new ValidationResult(message) }));
         }
     }
 }

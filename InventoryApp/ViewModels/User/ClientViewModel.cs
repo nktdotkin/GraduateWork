@@ -5,6 +5,7 @@ using InventoryApp.ViewModels.Common;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -21,7 +22,7 @@ namespace InventoryApp.ViewModels.User
             Notification = new NotificationServiceViewModel();
             DataBaseStaticModels = new DataBaseStaticObjects();
             ModelValidation = new ValidationService<ClientModel>();
-            Update();
+            Task.Run(() => Update());
         }
 
         #region Properties
@@ -81,12 +82,13 @@ namespace InventoryApp.ViewModels.User
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        Update();
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Update();
+                        Task.Run(() => Update());
                     }
                 }
             }
@@ -119,7 +121,7 @@ namespace InventoryApp.ViewModels.User
             {
                 Notification.ShowNotification("Error: No clients selected.");
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Add()
@@ -141,7 +143,7 @@ namespace InventoryApp.ViewModels.User
                     Notification.ShowNotification("Error: Adding new client failed.");
                 }
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Find(string searchText)

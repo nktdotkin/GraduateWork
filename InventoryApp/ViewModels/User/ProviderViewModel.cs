@@ -5,6 +5,7 @@ using InventoryApp.ViewModels.Common;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.User
 {
@@ -20,7 +21,7 @@ namespace InventoryApp.ViewModels.User
             ProviderLocationSource = new BaseQueryService().GetAdress(null);
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ProviderModel>();
-            Update();
+            Task.Run(() => Update());
         }
 
         #region Properties
@@ -79,12 +80,13 @@ namespace InventoryApp.ViewModels.User
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        Update();
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Update();
+                        Task.Run(() => Update());
                     }
                 }
             }
@@ -117,7 +119,7 @@ namespace InventoryApp.ViewModels.User
             {
                 Notification.ShowNotification("Error: No providers selected.");
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Add()
@@ -139,7 +141,7 @@ namespace InventoryApp.ViewModels.User
                     Notification.ShowNotification("Error: Adding new provider failed.");
                 }
             }
-            Update();
+            Task.Run(() => Update());
         }
 
         private void Find(string searchText)
