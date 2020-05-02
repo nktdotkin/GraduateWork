@@ -22,7 +22,10 @@ namespace InventoryApp.ViewModels.Product
             AddNewSupply = new SupplyModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<SupplyModel>();
-            Task.Run(() => Update());
+            ProviderModels = new ProviderViewModel().Update();
+            ProductModels = new ProductViewModel().Update();
+            var updateTask = Task.Run(() => Update());
+            Task.WhenAny(updateTask);
         }
 
         #region Properties
@@ -81,8 +84,6 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         private void Update()
         {
-            ProviderModels = new ProviderViewModel().Update();
-            ProductModels = new ProductViewModel().Update();
             SupplyModels = new BaseQueryService().Fill<SupplyModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(SupplyModels));
         }
@@ -138,7 +139,7 @@ namespace InventoryApp.ViewModels.Product
         {
             var searchResult = SupplyModels.Where(items =>
             items.Product.Name.Contains(searchText) ||
-            items.Product.Group.Contains(searchText) ||
+            items.Product.Groups.Group.Contains(searchText) ||
             items.Product.Description.Contains(searchText) ||
             items.Provider.Name.Contains(searchText) ||
             items.Provider.Phone.Contains(searchText) ||

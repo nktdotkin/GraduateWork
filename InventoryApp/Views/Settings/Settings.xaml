@@ -4,9 +4,149 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InventoryApp.Views.Settings"
+        xmlns:properties="clr-namespace:InventoryApp.Properties"
+        xmlns:Settings="clr-namespace:InventoryApp.ViewModels.Base"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:BaseCommand="clr-namespace:InventoryApp.Service"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
+	Width="800" Height="600" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#fafafa">
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="H" Command="{Binding MainWindowCommand}"></KeyBinding>
+    </Window.InputBindings>
+    <Window.DataContext>
+        <Settings:SettingsViewModel/>
+    </Window.DataContext>
     <Grid>
-        
+        <Grid Height="60" VerticalAlignment="Top" Background="#FFDE73">
+            <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="-0,0,0,0" HorizontalAlignment="Left"></Image>
+            <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22"/>
+            <Menu Margin="0,0,20,0"  Background="Transparent" IsMainMenu="True" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <MenuItem Height="35" Width="50" Icon="{materialDesign:PackIcon Kind=UserBox}">
+                    <MenuItem Background="#f4f4f4" Header="Backup Database" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Backup" />
+                        </MenuItem.Icon>
+                        <MenuItem.DataContext>
+                            <Settings:MainWindowViewModel/>
+                        </MenuItem.DataContext>
+                    </MenuItem>
+                    <MenuItem Background="#f4f4f4" Header="Restore Database" InputGestureText="Ctrl+R" Command="{Binding RestoreCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Restore" />
+                        </MenuItem.Icon>
+                        <MenuItem.DataContext>
+                            <Settings:MainWindowViewModel/>
+                        </MenuItem.DataContext>
+                    </MenuItem>
+                    <MenuItem Background="#f4f4f4" Header="Home" InputGestureText="Ctrl+S" Command="{Binding MainWindowCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="Home" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Background="#f4f4f4" Header="Logout" InputGestureText="Ctrl+L" Command="{Binding LogoutCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="User" />
+                        </MenuItem.Icon>
+                        <MenuItem.DataContext>
+                            <Settings:MainWindowViewModel/>
+                        </MenuItem.DataContext>
+                    </MenuItem>
+                    <MenuItem Background="#f4f4f4" Header="Exit" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
+                        <MenuItem.Icon>
+                            <materialDesign:PackIcon Kind="ExitToApp" />
+                        </MenuItem.Icon>
+                        <MenuItem.DataContext>
+                            <BaseCommand:BaseQueryService/>
+                        </MenuItem.DataContext>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Width="300" Margin="60,60,0,0">
+            <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}">
+                <StackPanel>
+                    <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+                        <Expander.Header>
+                            <TextBlock Text="Edit status" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="90"/>
+                                </TextBlock.LayoutTransform>
+                            </TextBlock>
+                        </Expander.Header>
+                        <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                            <ListBox Style="{StaticResource MaterialDesignListBox}" ItemsSource="{Binding StatusesModels}" SelectedItem="{Binding StatusesModels, UpdateSourceTrigger=PropertyChanged}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBox Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
+                                            <TextBox Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"></TextBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Expander>
+                    <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+                        <Expander.Header>
+                            <TextBlock Text="Edit groups" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="90"/>
+                                </TextBlock.LayoutTransform>
+                            </TextBlock>
+                        </Expander.Header>
+                        <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                            <ListBox Style="{StaticResource MaterialDesignListBox}" ItemsSource="{Binding GroupsModels}" SelectedItem="{Binding GroupsModels, UpdateSourceTrigger=PropertyChanged}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBox Width="200" Text="{Binding Group, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
+                                            <TextBox Width="200" Text="{Binding Tax, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"></TextBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Expander>
+                    <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+                        <Expander.Header>
+                            <TextBlock Text="Edit stores" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform Angle="90"/>
+                                </TextBlock.LayoutTransform>
+                            </TextBlock>
+                        </Expander.Header>
+                        <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                            <ListBox Style="{StaticResource MaterialDesignListBox}" ItemsSource="{Binding StoretypesModels}" SelectedItem="{Binding StoretypesModels, UpdateSourceTrigger=PropertyChanged}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBox Width="200" Text="{Binding StoreType, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <Grid Width="400" Margin="60,60,0,0" HorizontalAlignment="Right">
+            <StackPanel>
+                <TextBlock Margin="20,30" Text="Sales:" Foreground="#cc420c" FontSize="20" FontFamily="Helvetica Neue"/>
+                <ListBox  />
+                <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                    <ListBox Style="{StaticResource MaterialDesignListBox}" ItemsSource="{Binding Source={x:Static properties:Settings.Default}, Path=Properties}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Width="200" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                                    <TextBox Width="200" Text="{Binding PropertyValue, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

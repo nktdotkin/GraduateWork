@@ -23,7 +23,10 @@ namespace InventoryApp.ViewModels.Product
             AddNewShipment = new ShipmentModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ShipmentModel>();
-            Task.Run(() => Update());
+            ClientModels = new ClientViewModel().Update();
+            ProductModels = new ProductViewModel().Update();
+            var updateTask = Task.Run(() => Update());
+            Task.WhenAny(updateTask);
         }
 
         #region Properties
@@ -83,8 +86,6 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         private void Update()
         {
-            ClientModels = new ClientViewModel().Update();
-            ProductModels = new ProductViewModel().Update();
             ShipmentModels = new BaseQueryService().Fill<ShipmentModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ShipmentModels));
         }
@@ -123,7 +124,7 @@ namespace InventoryApp.ViewModels.Product
                 if (AddNewShipment.Amount > actualAmount)
                 {
                     Notification.ShowNotification($"Info: Not enougth in stock (or nothing selected).");
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {actualAmount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
+                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {actualAmount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * actualAmount} , {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Info: Shipment for {AddNewShipment.Client.Name} for {actualAmount} pcs. is added.");
@@ -136,7 +137,7 @@ namespace InventoryApp.ViewModels.Product
                 }
                 else
                 {
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {AddNewShipment.Amount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
+                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {AddNewShipment.Amount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * AddNewShipment.Amount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Info: Shipment for {AddNewShipment.Client.Name} is added.");
@@ -148,14 +149,14 @@ namespace InventoryApp.ViewModels.Product
                     }
                 }
             }
-            Task.Run(() => Update());
+            Update();
         }
 
         private void Find(string searchText)
         {
             var searchResult = ShipmentModels.Where(items =>
             items.Product.Name.Contains(searchText) ||
-            items.Product.Group.Contains(searchText) ||
+            items.Product.Groups.Group.Contains(searchText) ||
             items.Product.Description.Contains(searchText) ||
             items.Client.Name.Contains(searchText) ||
             items.Client.Phone.Contains(searchText) ||

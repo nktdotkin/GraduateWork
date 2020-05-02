@@ -27,19 +27,14 @@ namespace InventoryApp.Models.Product
                 }
             }
         }
-        [Required(ErrorMessage = "Amount must be more than zero")]
-        [Range(1, Int32.MaxValue)]
         public int Amount { get; set; }
         [Required(ErrorMessage = "Price must be more than zero")]
         [Range(0.1, double.MaxValue)]
         public decimal Price { get; set; }
-        [Required(ErrorMessage = "Tax must be more than zero")]
-        [Range(0.1, double.MaxValue)]
-        public decimal Tax { get; set; }
         public decimal TotalPrice { get; set; }
         public int GroupId { get; set; }
         public string ImageLink { get; set; }
         [Required(ErrorMessage = "Please select a group")]
-        public string Group { get; set; }
+        public GroupsModel Groups { get; set; }
     }
 }

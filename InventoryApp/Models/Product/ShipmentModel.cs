@@ -23,6 +23,7 @@ namespace InventoryApp.Models.Product
         [Required(ErrorMessage = "Amount must be more than zero")]
         [Range(1, Int32.MaxValue)]
         public int Amount { get; set; }
+        public decimal TotalPrice { get; set; }
         [Required(ErrorMessage = "Please select product")]
         public ProductModel Product { get; set; }
         [Required(ErrorMessage = "Please select client")]

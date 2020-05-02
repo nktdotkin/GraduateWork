@@ -19,7 +19,8 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Date, StringFormat=dd-MM-yyyy}" Header="Date"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTemplateColumn Header="Product">
+                    <DataGridTextColumn Binding="{Binding Path=TotalPrice}" Header="Price"/>
+                    <DataGridTemplateColumn Header="  Product">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -42,12 +43,12 @@
                                     <TextBlock Text="{Binding Path=Product.ExpirationDateDays, StringFormat=dd-MM-yyyy}"/>
                                     <TextBlock Text="{Binding Path=Product.Price}"/>
                                     <TextBlock Text="{Binding Path=Product.TotalPrice}"/>
-                                    <TextBlock Text="{Binding Path=Product.Group}"/>
+                                    <TextBlock Text="{Binding Path=Product.Groups.Group}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Client">
+                    <DataGridTemplateColumn Header="  Client">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -71,8 +72,8 @@
                                     <TextBlock Text="{Binding Path=Client.Phone}"/>
                                     <TextBlock Text="{Binding Path=Client.Adress}"/>
                                     <TextBlock Text="{Binding Path=Client.Email}"/>
-                                    <TextBlock Text="{Binding Path=Client.Status}"/>
-                                    <TextBlock Text="{Binding Path=Client.StoreType}"/>
+                                    <TextBlock Text="{Binding Path=Client.Status.Status}"/>
+                                    <TextBlock Text="{Binding Path=Client.StoreType.StoreType}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -15,22 +15,20 @@ namespace InventoryApp.ViewModels.Product
         public ProductViewModel()
         {
             GC.Collect(1, GCCollectionMode.Forced);
-            ProductModels = new ObservableCollection<ProductModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddProductImageCommand = new RelayCommand((obj) => AddProductImage());
             AddNewProduct = new ProductModel();
             Notification = new NotificationServiceViewModel();
-            DataBaseStaticModels = new DataBaseStaticObjects();
             ModelValidation = new ValidationService<ProductModel>();
             Task.Run(() => Update(true));
-            Task.Run(() => DeleteOutdatingProducts());
+            //Task.Run(() => DeleteOutdatingProducts());
         }
 
         #region Properties
         private const string TableName = "Product";
         public ObservableCollection<ProductModel> ProductModels { get; set; }
-        public DataBaseStaticObjects DataBaseStaticModels { get; set; }
+        public ObservableCollection<GroupsModel> GroupsModels { get; set; }
         private ValidationService<ProductModel> ModelValidation { get; set; }
 
         public RelayCommand DeleteCommand { get; set; }
@@ -82,6 +80,7 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         public ObservableCollection<ProductModel> Update(bool isFirstStart = false)
         {
+            GroupsModels = new BaseQueryService().Fill<GroupsModel>(($"GetGroups"));
             ProductModels = new BaseQueryService().Fill<ProductModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProductModels));
             if (isFirstStart)
@@ -121,6 +120,7 @@ namespace InventoryApp.ViewModels.Product
             {
                 if (CheckStorageCapacity())
                 {
+                    AddNewProduct.GroupId = GroupsModels.Where(items => items.Group == AddNewProduct.Groups.Group).First().Id;
                     bool isCompleted = new BaseQueryService().Add(TableName, AddNewProduct);
                     if (isCompleted)
                     {
@@ -180,7 +180,7 @@ namespace InventoryApp.ViewModels.Product
         {
             var searchResult = ProductModels.Where(items =>
             items.Name.Contains(searchText) ||
-            items.Group.Contains(searchText) ||
+            items.Groups.Group.Contains(searchText) ||
             items.Description.Contains(searchText)
             ).ToList();
             if (!ProductModels.SequenceEqual(searchResult))

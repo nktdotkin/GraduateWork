@@ -14,13 +14,11 @@ namespace InventoryApp.ViewModels.User
         public ClientViewModel()
         {
             GC.Collect(1, GCCollectionMode.Forced);
-            ClientModels = new ObservableCollection<ClientModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewClient = new ClientModel();
             ClientLocationSource = new BaseQueryService().GetAdress(null);
             Notification = new NotificationServiceViewModel();
-            DataBaseStaticModels = new DataBaseStaticObjects();
             ModelValidation = new ValidationService<ClientModel>();
             Task.Run(() => Update());
         }
@@ -29,12 +27,13 @@ namespace InventoryApp.ViewModels.User
         private const string TableName = "Client";
         public string ClientLocationSource { get; set; }
         public ObservableCollection<ClientModel> ClientModels { get; set; }
+        public ObservableCollection<StoretypesModel> StoretypesModels { get; set; }
+        public ObservableCollection<StatusesModel> StatusesModels { get; set; }
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
-        public DataBaseStaticObjects DataBaseStaticModels { get; set; }
         private ValidationService<ClientModel> ModelValidation { get; set; }
 
         private ClientModel addNewClient;
@@ -98,6 +97,8 @@ namespace InventoryApp.ViewModels.User
         #region Functions
         public ObservableCollection<ClientModel> Update()
         {
+            StatusesModels = new BaseQueryService().Fill<StatusesModel>(($"GetStatuses"));
+            StoretypesModels = new BaseQueryService().Fill<StoretypesModel>(($"GetStoreTypes"));
             ClientModels = new BaseQueryService().Fill<ClientModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ClientModels));
             return ClientModels;
@@ -133,8 +134,10 @@ namespace InventoryApp.ViewModels.User
             }
             else
             {
-                bool isCompleted = new BaseQueryService().Add(TableName, AddNewClient);
-                if (isCompleted)
+                bool isCompleted = new BaseQueryService().Add<ClientModel>(TableName, AddNewClient);
+                Update();
+                bool isUpdated = new BaseQueryService().ExecuteQuery<ClientModel>($"UPDATE {TableName} SET _StatusId = {AddNewClient.Status.StatusId}, _StoreId = {AddNewClient.StoreType.StoreId} WHERE ClientId = {ClientModels.Last().Id}");
+                if (isCompleted && isUpdated)
                 {
                     Notification.ShowNotification($"Info: {AddNewClient.Name} is added.");
                 }
@@ -151,7 +154,7 @@ namespace InventoryApp.ViewModels.User
             var searchResult = ClientModels.Where(items =>
             items.Name.Contains(searchText) ||
             items.Surname.Contains(searchText) ||
-            items.Status.Contains(searchText) ||
+            items.Status.Status.Contains(searchText) ||
             items.Phone.Contains(searchText) ||
             items.Adress.Contains(searchText)
             ).ToList();

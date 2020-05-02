@@ -25,9 +25,9 @@
                     <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Expiration date"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
                     <DataGridTextColumn Binding="{Binding Path=Price}" Header="Price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Tax}" Header="Tax"/>
+                    <DataGridTextColumn Binding="{Binding Path=Groups.Tax}" Header="Tax"/>
                     <DataGridTextColumn Binding="{Binding Path=TotalPrice}" Header="Total price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Group}" Header="Group"/>
+                    <DataGridTextColumn Binding="{Binding Path=Groups.Group}" Header="Group"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -61,11 +61,16 @@
                         Find Image
                     </Button>
                     <DatePicker Text="{Binding AddNewProduct.ExpirationDateDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Expiration"/>
-                    <TextBox Text="{Binding AddNewProduct.Amount, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Amount"/>
                     <TextBox Text="{Binding AddNewProduct.Price, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Price"/>
-                    <TextBox Text="{Binding AddNewProduct.Tax, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Tax"/>
-                    <ComboBox Height="35" materialDesign:HintAssist.Hint="Group"  ItemsSource="{Binding DataBaseStaticModels.Groups}"
-                    SelectedValue="{Binding AddNewProduct.Group}">
+                    <ComboBox Height="35" materialDesign:HintAssist.Hint="Group"  ItemsSource="{Binding GroupsModels}"
+                    SelectedValue="{Binding AddNewProduct.Groups}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Group}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
                     <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
                         <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddCommand}">

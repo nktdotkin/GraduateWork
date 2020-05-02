@@ -24,8 +24,9 @@
                     <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Adress"/>
                     <DataGridTextColumn Binding="{Binding Path=Phone}" Header="Phone"/>
                     <DataGridTextColumn Binding="{Binding Path=Email}" Header="E-Mail"/>
-                    <DataGridTextColumn Binding="{Binding Path=Status}" Header="Status"/>
-                    <DataGridTextColumn Binding="{Binding Path=StoreType}" Header="Store type"/>
+                    <DataGridTextColumn Binding="{Binding Path=Status.Status}" Header="Status"/>
+                    <DataGridTextColumn Binding="{Binding Path=Status.Discount}" Header="Discount"/>
+                    <DataGridTextColumn Binding="{Binding Path=StoreType.StoreType}" Header="Store type"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
@@ -52,17 +53,30 @@
             </Expander.Header>
             <StackPanel Orientation="Vertical" Margin="8,24,16,24">
                 <TextBlock Text="Client:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
-                <StackPanel Width="300" Background="{DynamicResource MaterialDesignPaper}">
+                <StackPanel IsEnabled="{Binding }" Width="300" Background="{DynamicResource MaterialDesignPaper}">
                     <TextBox Text="{Binding AddNewClient.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name"/>
                     <TextBox Text="{Binding AddNewClient.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Surname"/>
                     <TextBox Text="{Binding AddNewClient.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Adress"/>
                     <TextBox Text="{Binding AddNewClient.Phone, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Phone"/>
                     <TextBox Text="{Binding AddNewClient.Email, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Email"/>
-                    <ComboBox Height="35" materialDesign:HintAssist.Hint="Status"  ItemsSource="{Binding DataBaseStaticModels.Statuses}"                   
+                    <ComboBox Height="45" materialDesign:HintAssist.Hint="Status" ItemsSource="{Binding StatusesModels, UpdateSourceTrigger=PropertyChanged}"                   
                     SelectedValue="{Binding AddNewClient.Status}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Status}"/>
+                                    <TextBlock Text="{Binding Discount}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <ComboBox Height="35" materialDesign:HintAssist.Hint="StoreType"  ItemsSource="{Binding DataBaseStaticModels.StoreTypes}"
+                    <ComboBox Height="35" materialDesign:HintAssist.Hint="StoreType"  ItemsSource="{Binding StoretypesModels, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValue="{Binding AddNewClient.StoreType}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding StoreType}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
                     </ComboBox>
                     <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
                         <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddCommand}">

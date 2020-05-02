@@ -30,34 +30,48 @@ namespace InventoryApp.Service
                 int readerValueCounter = 0;
                 while (reader.Read())
                 {
-                    var instanse = BaseService.GetClass<T>();
-                    foreach (var fields in instanse.GetType().GetProperties().OrderBy(x => x.MetadataToken))
+                    var firstLevelInstanse = BaseService.GetClass<T>();
+                    foreach (var firstLevelFields in firstLevelInstanse.GetType().GetProperties().OrderBy(x => x.MetadataToken))
                     {
-                        var prop = instanse.GetType().GetProperty(fields.Name);
-                        if (fields.PropertyType.FullName.Contains("InventoryApp"))
+                        var firstLevelProperty = firstLevelInstanse.GetType().GetProperty(firstLevelFields.Name);
+                        if (firstLevelFields.PropertyType.FullName.Contains("InventoryApp"))
                         {
-                            var baseInstance = Activator.CreateInstance(prop.PropertyType);
-                            foreach (var baseFields in baseInstance.GetType().GetProperties().OrderBy(x => x.MetadataToken))
+                            var secondLevelInstance = Activator.CreateInstance(firstLevelProperty.PropertyType);
+                            foreach (var secondLevelFields in secondLevelInstance.GetType().GetProperties().OrderBy(x => x.MetadataToken))
                             {
-                                var baseProp = baseInstance.GetType().GetProperty(baseFields.Name);
-                                baseProp.SetValue(baseInstance, Convert.ChangeType(reader.GetValue(readerValueCounter), baseProp.PropertyType));
-                                readerValueCounter++;
+                                var secondLevelProperty = secondLevelInstance.GetType().GetProperty(secondLevelFields.Name);
+                                if (secondLevelProperty.PropertyType.FullName.Contains("InventoryApp"))
+                                {
+                                    var thirdLevelInstance = Activator.CreateInstance(secondLevelProperty.PropertyType);
+                                    foreach (var thirdLevelFields in thirdLevelInstance.GetType().GetProperties().OrderBy(x => x.MetadataToken))
+                                    {
+                                        var thirdLevelProperty = thirdLevelInstance.GetType().GetProperty(thirdLevelFields.Name);
+                                        thirdLevelProperty.SetValue(thirdLevelInstance, Convert.ChangeType(reader.GetValue(readerValueCounter), thirdLevelProperty.PropertyType));
+                                        readerValueCounter++;
+                                    }
+                                    secondLevelProperty.SetValue(secondLevelInstance, Convert.ChangeType(thirdLevelInstance, secondLevelProperty.PropertyType));
+                                }
+                                else
+                                {
+                                    secondLevelProperty.SetValue(secondLevelInstance, Convert.ChangeType(reader.GetValue(readerValueCounter), secondLevelProperty.PropertyType));
+                                    readerValueCounter++;
+                                }
                             }
-                            prop.SetValue(instanse, Convert.ChangeType(baseInstance, prop.PropertyType));
+                            firstLevelProperty.SetValue(firstLevelInstanse, Convert.ChangeType(secondLevelInstance, firstLevelProperty.PropertyType));
                         }
                         else
                         {
-                            prop.SetValue(instanse, Convert.ChangeType(reader.GetValue(readerValueCounter), prop.PropertyType));
+                            firstLevelProperty.SetValue(firstLevelInstanse, Convert.ChangeType(reader.GetValue(readerValueCounter), firstLevelProperty.PropertyType));
                             readerValueCounter++;
                         }
                     }
-                    collection.Add(instanse);
+                    collection.Add(firstLevelInstanse);
                     readerValueCounter = 0;
                 }
             }
             catch (Exception e)
             {
-                //MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message);
             }
             connection.Close();
             return collection;
@@ -67,6 +81,11 @@ namespace InventoryApp.Service
         {
             return ExecuteQuery(null, $"Set{tableName}", instanse, true);
         }
+
+        //public bool AddWithparameters(string tableName, List<string> parameters)
+        //{
+        //    return ExecuteQuery<BaseQueryService>(null, null, null, false, parameters, tableName, true);
+        //}
 
         public bool Delete(string tableName, int id)
         {
@@ -91,7 +110,7 @@ namespace InventoryApp.Service
                         command.CommandType = CommandType.StoredProcedure;
                         foreach (var fields in instanse.GetType().GetProperties())
                         {
-                            if (fields.Name != "Id")
+                            if (fields.Name != "Id" && !fields.PropertyType.FullName.Contains("InventoryApp"))
                             {
                                 command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.VarChar)).Value = fields.GetValue(instanse);
                             }
@@ -99,6 +118,20 @@ namespace InventoryApp.Service
                         break;
                     case false:
                         command = new SqlCommand(Expression, connection);
+                        //switch (listQuery)
+                        //{
+                        //    case true:
+                        //        command = new SqlCommand($"INSERT INTO {tableName}(Column)VALUES(@Column)", connection);
+                        //        command.Parameters.Add("@Column", SqlDbType.VarChar);
+                        //        foreach (var value in list)
+                        //        {
+                        //            command.Parameters["@Column"].Value = value;
+                        //        }
+                        //        break;
+                        //    case false:
+                        //        command = new SqlCommand(Expression, connection);
+                        //        break;
+                        //}
                         break;
                 }
                 var exetudedCommand = command.ExecuteNonQuery();

@@ -211,12 +211,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Product\GroupsModel.cs" />
+    <Compile Include="Models\User\StatusesModel.cs" />
+    <Compile Include="Models\User\StoretypesModel.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\RelayCommand.cs" />
-    <Compile Include="Service\DataBaseStaticObjects.cs" />
     <Compile Include="Service\PasswordSecurityService.cs" />
     <Compile Include="Service\BaseQueryService.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\Base\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\Base\SettingsViewModel.cs" />
     <Compile Include="ViewModels\Base\ViewModelsBase.cs" />
     <Compile Include="ViewModels\Product\ProductViewModel.cs" />
     <Compile Include="ViewModels\Product\ShipmentViewModel.cs" />

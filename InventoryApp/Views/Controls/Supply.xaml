@@ -19,7 +19,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Date, StringFormat=dd-MM-yyyy}" Header="Date"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTemplateColumn Header="Product">
+                    <DataGridTemplateColumn Header="  Product">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
@@ -42,12 +42,12 @@
                                     <TextBlock Text="{Binding Path=Product.ExpirationDateDays, StringFormat=dd-MM-yyyy}"/>
                                     <TextBlock Text="{Binding Path=Product.Price}"/>
                                     <TextBlock Text="{Binding Path=Product.TotalPrice}"/>
-                                    <TextBlock Text="{Binding Path=Product.Group}"/>
+                                    <TextBlock Text="{Binding Path=Product.Groups.Group}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Provider">
+                    <DataGridTemplateColumn Header="  Provider">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
