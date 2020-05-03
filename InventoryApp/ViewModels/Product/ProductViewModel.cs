@@ -22,12 +22,12 @@ namespace InventoryApp.ViewModels.Product
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ProductModel>();
             Task.Run(() => Update(true));
-            //Task.Run(() => DeleteOutdatingProducts());
         }
 
         #region Properties
         private const string TableName = "Product";
         public ObservableCollection<ProductModel> ProductModels { get; set; }
+        public ObservableCollection<ProductModel> OutdatedProductModels { get; set; }
         public ObservableCollection<GroupsModel> GroupsModels { get; set; }
         private ValidationService<ProductModel> ModelValidation { get; set; }
 
@@ -75,16 +75,44 @@ namespace InventoryApp.ViewModels.Product
                 }
             }
         }
+
+        private GroupsModel searchByGroup;
+        public GroupsModel SearchByGroup
+        {
+            get => searchByGroup;
+            set
+            {
+                if (value != searchByGroup)
+                {
+                    searchByGroup = value;
+                    OnPropertyChanged(nameof(SearchByGroup));
+                    if (!string.IsNullOrWhiteSpace(searchByGroup.Group))
+                    {
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
+                        Find(searchByGroup.Group);
+                    }
+                    else
+                    {
+                        Task.Run(() => Update());
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Functions
         public ObservableCollection<ProductModel> Update(bool isFirstStart = false)
         {
             GroupsModels = new BaseQueryService().Fill<GroupsModel>(($"GetGroups"));
+            OutdatedProductModels = new BaseQueryService().Fill<ProductModel>(($"GetOutdatedProducts"));
             ProductModels = new BaseQueryService().Fill<ProductModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ProductModels));
             if (isFirstStart)
+            {
                 CheckStorageCapacity();
+                Task.Run(() => DeleteOutdatingProducts());
+            }
             return ProductModels;
         }
 
@@ -154,14 +182,15 @@ namespace InventoryApp.ViewModels.Product
         {
             foreach (var oudatedPorducts in ProductModels.Where(items => (items.ExpirationDateDays.DayOfYear.Equals(DateTime.Now.DayOfYear - 1)) && items.ExpirationDateDays.Year.Equals(DateTime.Now.Year)))
             {
-                bool isCompleted = new BaseQueryService().Delete(TableName, oudatedPorducts.Id);
-                if (isCompleted)
+                bool isDeleted = new BaseQueryService().Delete(TableName, oudatedPorducts.Id);
+                bool isAdded = new BaseQueryService().Add("OutdatedProduct", oudatedPorducts);
+                if (isDeleted && isAdded)
                 {
                     Notification.ShowNotification("Info: Outdated product is deleted.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Deleting outdated product failed.\n\t It can be referenced in Shipment");
+                    Notification.ShowNotification("Error: Deleting outdated product failed.");
                 }
             }
             Task.Run(() => Update());

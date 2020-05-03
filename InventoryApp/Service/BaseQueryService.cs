@@ -71,7 +71,7 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
+                //MessageBox.Show(e.Message);
             }
             connection.Close();
             return collection;

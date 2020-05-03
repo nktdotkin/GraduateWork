@@ -29,7 +29,7 @@ namespace InventoryApp.ViewModels.Base
             SettingsCommand = new RelayCommand((obj) => Settings());
             LogoutCommand = new RelayCommand((obj) => Logout());
             //Set as setting
-            //Initialize();
+            Initialize();
         }
 
         private void Initialize()
