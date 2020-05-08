@@ -20,7 +20,7 @@
     </Window.DataContext>
     <Grid>
         <!--Top Grid-->
-        <Grid Height="60" VerticalAlignment="Top" Background="#FFDE73">
+        <Grid Height="60" VerticalAlignment="Top" Background="#FFE082">
             <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="-0,0,0,0" HorizontalAlignment="Left"></Image>
             <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">

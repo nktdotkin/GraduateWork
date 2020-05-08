@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using InventoryApp.Service;
 
 namespace InventoryApp.ViewModels.Common
 {
@@ -49,6 +50,7 @@ namespace InventoryApp.ViewModels.Common
             foreach (var message in Messages)
             {
                 NotificationMessageQueue.Enqueue(message);
+                new LogService().SetToFile(message.ToString());
             }
         }
 
