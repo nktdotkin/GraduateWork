@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:InventoryApp.ViewModels.User"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:browser="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+             xmlns:properties="clr-namespace:InventoryApp.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -13,84 +14,88 @@
     </UserControl.DataContext>
     <Grid>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,60,0,0">
-            <Button ToolTip="Search" Background="{x:Null}" BorderBrush="{x:Null}" Width="70" Height="70">
+            <Button ToolTip="Поиск" Background="{x:Null}" BorderBrush="{x:Null}" Width="70" Height="70">
                 <materialDesign:PackIcon Kind="Search" Height="30" Width="30" Foreground="Black" />
             </Button>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="180" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="180" materialDesign:HintAssist.Hint="Поиск" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
         </StackPanel>
         <Grid Margin="0,180,0,0">
             <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ClientModels, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name"/>
-                    <DataGridTextColumn Binding="{Binding Path=Surname}" Header="Surname"/>
-                    <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Adress"/>
-                    <DataGridTextColumn Binding="{Binding Path=Phone}" Header="Phone"/>
+                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Имя"/>
+                    <DataGridTextColumn Binding="{Binding Path=Surname}" Header="Фамилия"/>
+                    <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Адрес доставки"/>
+                    <DataGridTextColumn Binding="{Binding Path=Phone}" Header="Контактный номер"/>
                     <DataGridTextColumn Binding="{Binding Path=Email}" Header="E-Mail"/>
-                    <DataGridTextColumn Binding="{Binding Path=Status.Status}" Header="Status"/>
-                    <DataGridTextColumn Binding="{Binding Path=Status.Discount}" Header="Discount"/>
-                    <DataGridTextColumn Binding="{Binding Path=StoreType.StoreType}" Header="Store type"/>
+                    <DataGridTextColumn Binding="{Binding Path=Status.Status}" Header="Статус"/>
+                    <DataGridTextColumn Binding="{Binding Path=Status.Discount}" Header="Размер скидки (%)"/>
+                    <DataGridTextColumn Binding="{Binding Path=StoreType.StoreType}" Header="Тип магазина"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
-        <Expander Margin="900,120,60,60" HorizontalAlignment="Left" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
-            <Expander.Header>
-                <TextBlock Text="Show client adress" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
-                    <TextBlock.LayoutTransform>
-                        <RotateTransform Angle="90"/>
-                    </TextBlock.LayoutTransform>
-                </TextBlock>
-            </Expander.Header>
-            <StackPanel Orientation="Vertical" Margin="8,24,16,24">
-                <TextBlock Text="Adress:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
-                <browser:ChromiumWebBrowser Height="800" Width="600" Address="{Binding ClientLocationSource, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
-        </Expander>
-        <Expander Margin="900,360,60,60" HorizontalAlignment="Left" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
-            <Expander.Header>
-                <TextBlock Text="Add new client" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
-                    <TextBlock.LayoutTransform>
-                        <RotateTransform Angle="90"/>
-                    </TextBlock.LayoutTransform>
-                </TextBlock>
-            </Expander.Header>
-            <StackPanel Orientation="Vertical" Margin="8,24,16,24">
-                <TextBlock Text="Client:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
-                <StackPanel IsEnabled="{Binding }" Width="300" Background="{DynamicResource MaterialDesignPaper}">
-                    <TextBox Text="{Binding AddNewClient.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name"/>
-                    <TextBox Text="{Binding AddNewClient.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Surname"/>
-                    <TextBox Text="{Binding AddNewClient.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Adress"/>
-                    <TextBox Text="{Binding AddNewClient.Phone, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Phone"/>
-                    <TextBox Text="{Binding AddNewClient.Email, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Email"/>
-                    <ComboBox Height="45" materialDesign:HintAssist.Hint="Status" ItemsSource="{Binding StatusesModels, UpdateSourceTrigger=PropertyChanged}"                   
-                    SelectedValue="{Binding AddNewClient.Status}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Text="{Binding Status}"/>
-                                    <TextBlock Text="{Binding Discount}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <ComboBox Height="35" materialDesign:HintAssist.Hint="StoreType"  ItemsSource="{Binding StoretypesModels, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedValue="{Binding AddNewClient.StoreType}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding StoreType}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                        <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddCommand}">
-                            ADD
-                        </Button>
-                        <Button Command="{Binding DeleteCommand}" ToolTip="Select client in the grid to delete" Style="{DynamicResource MaterialDesignFlatButton}">
-                            DELETE
-                        </Button>
+        <ScrollViewer Margin="900,120,60,60" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignScrollViewer}">
+            <StackPanel>
+                <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+                    <Expander.Header>
+                        <TextBlock Text="Предпросмотр адреса" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90"/>
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                    </Expander.Header>
+                    <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                        <TextBlock Text="Адрес:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                        <browser:ChromiumWebBrowser Height="800" Width="600" Address="{Binding ClientLocationSource, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                </StackPanel>
+                </Expander>
+                <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+                    <Expander.Header>
+                        <TextBlock Text="Добавить клиента" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90"/>
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                    </Expander.Header>
+                    <StackPanel Orientation="Vertical" Margin="8,24,16,24">
+                        <TextBlock Text="Клиент:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                        <StackPanel IsEnabled="{Binding }" Width="300" Background="{DynamicResource MaterialDesignPaper}">
+                            <TextBox Text="{Binding AddNewClient.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Имя"/>
+                            <TextBox Text="{Binding AddNewClient.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Фамилия"/>
+                            <TextBox Text="{Binding AddNewClient.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Адрес доставки"/>
+                            <TextBox Text="{Binding AddNewClient.Phone, UpdateSourceTrigger=LostFocus}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Контактный номер"/>
+                            <TextBox Text="{Binding AddNewClient.Email, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="E-Mail"/>
+                            <ComboBox Height="45" materialDesign:HintAssist.Hint="Статус" ItemsSource="{Binding StatusesModels, UpdateSourceTrigger=PropertyChanged}"                   
+                    SelectedValue="{Binding AddNewClient.Status}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Status}"/>
+                                            <TextBlock Text="{Binding Discount}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <ComboBox Height="35" materialDesign:HintAssist.Hint="Тип магазина"  ItemsSource="{Binding StoretypesModels, UpdateSourceTrigger=PropertyChanged}"
+                    SelectedValue="{Binding AddNewClient.StoreType}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding StoreType}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddCommand}">
+                                    Добавить
+                                </Button>
+                                <Button Command="{Binding DeleteCommand}" ToolTip="Выберите объект в таблице что бы удалить" Style="{DynamicResource MaterialDesignFlatButton}">
+                                    Удалить
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Expander>
             </StackPanel>
-        </Expander>
+        </ScrollViewer>
         <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>

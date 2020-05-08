@@ -28,17 +28,6 @@ namespace InventoryApp.ViewModels.Base
             RestoreCommand = new RelayCommand((obj) => Restore());
             SettingsCommand = new RelayCommand((obj) => Settings());
             LogoutCommand = new RelayCommand((obj) => Logout());
-            //Set as setting
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            new ProviderViewModel();
-            new ClientViewModel();
-            new ProductViewModel();
-            new ShipmentViewModel();
-            new SupplyViewModel();
         }
 
         public RelayCommand SettingsCommand { get; set; }

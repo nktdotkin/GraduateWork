@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InventoryApp.ViewModels.Product"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:properties="clr-namespace:InventoryApp.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -12,11 +13,11 @@
     </UserControl.DataContext>
     <Grid>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,60,0,0">
-            <Button ToolTip="Search" Background="{x:Null}" BorderBrush="{x:Null}" Width="70" Height="70">
+            <Button ToolTip="Поиск" Background="{x:Null}" BorderBrush="{x:Null}" Width="70" Height="70">
                 <materialDesign:PackIcon Kind="Search" Height="30" Width="30" Foreground="Black" />
             </Button>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="180" materialDesign:HintAssist.Hint="Search" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
-            <ComboBox Width="100" Height="40" materialDesign:HintAssist.Hint="Group" ItemsSource="{Binding GroupsModels}"
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="180" materialDesign:HintAssist.Hint="Поиск" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+            <ComboBox Width="Auto" Height="40" materialDesign:HintAssist.Hint="Поиск по группе" ItemsSource="{Binding GroupsModels}"
                     SelectedValue="{Binding SearchByGroup, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -30,54 +31,51 @@
         <Grid Margin="0,180,0,0">
             <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ProductModels, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name"/>
-                    <DataGridTextColumn Binding="{Binding Path=Description}" Header="Description"/>
-                    <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Expiration date"/>
-                    <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
-                    <DataGridTextColumn Binding="{Binding Path=Price}" Header="Price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Groups.Tax}" Header="Tax"/>
-                    <DataGridTextColumn Binding="{Binding Path=TotalPrice}" Header="Total price"/>
-                    <DataGridTextColumn Binding="{Binding Path=Groups.Group}" Header="Group"/>
+                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Название товара"/>
+                    <DataGridTextColumn Binding="{Binding Path=Description}" Header="Описание"/>
+                    <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Срок хранения"/>
+                    <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Количество"/>
+                    <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена (без НДС)"/>
+                    <DataGridTextColumn Binding="{Binding Path=Groups.Tax}" Header="Налог (на категорию)"/>
+                    <DataGridTextColumn Binding="{Binding Path=TotalPrice}" Header="Цена (с НДС)"/>
+                    <DataGridTextColumn Binding="{Binding Path=Groups.Group}" Header="Товарная группа"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid>
-        <Grid HorizontalAlignment="Left">
-            
         </Grid>
         <ScrollViewer Margin="900,120,60,60" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignScrollViewer}">
             <StackPanel>
                 <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                     <Expander.Header>
-                        <TextBlock Text="Show product preview" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                        <TextBlock Text="Предпросмотр товара" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                             <TextBlock.LayoutTransform>
                                 <RotateTransform Angle="90"/>
                             </TextBlock.LayoutTransform>
                         </TextBlock>
                     </Expander.Header>
                     <StackPanel Orientation="Vertical" Margin="8,24,16,24">
-                        <TextBlock Text="Preview:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                        <TextBlock Text="Выбранный товар:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
                         <Image Source="{Binding SelectedItem.ImageLink}" />
                     </StackPanel>
                 </Expander>
-                <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+                <Expander IsEnabled="{Binding Source={x:Static properties:Settings.Default}, Path=ManagerVisibility}" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                     <Expander.Header>
-                        <TextBlock Text="Add new product" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                        <TextBlock Text="Добавить новый товар" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                             <TextBlock.LayoutTransform>
                                 <RotateTransform Angle="90"/>
                             </TextBlock.LayoutTransform>
                         </TextBlock>
                     </Expander.Header>
                     <StackPanel Orientation="Vertical" Margin="8,24,16,24">
-                        <TextBlock Text="Product:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                        <TextBlock Text="Товар:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
                         <StackPanel HorizontalAlignment="Left" Width="300" Background="{DynamicResource MaterialDesignPaper}">
-                            <TextBox Text="{Binding AddNewProduct.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Name"/>
-                            <TextBox Text="{Binding AddNewProduct.Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Description"/>
+                            <TextBox Text="{Binding AddNewProduct.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Наименование"/>
+                            <TextBox Text="{Binding AddNewProduct.Description, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Описание"/>
                             <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddProductImageCommand}">
-                                Find Image
+                                Добавить изображение
                             </Button>
-                            <DatePicker Text="{Binding AddNewProduct.ExpirationDateDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Expiration"/>
-                            <TextBox Text="{Binding AddNewProduct.Price, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Price"/>
-                            <ComboBox Height="35" materialDesign:HintAssist.Hint="Group"  ItemsSource="{Binding GroupsModels}"
+                            <DatePicker Text="{Binding AddNewProduct.ExpirationDateDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Срок хранения"/>
+                            <TextBox Text="{Binding AddNewProduct.Price, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Цена (без НДС)"/>
+                            <ComboBox Height="35" materialDesign:HintAssist.Hint="Товарная группа"  ItemsSource="{Binding GroupsModels}"
                     SelectedValue="{Binding AddNewProduct.Groups}">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
@@ -89,10 +87,10 @@
                             </ComboBox>
                             <StackPanel Margin="0,10,0,0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
                                 <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddCommand}">
-                                    ADD
+                                    Добавить
                                 </Button>
-                                <Button Command="{Binding DeleteCommand}" ToolTip="Select product in the grid to delete" Style="{DynamicResource MaterialDesignFlatButton}">
-                                    DELETE
+                                <Button Command="{Binding DeleteCommand}" ToolTip="Выберите объект в таблице что бы удалить" Style="{DynamicResource MaterialDesignFlatButton}">
+                                    Удалить
                                 </Button>
                             </StackPanel>
                         </StackPanel>
@@ -100,24 +98,24 @@
                 </Expander>
                 <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                     <Expander.Header>
-                        <TextBlock Text="Show outdated" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                        <TextBlock Text="Списанные товары" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                             <TextBlock.LayoutTransform>
                                 <RotateTransform Angle="90"/>
                             </TextBlock.LayoutTransform>
                         </TextBlock>
                     </Expander.Header>
                     <StackPanel Orientation="Vertical" Margin="8,24,16,24">
-                        <TextBlock Text="Products:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+                        <TextBlock Text="Товары:" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
                         <DataGrid Width="Auto" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding OutdatedProductModels, UpdateSourceTrigger=PropertyChanged}">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name"/>
-                                <DataGridTextColumn Binding="{Binding Path=Description}" Header="Description"/>
-                                <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Expiration date"/>
-                                <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Amount"/>
-                                <DataGridTextColumn Binding="{Binding Path=Price}" Header="Price"/>
-                                <DataGridTextColumn Binding="{Binding Path=Groups.Tax}" Header="Tax"/>
-                                <DataGridTextColumn Binding="{Binding Path=TotalPrice}" Header="Total price"/>
-                                <DataGridTextColumn Binding="{Binding Path=Groups.Group}" Header="Group"/>
+                                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Название товара"/>
+                                <DataGridTextColumn Binding="{Binding Path=Description}" Header="Описание"/>
+                                <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Срок хранения"/>
+                                <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Количество"/>
+                                <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена (без НДС)"/>
+                                <DataGridTextColumn Binding="{Binding Path=Groups.Tax}" Header="Налог (на категорию)"/>
+                                <DataGridTextColumn Binding="{Binding Path=TotalPrice}" Header="Цена (с НДС)"/>
+                                <DataGridTextColumn Binding="{Binding Path=Groups.Group}" Header="Товарная группа"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>

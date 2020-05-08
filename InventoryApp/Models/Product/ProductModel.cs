@@ -9,13 +9,13 @@ namespace InventoryApp.Models.Product
         private DateTime expirationDateDays = DateTime.Now;
 
         public int Id { get; set; }
-        [Required(ErrorMessage = "Uncorrect name")]
+        [Required(ErrorMessage = "Введите назавание товара")]
         [StringLength(50, MinimumLength = 5)]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Uncorrect description")]
+        [Required(ErrorMessage = "Заполните описание")]
         [StringLength(50, MinimumLength = 5)]
         public string Description { get; set; }
-        [Required(ErrorMessage = "Uncorrect date")]
+        [Required(ErrorMessage = "Выберите дату")]
         public DateTime ExpirationDateDays
         {
             get => DateTime.ParseExact(expirationDateDays.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", CultureInfo.InvariantCulture);
@@ -28,13 +28,13 @@ namespace InventoryApp.Models.Product
             }
         }
         public int Amount { get; set; }
-        [Required(ErrorMessage = "Price must be more than zero")]
+        [Required(ErrorMessage = "Цена должна быть больше 0")]
         [Range(0.1, double.MaxValue)]
         public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
         public int GroupId { get; set; }
         public string ImageLink { get; set; }
-        [Required(ErrorMessage = "Please select a group")]
+        [Required(ErrorMessage = "Выберите группу")]
         public GroupsModel Groups { get; set; }
     }
 }

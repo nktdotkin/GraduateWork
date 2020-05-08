@@ -5,6 +5,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:Main="clr-namespace:InventoryApp.ViewModels.Base"
 	xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:properties="clr-namespace:InventoryApp.Properties"
 	xmlns:BaseCommand="clr-namespace:InventoryApp.Service"
 	mc:Ignorable="d"
 	Width="auto" Height="auto" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" Background="#fafafa" WindowState="Maximized">
@@ -22,46 +23,52 @@
         <Grid Height="60" VerticalAlignment="Top" Background="#FFDE73">
             <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="-0,0,0,0" HorizontalAlignment="Left"></Image>
             <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22"/>
-            <Menu Margin="0,0,20,0"  Background="Transparent" IsMainMenu="True" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <MenuItem Height="35" Width="50" Icon="{materialDesign:PackIcon Kind=UserBox}">
-                    <MenuItem Background="#f4f4f4" Header="Backup Database" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
-                        <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="Backup" />
-                        </MenuItem.Icon>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBlock VerticalAlignment="Center" Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ManagerVisibility, Converter={StaticResource BoolToVis}}" Text="Админ:" FontFamily="Arial" FontSize="22"/>
+                <TextBlock VerticalAlignment="Center" Text="{Binding Source={x:Static properties:Settings.Default}, Path=CurrentUser}" FontFamily="Arial" FontSize="22"/>
+                <Menu Margin="0,0,20,0"  Background="Transparent" IsMainMenu="True">
+                    <MenuItem Height="35" Width="50" Icon="{materialDesign:PackIcon Kind=UserBox}">
+                        <MenuItem Background="#f4f4f4" Header="Создать копию" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="Backup" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Background="#f4f4f4" Header="Восстановить из копии" InputGestureText="Ctrl+R" Command="{Binding RestoreCommand}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="Restore" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem IsEnabled="{Binding Source={x:Static properties:Settings.Default}, Path=ManagerVisibility}" Background="#f4f4f4" Header="Настройки" InputGestureText="Ctrl+S" Command="{Binding SettingsCommand}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="Settings" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Background="#f4f4f4" Header="Логин" InputGestureText="Ctrl+L" Command="{Binding LogoutCommand}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="User" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Background="#f4f4f4" Header="Выйти" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="ExitToApp" />
+                            </MenuItem.Icon>
+                            <MenuItem.DataContext>
+                                <BaseCommand:BaseQueryService/>
+                            </MenuItem.DataContext>
+                        </MenuItem>
                     </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Restore Database" InputGestureText="Ctrl+R" Command="{Binding RestoreCommand}">
-                        <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="Restore" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Settings" InputGestureText="Ctrl+S" Command="{Binding SettingsCommand}">
-                        <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="Settings" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Logout" InputGestureText="Ctrl+L" Command="{Binding LogoutCommand}">
-                        <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="User" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Exit" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
-                        <MenuItem.Icon>
-                            <materialDesign:PackIcon Kind="ExitToApp" />
-                        </MenuItem.Icon>
-                        <MenuItem.DataContext>
-                            <BaseCommand:BaseQueryService/>
-                        </MenuItem.DataContext>
-                    </MenuItem>
-                </MenuItem>
-            </Menu>
+                </Menu>
+            </StackPanel>
         </Grid>
-        <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,60,0,0">
-            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding StatsSwitch}" Width="100" Height="50" Content="Stats" Margin="0,65,500,365"/>
-            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProductSwitch}" Width="100" Height="50" Content="Product" Margin="100,65,0,365"/>
-            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ShipmentSwitch}" Width="100" Height="50" Content="Order" Margin="0,65,300,365"/>
-            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ClientSwitch}" Width="100" Height="50" Content="Client"  Margin="500,65,0,365"/>
-            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProviderSwitch}" Width="100" Height="50" Content="Provider" Margin="300,65,0,365"/>
-            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding SupplySwitch}" Width="100" Height="50" Content="Supply" Margin="0,65,100,365"/>
+        <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,120,0,0">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding StatsSwitch}" Width="Auto" Height="50" Content="Статистика"/>
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProductSwitch}" Width="Auto" Height="50" Content="Товары"/>
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ShipmentSwitch}" Width="Auto" Height="50" Content="Заказы"/>
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ClientSwitch}" Width="Auto" Height="50" Content="Клиенты"/>
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProviderSwitch}" Width="Auto" Height="50" Content="Поставщики"/>
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding SupplySwitch}" Width="Auto" Height="50" Content="Поставки"/>
+            </StackPanel>
         </Grid>
         <ContentControl Content="{Binding TablePanel}"/>
     </Grid>

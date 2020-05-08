@@ -95,16 +95,16 @@ namespace InventoryApp.ViewModels.Product
                 bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    Notification.ShowNotification("Info: Supply information is deleted.");
+                    Notification.ShowNotification("Инфо: Информация удалена.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Deleting information failed.");
+                    Notification.ShowNotification("Ошибка: Удаление завершилось с ошибкой.");
                 }
             }
             else
             {
-                Notification.ShowNotification("Error: No supply information selected.");
+                Notification.ShowNotification("Ошибка: Выберите информацию для удаления.");
             }
             Task.Run(() => Update());
         }
@@ -123,13 +123,13 @@ namespace InventoryApp.ViewModels.Product
                     bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
                     if (isCompleted)
                     {
-                        Notification.ShowNotification($"Info: Supply for {AddNewSupply.Product.Name} is added.");
+                        Notification.ShowNotification($"Инфо: Поставка для {AddNewSupply.Product.Name} добавлена.");
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
                     }
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Adding new supply information failed.");
+                    Notification.ShowNotification("Ошибка: Добавление информации произошло с ошибкой.");
                 }
             }
             Task.Run(() => Update());

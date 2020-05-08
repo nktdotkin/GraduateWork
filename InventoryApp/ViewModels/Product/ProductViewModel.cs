@@ -104,9 +104,9 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         public ObservableCollection<ProductModel> Update(bool isFirstStart = false)
         {
-            GroupsModels = new BaseQueryService().Fill<GroupsModel>(($"GetGroups"));
-            OutdatedProductModels = new BaseQueryService().Fill<ProductModel>(($"GetOutdatedProducts"));
-            ProductModels = new BaseQueryService().Fill<ProductModel>(($"Get{TableName}"));
+            GroupsModels = new BaseQueryService().Fill<GroupsModel>($"GetGroups");
+            OutdatedProductModels = new BaseQueryService().Fill<ProductModel>($"GetOutdatedProducts");
+            ProductModels = new BaseQueryService().Fill<ProductModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ProductModels));
             if (isFirstStart)
             {
@@ -123,16 +123,16 @@ namespace InventoryApp.ViewModels.Product
                 bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    Notification.ShowNotification("Info: Product is deleted.");
+                    Notification.ShowNotification("Инфо: Товар удален.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Deleting product failed.");
+                    Notification.ShowNotification("Ошибка: Удаление завершилось с ошибкой.");
                 }
             }
             else
             {
-                Notification.ShowNotification("Error: No products selected.");
+                Notification.ShowNotification("Ошибка: Выберите товар.");
             }
             Task.Run(() => Update());
         }
@@ -152,12 +152,12 @@ namespace InventoryApp.ViewModels.Product
                     bool isCompleted = new BaseQueryService().Add(TableName, AddNewProduct);
                     if (isCompleted)
                     {
-                        Notification.ShowNotification($"Info: {AddNewProduct.Name} is added.");
+                        Notification.ShowNotification($"Инфо: {AddNewProduct.Name} добавлен.");
                     }
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Adding new supply information failed.");
+                    Notification.ShowNotification("Ошибка: Добавление товара произошло с ошибкой.");
                 }
             }
             Task.Run(() => Update());
@@ -170,11 +170,11 @@ namespace InventoryApp.ViewModels.Product
             if (!string.IsNullOrWhiteSpace(fileDialog.FileName))
             {
                 AddNewProduct.ImageLink = fileDialog.FileName;
-                Notification.ShowNotification($"Info: File {fileDialog.SafeFileName} is added.");
+                Notification.ShowNotification($"Инфо: Файл {fileDialog.SafeFileName} добавлен.");
             }
             else
             {
-                Notification.ShowNotification($"Info: File is not added.");
+                Notification.ShowNotification($"Инфо: Файл не добавлен.");
             }
         }
 
@@ -186,11 +186,11 @@ namespace InventoryApp.ViewModels.Product
                 bool isAdded = new BaseQueryService().Add("OutdatedProduct", oudatedPorducts);
                 if (isDeleted && isAdded)
                 {
-                    Notification.ShowNotification("Info: Outdated product is deleted.");
+                    Notification.ShowNotification("Инфо: Товары списаны.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Deleting outdated product failed.");
+                    Notification.ShowNotification("Ошибка: Списание товаров завершилось с ошибкой.");
                 }
             }
             Task.Run(() => Update());
@@ -201,7 +201,7 @@ namespace InventoryApp.ViewModels.Product
             var productCount = ProductModels.Select(items => items.Amount).Sum();
             var occupiedSpace = (productCount * 100) / Properties.Settings.Default.MaxCapacity;
             Properties.Settings.Default.ActualCapacity = productCount;
-            Notification.ShowNotification($"Info: Used storage space is {occupiedSpace}%");
+            Notification.ShowNotification($"Инфо: Занятое пространство склада {occupiedSpace}%");
             return (occupiedSpace < 99) ? true : false;
         }
 

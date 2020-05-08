@@ -97,16 +97,16 @@ namespace InventoryApp.ViewModels.Product
                 bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    Notification.ShowNotification("Info: Shipment information is deleted.");
+                    Notification.ShowNotification("Инфо: Информация о заказе удалена.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Deleting information failed.");
+                    Notification.ShowNotification("Ошибка: Удаление завершилось с ошибкой.");
                 }
             }
             else
             {
-                Notification.ShowNotification("Error: No shipment information selected.");
+                Notification.ShowNotification("Ошибка: Выберите информацию для удаления.");
             }
             Task.Run(() => Update());
         }
@@ -123,16 +123,16 @@ namespace InventoryApp.ViewModels.Product
                 var actualAmount = ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First();
                 if (AddNewShipment.Amount > actualAmount)
                 {
-                    Notification.ShowNotification($"Info: Not enougth in stock (or nothing selected).");
+                    Notification.ShowNotification($"Инфо: Недостаточно товара (или ничего не выбрано).");
                     bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {actualAmount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * actualAmount} , {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
                     if (isCompleted)
                     {
-                        Notification.ShowNotification($"Info: Shipment for {AddNewShipment.Client.Name} for {actualAmount} pcs. is added.");
+                        Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} на {actualAmount} шт. добавлен.");
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={0} where ProductId = {AddNewShipment.Product.Id}");
                     }
                     else
                     {
-                        Notification.ShowNotification("Error: Adding new shipment information failed.");
+                        Notification.ShowNotification("Ошибка: Добавление заказа произошло с ошибкой.");
                     }
                 }
                 else
@@ -140,12 +140,12 @@ namespace InventoryApp.ViewModels.Product
                     bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {AddNewShipment.Amount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * AddNewShipment.Amount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
                     if (isCompleted)
                     {
-                        Notification.ShowNotification($"Info: Shipment for {AddNewShipment.Client.Name} is added.");
+                        Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} добавлен.");
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First() - AddNewShipment.Amount} where ProductId = {AddNewShipment.Product.Id}");
                     }
                     else
                     {
-                        Notification.ShowNotification("Error: Adding new shipment information failed.");
+                        Notification.ShowNotification("Ошибка: Добавление заказа произошло с ошибкой.");
                     }
                 }
             }

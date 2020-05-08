@@ -50,7 +50,7 @@ namespace InventoryApp.ViewModels.User
             }
             else
             {
-                Notification.ShowNotification("Error: Login failed.");
+                Notification.ShowNotification(@"Ошибка: Неверный логин\пароль.");
             }
         }
 
@@ -67,11 +67,11 @@ namespace InventoryApp.ViewModels.User
             bool isSignedUp = new BaseQueryService().ExecuteQuery<LoginViewModel>(signUpQuery);
             if (isSignedUp)
             {
-                Notification.ShowNotification("Info: Successfully registered.");
+                Notification.ShowNotification("Инфо: Успешная регистрация.");
             }
             else
             {
-                Notification.ShowNotification("Error: Registration failed.");
+                Notification.ShowNotification("Ошибка: Регистрация завершилась с ошибкой.");
             }
         }
 
@@ -81,7 +81,7 @@ namespace InventoryApp.ViewModels.User
             {
                 Properties.Settings.Default.UserName = "Administrator";
                 Properties.Settings.Default.Save();
-                Notification.ShowNotification("Info: Set up admin password.");
+                Notification.ShowNotification("Инфо: Задайте пароль администратора.");
             }
             return Properties.Settings.Default.FirstStart;
         }

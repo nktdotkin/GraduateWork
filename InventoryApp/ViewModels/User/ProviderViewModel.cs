@@ -108,16 +108,16 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    Notification.ShowNotification("Info: Provider is deleted.");
+                    Notification.ShowNotification("Инфо: Поставщик удален.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Deleting provider failed.");
+                    Notification.ShowNotification("Ошибка: Удаление произошло с ошибкой.");
                 }
             }
             else
             {
-                Notification.ShowNotification("Error: No providers selected.");
+                Notification.ShowNotification("Ошибка: Выберите поставщика.");
             }
             Task.Run(() => Update());
         }
@@ -134,11 +134,11 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQueryService().Add(TableName, AddNewProvider);
                 if (isCompleted)
                 {
-                    Notification.ShowNotification($"Info: {AddNewProvider.Name} is added.");
+                    Notification.ShowNotification($"Инфо: {AddNewProvider.Name} добавлен.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Adding new provider failed.");
+                    Notification.ShowNotification($"Ошибка: {AddNewProvider.Name} не добавлен..");
                 }
             }
             Task.Run(() => Update());

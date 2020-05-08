@@ -9,6 +9,7 @@
         <Setter Property="Panel.ZIndex" Value="1" />
         <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth1"/>
     </Style>
+    <BooleanToVisibilityConverter x:Key="BoolToVis" />
     <Style x:Key="ColorZoneTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
         <Setter Property="Margin" Value="8 0 8 0" />
         <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden"/>

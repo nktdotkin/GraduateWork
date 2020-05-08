@@ -22,7 +22,7 @@
             <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22"/>
             <Menu Margin="0,0,20,0"  Background="Transparent" IsMainMenu="True" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <MenuItem Height="35" Width="50" Icon="{materialDesign:PackIcon Kind=UserBox}">
-                    <MenuItem Background="#f4f4f4" Header="Backup Database" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
+                    <MenuItem Background="#f4f4f4" Header="Создать копию" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="Backup" />
                         </MenuItem.Icon>
@@ -30,7 +30,7 @@
                             <Settings:MainWindowViewModel/>
                         </MenuItem.DataContext>
                     </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Restore Database" InputGestureText="Ctrl+R" Command="{Binding RestoreCommand}">
+                    <MenuItem Background="#f4f4f4" Header="Восстановить из копии" InputGestureText="Ctrl+R" Command="{Binding RestoreCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="Restore" />
                         </MenuItem.Icon>
@@ -38,12 +38,12 @@
                             <Settings:MainWindowViewModel/>
                         </MenuItem.DataContext>
                     </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Home" InputGestureText="Ctrl+S" Command="{Binding MainWindowCommand}">
+                    <MenuItem Background="#f4f4f4" Header="Домой" InputGestureText="Ctrl+S" Command="{Binding MainWindowCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="Home" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Logout" InputGestureText="Ctrl+L" Command="{Binding LogoutCommand}">
+                    <MenuItem Background="#f4f4f4" Header="Логин" InputGestureText="Ctrl+L" Command="{Binding LogoutCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="User" />
                         </MenuItem.Icon>
@@ -51,7 +51,7 @@
                             <Settings:MainWindowViewModel/>
                         </MenuItem.DataContext>
                     </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Exit" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
+                    <MenuItem Background="#f4f4f4" Header="Выход" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="ExitToApp" />
                         </MenuItem.Icon>
@@ -67,7 +67,7 @@
                 <StackPanel>
                     <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                         <Expander.Header>
-                            <TextBlock Text="Edit status" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                            <TextBlock Text="Редактировать статусы" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                                 <TextBlock.LayoutTransform>
                                     <RotateTransform Angle="90"/>
                                 </TextBlock.LayoutTransform>
@@ -88,7 +88,7 @@
                     </Expander>
                     <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                         <Expander.Header>
-                            <TextBlock Text="Edit groups" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                            <TextBlock Text="Редактировать группы" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                                 <TextBlock.LayoutTransform>
                                     <RotateTransform Angle="90"/>
                                 </TextBlock.LayoutTransform>
@@ -109,7 +109,7 @@
                     </Expander>
                     <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                         <Expander.Header>
-                            <TextBlock Text="Edit stores" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
+                            <TextBlock Text="Редактировать типы магазинов" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                                 <TextBlock.LayoutTransform>
                                     <RotateTransform Angle="90"/>
                                 </TextBlock.LayoutTransform>

@@ -111,16 +111,16 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
                 if (isCompleted)
                 {
-                    Notification.ShowNotification("Info: Client is deleted.");
+                    Notification.ShowNotification("Инфо: Клиент удален.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Deleting client failed.");
+                    Notification.ShowNotification("Ошибка: Удаление завершилось с ошибкой.");
                 }
             }
             else
             {
-                Notification.ShowNotification("Error: No clients selected.");
+                Notification.ShowNotification("Ошибка: Выберите клиента.");
             }
             Task.Run(() => Update());
         }
@@ -139,11 +139,11 @@ namespace InventoryApp.ViewModels.User
                 bool isUpdated = new BaseQueryService().ExecuteQuery<ClientModel>($"UPDATE {TableName} SET _StatusId = {AddNewClient.Status.StatusId}, _StoreId = {AddNewClient.StoreType.StoreId} WHERE ClientId = {ClientModels.Last().Id}");
                 if (isCompleted && isUpdated)
                 {
-                    Notification.ShowNotification($"Info: {AddNewClient.Name} is added.");
+                    Notification.ShowNotification($"Инфо: {AddNewClient.Name} добавлен.");
                 }
                 else
                 {
-                    Notification.ShowNotification("Error: Adding new client failed.");
+                    Notification.ShowNotification($"Ошибка: {AddNewClient.Name} не добавлен.");
                 }
             }
             Task.Run(() => Update());

@@ -20,13 +20,13 @@ namespace InventoryApp.Models.Product
                 }
             }
         }
-        [Required(ErrorMessage = "Amount must be more than zero")]
+        [Required(ErrorMessage = "Количество должно быть больше 0")]
         [Range(1, Int32.MaxValue)]
         public int Amount { get; set; }
         public decimal TotalPrice { get; set; }
-        [Required(ErrorMessage = "Please select product")]
+        [Required(ErrorMessage = "Выберите товар")]
         public ProductModel Product { get; set; }
-        [Required(ErrorMessage = "Please select client")]
+        [Required(ErrorMessage = "Выберите клиента")]
         public User.ClientModel Client { get; set; }
     }
 }

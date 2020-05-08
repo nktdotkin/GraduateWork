@@ -4,9 +4,9 @@ namespace InventoryApp.Models.User
 {
     public class ClientModel : BaseUser
     {
-        [Required(ErrorMessage = "Please select status")]
+        [Required(ErrorMessage = "Выберите статус")]
         public StatusesModel Status { get; set; }
-        [Required(ErrorMessage = "Please select store type")]
+        [Required(ErrorMessage = "Выберите тип магазина")]
         public StoretypesModel StoreType { get; set; }
     }
 }
