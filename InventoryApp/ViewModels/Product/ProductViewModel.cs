@@ -4,6 +4,7 @@ using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace InventoryApp.ViewModels.Product
             GC.Collect(1, GCCollectionMode.Forced);
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
+            ImportCommand = new RelayCommand((obj) => GetProductFromFile());
             AddProductImageCommand = new RelayCommand((obj) => AddProductImage());
             AddNewProduct = new ProductModel();
             Notification = new NotificationServiceViewModel();
@@ -34,6 +36,7 @@ namespace InventoryApp.ViewModels.Product
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
         public RelayCommand AddProductImageCommand { get; set; }
+        public RelayCommand ImportCommand { get; set; }
 
         private ProductModel selectedItem;
         public ProductModel SelectedItem
@@ -176,6 +179,41 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification($"Инфо: Файл не добавлен.");
             }
+        }
+
+        private void GetProductFromFile()
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.ShowDialog();
+            List<string> recordsList = new DocumentService().GetFromDocument(fileDialog.FileName);
+            List<string> newProduct = new List<string>();
+            int j = 0;
+            for (int i = 0; i < recordsList.Count; i++)
+            {
+                if (recordsList[i].Contains("Product"))
+                {
+                    newProduct.Add(recordsList[j + 1]);
+                }
+                j++;
+            }
+            int counter = 0;
+            foreach(var fields in AddNewProduct.GetType().GetProperties().OrderBy(x => x.MetadataToken))
+            {
+                var productProperty = AddNewProduct.GetType().GetProperty(fields.Name);
+                if (fields.Name != "Id" && fields.Name != "GroupId")
+                {
+                    if (fields.Name.Contains("Groups"))
+                    {
+                        productProperty.SetValue(AddNewProduct, Convert.ChangeType(GroupsModels.Where(group => group.Group.Contains(newProduct[counter])).First(), productProperty.PropertyType));
+                    }
+                    else
+                    {
+                        productProperty.SetValue(AddNewProduct, Convert.ChangeType(newProduct[counter], productProperty.PropertyType));
+                    }
+                    counter++;
+                }
+            }
+            Add();
         }
 
         private void DeleteOutdatingProducts()

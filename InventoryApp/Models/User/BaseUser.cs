@@ -17,7 +17,7 @@ namespace InventoryApp.Models.User
         public string Surname { get; set; }
         [Required(ErrorMessage = "Введите адрес")]
         [StringLength(50, MinimumLength = 10)]
-        public string Adress { get; set; }
+        public string Address { get; set; }
         [Required(ErrorMessage = "Введите номер телефона")]
         //[RegularExpression(@"((\(\d{4}\) ?)|(\d{3}-))?\d{3}-\d{4}", ErrorMessage = "Correct phone format (xxxx)xxx-xxxx")]
         public string Phone

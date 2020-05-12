@@ -24,7 +24,7 @@ namespace InventoryApp.ViewModels.Product
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ShipmentModel>();
             var updateTask = Task.Run(() => Update());
-            Task.WhenAny(updateTask);
+            Task.WaitAll(updateTask);
         }
 
         #region Properties
@@ -111,6 +111,12 @@ namespace InventoryApp.ViewModels.Product
             Task.Run(() => Update());
         }
 
+        private void CreateDocument()
+        {
+            var exportMessage = new DocumentService().ExportInformationToFile(AddNewShipment, "Отгрузки");
+            //Notification.ShowNotification(exportMessage);
+        }
+
         private void Add()
         {
             var errorList = ModelValidation.ValidateFields(AddNewShipment);
@@ -128,6 +134,7 @@ namespace InventoryApp.ViewModels.Product
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} на {actualAmount} шт. добавлен.");
+                        Task.Run(() => CreateDocument());
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={0} where ProductId = {AddNewShipment.Product.Id}");
                     }
                     else

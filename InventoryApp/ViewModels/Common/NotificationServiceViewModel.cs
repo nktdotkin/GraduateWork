@@ -1,10 +1,10 @@
-﻿using InventoryApp.ViewModels.Base;
+﻿using InventoryApp.Service;
+using InventoryApp.ViewModels.Base;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using InventoryApp.Service;
 
 namespace InventoryApp.ViewModels.Common
 {

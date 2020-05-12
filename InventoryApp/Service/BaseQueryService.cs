@@ -71,6 +71,7 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.Message);
                 new LogService().SetToFile("Database error: " + e.Message);
             }
             connection.Close();
@@ -140,15 +141,16 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
+                MessageBox.Show(e.Message);
                 new LogService().SetToFile("Database error: " + e.Message);
             }
             connection.Close();
             return isCompleted;
         }
 
-        public string GetAdress(string Adress)
+        public string GetAddress(string Address)
         {
-            return ("https://www.google.com/maps/search/?api=1&query=" + Adress?.Replace(" ", "+")) ?? "https://www.google.ru/maps";
+            return ("https://www.google.com/maps/search/?api=1&query=" + Address?.Replace(" ", "+")) ?? "https://www.google.ru/maps";
         }
 
         public ICommand ExitCommand

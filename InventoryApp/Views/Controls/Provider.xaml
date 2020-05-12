@@ -24,7 +24,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Имя"/>
                     <DataGridTextColumn Binding="{Binding Path=Surname}" Header="Фамилия"/>
-                    <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Адрес склада"/>
+                    <DataGridTextColumn Binding="{Binding Path=Address}" Header="Адрес склада"/>
                     <DataGridTextColumn Binding="{Binding Path=Phone}" Header="Контактный номер"/>
                     <DataGridTextColumn Binding="{Binding Path=Email}" Header="E-Mail"/>
                     <DataGridTextColumn Binding="{Binding Path=Company}" Header="Компания"/>
@@ -59,7 +59,7 @@
                         <StackPanel Width="300" Background="{DynamicResource MaterialDesignPaper}">
                             <TextBox Text="{Binding AddNewProvider.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Имя" MaxLength="30"/>
                             <TextBox Text="{Binding AddNewProvider.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Фамилия" MaxLength="30"/>
-                            <TextBox Text="{Binding AddNewProvider.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Адрес склада" MaxLength="50"/>
+                            <TextBox Text="{Binding AddNewProvider.Address, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Адрес склада" MaxLength="50"/>
                             <TextBox Text="{Binding AddNewProvider.Phone, UpdateSourceTrigger=LostFocus}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Контактный номер" MaxLength="20"/>
                             <TextBox Text="{Binding AddNewProvider.Email, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="E-Mail" MaxLength="50"/>
                             <TextBox Text="{Binding AddNewProvider.Company, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Компания" MaxLength="50"/>

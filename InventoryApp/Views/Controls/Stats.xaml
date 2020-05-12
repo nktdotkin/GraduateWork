@@ -16,35 +16,105 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="Azure">
-            
-        </Grid>
-        <Grid Grid.Column="1" Background="Green">
+        <Grid Grid.Column="0">
             <StackPanel Orientation="Vertical">
-                <lvc:CartesianChart Width="Auto">
-                    <lvc:CartesianChart.Series>
-                        <lvc:ColumnSeries  Values="{Binding ShipmentModels}" Configuration="{Binding MapperSold}" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
-                    </lvc:CartesianChart.Series>
-                </lvc:CartesianChart>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Sold" FontSize="14" FontFamily="Helvetica Neue"/>
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Background="#FFDE73" Height="30" Width="30"/>
-                    <TextBlock Text="Earned" FontSize="14" FontFamily="Helvetica Neue"/>
-                    <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Background="#607d8b" Height="30" Width="30"/>
+                <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Command="{Binding GetWeek}" Width="90" Foreground="Black" BorderBrush="Black" Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="Статистика за неделю" Margin="10">Неделя</Button>
+                    <Button Command="{Binding GetMonth}" Width="90" Foreground="Black" BorderBrush="Black" Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="Статистика за месяц" Margin="10">Месяц</Button>
+                    <Button Command="{Binding GetYear}" Width="90" Foreground="Black" BorderBrush="Black" Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="Статистика за год" Margin="10">Год</Button>
                 </StackPanel>
-                <lvc:CartesianChart Width="Auto">
-                    <lvc:CartesianChart.Series>
-                        <lvc:ColumnSeries  Values="{Binding ResultEarned}" Configuration="{Binding MapperEarned}" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#607d8b"/>
-                    </lvc:CartesianChart.Series>
-                </lvc:CartesianChart>
+                <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
+                    <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}">
+                        <StackPanel>
+                            <Expander HorizontalAlignment="Stretch" Header="Топ клиентов (количество покупок)">
+                                <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="24,8,24,16">
+                                    <TextBlock Text="Клиенты:" />
+                                    <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding TopClientList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Name}" Header="Имя"/>
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Surname}" Header="Фамилия"/>
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Status.Status}" Header="Статус"/>
+                                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Количество купленных товаров"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Expander>
+                            <Border Background="{DynamicResource MaterialDesignDivider}" Height="1" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" />
+                            <Expander HorizontalAlignment="Stretch" Header="Топ товаров (количество продаж)">
+                                <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="24,8,24,16">
+                                    <TextBlock Text="Товары:" />
+                                    <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding TopProductList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Name}" Header="Название"/>
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Groups.Group}" Header="Группа"/>
+                                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Количество"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Expander>
+                            <Border Background="{DynamicResource MaterialDesignDivider}" Height="1" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" />
+                            <Expander  HorizontalAlignment="Stretch" Header="Expander Example 2c">
+                                <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="24,8,24,16">
+                                    <TextBlock Text="Your Content" />
+                                    <TextBlock Opacity=".68"
+          Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </StackPanel>
             </StackPanel>
         </Grid>
-        <Grid Grid.Column="2" Background="Red">
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <lvc:CartesianChart Grid.Row="2">
+                    <lvc:CartesianChart.Series>
+                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentAmount}" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
+                    </lvc:CartesianChart.Series>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis LabelsRotation="20" Labels="{Binding SoldDateList}" Position="LeftBottom" >
+                            <lvc:Axis.Separator >
+                                <lvc:Separator Step="1"></lvc:Separator>
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis FontSize="22" Title="Количество проданных товаров" LabelFormatter="{Binding FormatterSold}" Position="RightTop"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
+            </Grid>
+            <Grid Grid.Row="1">
+                <lvc:CartesianChart Grid.Row="2">
+                    <lvc:CartesianChart.Series>
+                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentPrice}" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
+                    </lvc:CartesianChart.Series>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis LabelsRotation="20" Labels="{Binding SoldProductList}" Position="LeftBottom" >
+                            <lvc:Axis.Separator >
+                                <lvc:Separator Step="1"></lvc:Separator>
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis FontSize="22" Title="Стоимость продажи" LabelFormatter="{Binding FormatterEarned}" Position="RightTop"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="2">
             <GroupBox Style="{StaticResource MaterialDesignGroupBox}" materialDesign:ColorZoneAssist.Mode="PrimaryLight" Header="Список действий" FontSize="22" FontFamily="Helvetica Neue" Margin="16">
                 <FlowDocumentScrollViewer>
                     <FlowDocument>
                         <Paragraph>
-                            <ListBox ItemsSource="{Binding messageList, UpdateSourceTrigger=PropertyChanged}">
+                            <ListBox ItemsSource="{Binding MessageList, UpdateSourceTrigger=PropertyChanged}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">

@@ -18,7 +18,7 @@ namespace InventoryApp.ViewModels.User
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewProvider = new ProviderModel();
-            ProviderLocationSource = new BaseQueryService().GetAdress(null);
+            ProviderLocationSource = new BaseQueryService().GetAddress(null);
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ProviderModel>();
             Task.Run(() => Update());
@@ -59,9 +59,9 @@ namespace InventoryApp.ViewModels.User
                 {
                     selectedItem = value;
                     OnPropertyChanged(nameof(SelectedItem));
-                    if (ProviderLocationSource != selectedItem?.Adress)
+                    if (ProviderLocationSource != selectedItem?.Address)
                     {
-                        ProviderLocationSource = new BaseQueryService().GetAdress(selectedItem?.Adress);
+                        ProviderLocationSource = new BaseQueryService().GetAddress(selectedItem?.Address);
                         OnPropertyChanged(nameof(ProviderLocationSource));
                     }
                 }
@@ -151,7 +151,7 @@ namespace InventoryApp.ViewModels.User
             items.Surname.Contains(searchText) ||
             items.Company.Contains(searchText) ||
             items.Phone.Contains(searchText) ||
-            items.Adress.Contains(searchText)
+            items.Address.Contains(searchText)
             ).ToList();
             if (!ProviderModels.SequenceEqual(searchResult))
             {

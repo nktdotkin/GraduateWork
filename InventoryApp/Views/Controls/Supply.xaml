@@ -72,7 +72,7 @@
                                     <TextBlock Text="{Binding Path=Provider.Name}"/>
                                     <TextBlock Text="{Binding Path=Provider.Surname}"/>
                                     <TextBlock Text="{Binding Path=Provider.Phone}"/>
-                                    <TextBlock Text="{Binding Path=Provider.Adress}"/>
+                                    <TextBlock Text="{Binding Path=Provider.Address}"/>
                                     <TextBlock Text="{Binding Path=Provider.Email}"/>
                                     <TextBlock Text="{Binding Path=Provider.Company}"/>
                                 </StackPanel>
@@ -117,7 +117,7 @@
                                         <StackPanel>
                                             <TextBlock Text="{Binding Name}"/>
                                             <TextBlock Text="{Binding Surname}"/>
-                                            <TextBlock Text="{Binding Adress}"/>
+                                            <TextBlock Text="{Binding Address}"/>
                                             <TextBlock Text="{Binding Company}"/>
                                         </StackPanel>
                                     </DataTemplate>

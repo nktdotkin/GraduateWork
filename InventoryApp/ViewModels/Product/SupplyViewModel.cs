@@ -25,7 +25,7 @@ namespace InventoryApp.ViewModels.Product
             ProviderModels = new ProviderViewModel().Update();
             ProductModels = new ProductViewModel().Update();
             var updateTask = Task.Run(() => Update());
-            Task.WhenAny(updateTask);
+            Task.WaitAll(updateTask);
         }
 
         #region Properties
@@ -109,6 +109,12 @@ namespace InventoryApp.ViewModels.Product
             Task.Run(() => Update());
         }
 
+        private void CreateDocument()
+        {
+            var exportMessage = new DocumentService().ExportInformationToFile(AddNewSupply, "Поставки");
+            //Notification.ShowNotification(exportMessage);
+        }
+
         private void Add()
         {
             var errorList = ModelValidation.ValidateFields(AddNewSupply);
@@ -124,6 +130,7 @@ namespace InventoryApp.ViewModels.Product
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Поставка для {AddNewSupply.Product.Name} добавлена.");
+                        Task.Run(() => CreateDocument());
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
                     }
                 }

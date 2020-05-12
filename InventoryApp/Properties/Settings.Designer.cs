@@ -117,5 +117,17 @@ namespace InventoryApp.Properties {
                 this["ManagerVisibility"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveDocsAutomaticly {
+            get {
+                return ((bool)(this["SaveDocsAutomaticly"]));
+            }
+            set {
+                this["SaveDocsAutomaticly"] = value;
+            }
+        }
     }
 }

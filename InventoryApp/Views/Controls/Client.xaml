@@ -24,7 +24,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Имя"/>
                     <DataGridTextColumn Binding="{Binding Path=Surname}" Header="Фамилия"/>
-                    <DataGridTextColumn Binding="{Binding Path=Adress}" Header="Адрес доставки"/>
+                    <DataGridTextColumn Binding="{Binding Path=Address}" Header="Адрес доставки"/>
                     <DataGridTextColumn Binding="{Binding Path=Phone}" Header="Контактный номер"/>
                     <DataGridTextColumn Binding="{Binding Path=Email}" Header="E-Mail"/>
                     <DataGridTextColumn Binding="{Binding Path=Status.Status}" Header="Статус"/>
@@ -61,7 +61,7 @@
                         <StackPanel IsEnabled="{Binding }" Width="300" Background="{DynamicResource MaterialDesignPaper}">
                             <TextBox Text="{Binding AddNewClient.Name, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Имя"/>
                             <TextBox Text="{Binding AddNewClient.Surname, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Фамилия"/>
-                            <TextBox Text="{Binding AddNewClient.Adress, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Адрес доставки"/>
+                            <TextBox Text="{Binding AddNewClient.Address, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Адрес доставки"/>
                             <TextBox Text="{Binding AddNewClient.Phone, UpdateSourceTrigger=LostFocus}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Контактный номер"/>
                             <TextBox Text="{Binding AddNewClient.Email, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="E-Mail"/>
                             <ComboBox Height="45" materialDesign:HintAssist.Hint="Статус" ItemsSource="{Binding StatusesModels, UpdateSourceTrigger=PropertyChanged}"                   

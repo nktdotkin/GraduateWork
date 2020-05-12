@@ -74,7 +74,7 @@
                                     <TextBlock Text="{Binding Path=Client.Name}"/>
                                     <TextBlock Text="{Binding Path=Client.Surname}"/>
                                     <TextBlock Text="{Binding Path=Client.Phone}"/>
-                                    <TextBlock Text="{Binding Path=Client.Adress}"/>
+                                    <TextBlock Text="{Binding Path=Client.Address}"/>
                                     <TextBlock Text="{Binding Path=Client.Email}"/>
                                     <TextBlock Text="{Binding Path=Client.Status.Status}"/>
                                     <TextBlock Text="{Binding Path=Client.StoreType.StoreType}"/>
@@ -120,7 +120,7 @@
                                         <StackPanel>
                                             <TextBlock Text="{Binding Name}"/>
                                             <TextBlock Text="{Binding Surname}"/>
-                                            <TextBlock Text="{Binding Adress}"/>
+                                            <TextBlock Text="{Binding Address}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>

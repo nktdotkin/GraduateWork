@@ -1,9 +1,9 @@
 ﻿using InventoryApp.Service;
-using InventoryApp.ViewModels.Product;
-using InventoryApp.ViewModels.User;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
 using InventoryApp.Views.Settings;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 
 namespace InventoryApp.ViewModels.Base
@@ -28,6 +28,8 @@ namespace InventoryApp.ViewModels.Base
             RestoreCommand = new RelayCommand((obj) => Restore());
             SettingsCommand = new RelayCommand((obj) => Settings());
             LogoutCommand = new RelayCommand((obj) => Logout());
+            OpenShipmentFolderCommand = new RelayCommand((obj) => OpenFolder("Отгрузки"));
+            OpenSupplyFolderCommand = new RelayCommand((obj) => OpenFolder("Поставки"));
         }
 
         public RelayCommand SettingsCommand { get; set; }
@@ -36,6 +38,8 @@ namespace InventoryApp.ViewModels.Base
         public RelayCommand RestoreCommand { get; set; }
         public RelayCommand LogoutCommand { get; set; }
 
+        public RelayCommand OpenShipmentFolderCommand { get; set; }
+        public RelayCommand OpenSupplyFolderCommand { get; set; }
 
         private object tablePanel;
         private TabControl tabControl;
@@ -158,6 +162,15 @@ namespace InventoryApp.ViewModels.Base
         {
             new Settings().Show();
             Application.Current.Windows[0].Close();
+        }
+
+        private void OpenFolder(string documentType)
+        {
+            if (!Directory.Exists(Path.Combine(System.Environment.CurrentDirectory, documentType)))
+            {
+                Directory.CreateDirectory(Path.Combine(System.Environment.CurrentDirectory, documentType));
+            }
+            Process.Start(Path.Combine(System.Environment.CurrentDirectory, documentType));
         }
 
         private void Logout()
