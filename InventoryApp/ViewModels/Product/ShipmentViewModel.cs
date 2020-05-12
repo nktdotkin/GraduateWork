@@ -79,6 +79,30 @@ namespace InventoryApp.ViewModels.Product
                 }
             }
         }
+
+        private ClientModel searchByClient;
+        public ClientModel SearchByClient
+        {
+            get => searchByClient;
+            set
+            {
+                if (value != searchByClient)
+                {
+                    searchByClient = value;
+                    OnPropertyChanged(nameof(SearchByClient));
+                    if (!string.IsNullOrWhiteSpace(searchByClient.Phone))
+                    {
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
+                        Find(searchByClient.Phone);
+                    }
+                    else
+                    {
+                        Task.Run(() => Update());
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Functions

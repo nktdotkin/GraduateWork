@@ -16,8 +16,8 @@
             <Button ToolTip="Поиск" Background="{x:Null}" BorderBrush="{x:Null}" Width="70" Height="70">
                 <materialDesign:PackIcon Kind="Search" Height="30" Width="30" Foreground="Black" />
             </Button>
-            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Height="40" Width="180" materialDesign:HintAssist.Hint="Поиск" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
-            <ComboBox Width="Auto" Height="40" materialDesign:HintAssist.Hint="Поиск по группе" ItemsSource="{Binding GroupsModels}"
+            <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Height="45" Width="180" materialDesign:HintAssist.Hint="Поиск" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="50" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+            <ComboBox Width="Auto" Height="45" materialDesign:HintAssist.Hint="Поиск по группе" ItemsSource="{Binding GroupsModels}"
                     SelectedValue="{Binding SearchByGroup, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>

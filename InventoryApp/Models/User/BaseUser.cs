@@ -19,7 +19,7 @@ namespace InventoryApp.Models.User
         [StringLength(50, MinimumLength = 10)]
         public string Address { get; set; }
         [Required(ErrorMessage = "Введите номер телефона")]
-        //[RegularExpression(@"((\(\d{4}\) ?)|(\d{3}-))?\d{3}-\d{4}", ErrorMessage = "Correct phone format (xxxx)xxx-xxxx")]
+        [RegularExpression(@"(\d{4})(\d{3})(\d{2})(\d{2})", ErrorMessage = "Формат номер хххх-ххх-хх-хх")]
         public string Phone
         {
             get
@@ -29,14 +29,14 @@ namespace InventoryApp.Models.User
 
                 switch (_phone.Length)
                 {
-                    case 7:
-                        return Regex.Replace(_phone, @"(\d{3})(\d{4})", "$1-$2");
-                    case 10:
-                        return Regex.Replace(_phone, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3");
+                    //case 7:
+                    //    return Regex.Replace(_phone, @"(\d{3})(\d{4})", "$1-$2");
+                    //case 10:
+                    //    return Regex.Replace(_phone, @"(\d{3})(\d{3})(\d{4})", "($1) $2-$3");
                     case 11:
                         return Regex.Replace(_phone, @"(\d{4})(\d{3})(\d{2})(\d{2})", "$1-$2-$3-$4");
                     default:
-                        return "Неверный формат номера";
+                        return _phone;
                 }
             }
             set

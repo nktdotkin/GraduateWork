@@ -79,6 +79,30 @@ namespace InventoryApp.ViewModels.Product
                 }
             }
         }
+
+        private ProviderModel searchByProvider;
+        public ProviderModel SearchByProvider
+        {
+            get => searchByProvider;
+            set
+            {
+                if (value != searchByProvider)
+                {
+                    searchByProvider = value;
+                    OnPropertyChanged(nameof(SearchByProvider));
+                    if (!string.IsNullOrWhiteSpace(searchByProvider.Phone))
+                    {
+                        var updateTask = Task.Run(() => Update());
+                        Task.WaitAll(updateTask);
+                        Find(searchByProvider.Phone);
+                    }
+                    else
+                    {
+                        Task.Run(() => Update());
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Functions
