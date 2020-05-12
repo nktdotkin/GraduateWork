@@ -18,7 +18,7 @@ namespace InventoryApp.Service
                     sw.Close();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 //ignored
             }

@@ -129,5 +129,17 @@ namespace InventoryApp.Properties {
                 this["SaveDocsAutomaticly"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ProductPreviewByDefault {
+            get {
+                return ((bool)(this["ProductPreviewByDefault"]));
+            }
+            set {
+                this["ProductPreviewByDefault"] = value;
+            }
+        }
     }
 }

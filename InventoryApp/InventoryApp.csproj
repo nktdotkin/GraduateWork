@@ -232,6 +232,7 @@
     <Compile Include="Service\RelayCommand.cs" />
     <Compile Include="Service\PasswordSecurityService.cs" />
     <Compile Include="Service\BaseQueryService.cs" />
+    <Compile Include="Service\SnapshotService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\Base\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Base\SettingsViewModel.cs" />

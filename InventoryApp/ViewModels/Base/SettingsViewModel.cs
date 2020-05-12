@@ -4,7 +4,6 @@ using InventoryApp.Service;
 using InventoryApp.ViewModels.Common;
 using InventoryApp.Views.Main;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace InventoryApp.ViewModels.Base
@@ -14,6 +13,9 @@ namespace InventoryApp.ViewModels.Base
         public SettingsViewModel()
         {
             MainWindowCommand = new RelayCommand((obj) => MainWindow());
+            AddNewStatusCommand = new RelayCommand((obj) => AddNewStatus());
+            AddNewGroupCommand = new RelayCommand((obj) => AddNewGroup());
+            AddNewStoreCommand = new RelayCommand((obj) => AddNewStore());
             Notification = new NotificationServiceViewModel();
             GetFromDatabase();
         }
@@ -24,6 +26,10 @@ namespace InventoryApp.ViewModels.Base
         public ObservableCollection<StoretypesModel> StoretypesModels { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
+
+        public RelayCommand AddNewStatusCommand { get; set; }
+        public RelayCommand AddNewGroupCommand { get; set; }
+        public RelayCommand AddNewStoreCommand { get; set; }
 
         private bool isCompleted = false;
 
@@ -39,6 +45,11 @@ namespace InventoryApp.ViewModels.Base
             foreach (var updatedRows in GroupsModels)
             {
                 isCompleted = new BaseQueryService().ExecuteQuery<GroupsModel>($"Update [ProductGroups] SET GroupType = '{updatedRows.Group}', Tax = {updatedRows.Tax} WHERE GroupId = {updatedRows.Id}");
+                if (!isCompleted)
+                {
+                    isCompleted = new BaseQueryService().ExecuteQuery<GroupsModel>($"Insert into [ProductGroups] (GroupType, Tax) VALUES ('{updatedRows.Group}', {updatedRows.Tax})");
+                    isCompleted = false;
+                }
             }
         }
 
@@ -47,6 +58,11 @@ namespace InventoryApp.ViewModels.Base
             foreach (var updatedRows in StatusesModels)
             {
                 isCompleted = new BaseQueryService().ExecuteQuery<StatusesModel>($"Update [ClientStatuses] SET StatusType = '{updatedRows.Status}', Discount = {updatedRows.Discount} WHERE StatusId = {updatedRows.StatusId}");
+                if (!isCompleted)
+                {
+                    isCompleted = new BaseQueryService().ExecuteQuery<StatusesModel>($"Insert into [ClientStatuses] (StatusType, Discount) VALUES ('{updatedRows.Status}', {updatedRows.Discount})");
+                    isCompleted = false;
+                }
             }
         }
 
@@ -54,13 +70,33 @@ namespace InventoryApp.ViewModels.Base
         {
             foreach (var updatedRows in StoretypesModels)
             {
-                isCompleted = new BaseQueryService().ExecuteQuery<StoretypesModel>($"Update [ClientStoreTypes] SET StoreType = '{updatedRows.StoreType}' WHERE StatusId = {updatedRows.StoreId}");
+                isCompleted = new BaseQueryService().ExecuteQuery<StoretypesModel>($"Update [ClientStoreTypes] SET StoreType = '{updatedRows.StoreType}' WHERE StoreId = {updatedRows.StoreId}");
+                if (!isCompleted)
+                {
+                    isCompleted = new BaseQueryService().ExecuteQuery<StoretypesModel>($"Insert into [ClientStoreTypes] (StoreType) VALUES ('{updatedRows.StoreType}')");
+                    isCompleted = false;
+                }
             }
         }
 
         private void SeveSettings()
         {
+            Properties.Settings.Default.Save();
+        }
 
+        public void AddNewStatus()
+        {
+            StatusesModels.Add(new StatusesModel() { StatusId = 0, Discount = 0, Status = "Новый статус" });
+        }
+
+        public void AddNewGroup()
+        {
+            GroupsModels.Add(new GroupsModel() { Id = 0, Tax = 0, Group = "Новая группа" });
+        }
+
+        public void AddNewStore()
+        {
+            StoretypesModels.Add(new StoretypesModel() { StoreId = 0, StoreType = "Новый тип" });
         }
 
         private void MainWindow()
@@ -72,9 +108,10 @@ namespace InventoryApp.ViewModels.Base
 
         private void UpdateInfo()
         {
-            Task.Run(() => UpdateGroups());
-            Task.Run(() => UpdateStatuses());
-            Task.Run(() => UpdateStoreTypes());
+            SeveSettings();
+            UpdateGroups();
+            UpdateStatuses();
+            UpdateStoreTypes();
         }
     }
 }

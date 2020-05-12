@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace InventoryApp.Service
@@ -68,7 +67,6 @@ namespace InventoryApp.Service
             }
             doc.Close();
             word.Quit();
-            int j = 0;
             return data;
         }
 

@@ -81,5 +81,6 @@
             </StackPanel>
         </Grid>
         <ContentControl Content="{Binding TablePanel}"/>
+        <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>

@@ -185,35 +185,38 @@ namespace InventoryApp.ViewModels.Product
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
-            List<string> recordsList = new DocumentService().GetFromDocument(fileDialog.FileName);
-            List<string> newProduct = new List<string>();
-            int j = 0;
-            for (int i = 0; i < recordsList.Count; i++)
+            if (!string.IsNullOrEmpty(fileDialog.FileName))
             {
-                if (recordsList[i].Contains("Product"))
+                List<string> recordsList = new DocumentService().GetFromDocument(fileDialog.FileName);
+                List<string> newProduct = new List<string>();
+                int j = 0;
+                for (int i = 0; i < recordsList.Count; i++)
                 {
-                    newProduct.Add(recordsList[j + 1]);
+                    if (recordsList[i].Contains("Product"))
+                    {
+                        newProduct.Add(recordsList[j + 1]);
+                    }
+                    j++;
                 }
-                j++;
-            }
-            int counter = 0;
-            foreach(var fields in AddNewProduct.GetType().GetProperties().OrderBy(x => x.MetadataToken))
-            {
-                var productProperty = AddNewProduct.GetType().GetProperty(fields.Name);
-                if (fields.Name != "Id" && fields.Name != "GroupId")
+                int counter = 0;
+                foreach (var fields in AddNewProduct.GetType().GetProperties().OrderBy(x => x.MetadataToken))
                 {
-                    if (fields.Name.Contains("Groups"))
+                    var productProperty = AddNewProduct.GetType().GetProperty(fields.Name);
+                    if (fields.Name != "Id" && fields.Name != "GroupId")
                     {
-                        productProperty.SetValue(AddNewProduct, Convert.ChangeType(GroupsModels.Where(group => group.Group.Contains(newProduct[counter])).First(), productProperty.PropertyType));
+                        if (fields.Name.Contains("Groups"))
+                        {
+                            productProperty.SetValue(AddNewProduct, Convert.ChangeType(GroupsModels.Where(group => group.Group.Contains(newProduct[counter])).First(), productProperty.PropertyType));
+                        }
+                        else
+                        {
+                            productProperty.SetValue(AddNewProduct, Convert.ChangeType(newProduct[counter], productProperty.PropertyType));
+                        }
+                        counter++;
                     }
-                    else
-                    {
-                        productProperty.SetValue(AddNewProduct, Convert.ChangeType(newProduct[counter], productProperty.PropertyType));
-                    }
-                    counter++;
                 }
+                Add();
             }
-            Add();
         }
 
         private void DeleteOutdatingProducts()

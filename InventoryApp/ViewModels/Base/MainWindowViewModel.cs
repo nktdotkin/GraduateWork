@@ -1,7 +1,9 @@
 ﻿using InventoryApp.Service;
+using InventoryApp.ViewModels.Common;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
 using InventoryApp.Views.Settings;
+using Microsoft.Win32;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -30,6 +32,7 @@ namespace InventoryApp.ViewModels.Base
             LogoutCommand = new RelayCommand((obj) => Logout());
             OpenShipmentFolderCommand = new RelayCommand((obj) => OpenFolder("Отгрузки"));
             OpenSupplyFolderCommand = new RelayCommand((obj) => OpenFolder("Поставки"));
+            Notification = new NotificationServiceViewModel();
         }
 
         public RelayCommand SettingsCommand { get; set; }
@@ -40,6 +43,8 @@ namespace InventoryApp.ViewModels.Base
 
         public RelayCommand OpenShipmentFolderCommand { get; set; }
         public RelayCommand OpenSupplyFolderCommand { get; set; }
+
+        public NotificationServiceViewModel Notification { get; set; }
 
         private object tablePanel;
         private TabControl tabControl;
@@ -136,26 +141,19 @@ namespace InventoryApp.ViewModels.Base
 
         private void Backup()
         {
-            if (new BaseQueryService().ExecuteQuery<MainWindowViewModel>(""))
-            {
-                MessageBox.Show("Backup complete. Path to backup folder: " + Properties.Settings.Default.RestorePath);
-            }
-            else
-            {
-                MessageBox.Show("Backup failed.");
-            }
+            SaveFileDialog fileDialog = new SaveFileDialog();
+            fileDialog.ShowDialog();
+            string message = new SnapshotService().CreateSnapshot(fileDialog.FileName);
+            Notification.ShowNotification(message);
         }
 
         private void Restore()
         {
-            if (new BaseQueryService().ExecuteQuery<MainWindowViewModel>(""))
-            {
-                MessageBox.Show("Restore complete. Please reload application.");
-            }
-            else
-            {
-                MessageBox.Show("Restore failed.");
-            }
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.ValidateNames = false;
+            fileDialog.ShowDialog();
+            string message = new SnapshotService().RestoreFromSnapshot(fileDialog.SafeFileName);
+            Notification.ShowNotification(message);
         }
 
         private void Settings()
