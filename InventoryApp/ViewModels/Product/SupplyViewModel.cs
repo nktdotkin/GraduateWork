@@ -136,7 +136,7 @@ namespace InventoryApp.ViewModels.Product
         private void CreateDocument()
         {
             var exportMessage = new DocumentService().ExportInformationToFile(AddNewSupply, "Поставки");
-            //Notification.ShowNotification(exportMessage);
+            Notification.ShowNotification(exportMessage);
         }
 
         private void Add()
@@ -150,7 +150,7 @@ namespace InventoryApp.ViewModels.Product
             {
                 if ((Properties.Settings.Default.MaxCapacity - Properties.Settings.Default.ActualCapacity) > AddNewSupply.Amount)
                 {
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
+                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES (N'{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Поставка для {AddNewSupply.Product.Name} добавлена.");

@@ -44,10 +44,10 @@ namespace InventoryApp.ViewModels.Base
         {
             foreach (var updatedRows in GroupsModels)
             {
-                isCompleted = new BaseQueryService().ExecuteQuery<GroupsModel>($"Update [ProductGroups] SET GroupType = '{updatedRows.Group}', Tax = {updatedRows.Tax} WHERE GroupId = {updatedRows.Id}");
+                isCompleted = new BaseQueryService().ExecuteQuery<GroupsModel>($"Update [ProductGroups] SET GroupType = N'{updatedRows.Group}', Tax = {updatedRows.Tax} WHERE GroupId = {updatedRows.Id}");
                 if (!isCompleted)
                 {
-                    isCompleted = new BaseQueryService().ExecuteQuery<GroupsModel>($"Insert into [ProductGroups] (GroupType, Tax) VALUES ('{updatedRows.Group}', {updatedRows.Tax})");
+                    isCompleted = new BaseQueryService().ExecuteQuery<GroupsModel>($"Insert into [ProductGroups] (GroupType, Tax) VALUES (N'{updatedRows.Group}', {updatedRows.Tax})");
                     isCompleted = false;
                 }
             }
@@ -57,10 +57,10 @@ namespace InventoryApp.ViewModels.Base
         {
             foreach (var updatedRows in StatusesModels)
             {
-                isCompleted = new BaseQueryService().ExecuteQuery<StatusesModel>($"Update [ClientStatuses] SET StatusType = '{updatedRows.Status}', Discount = {updatedRows.Discount} WHERE StatusId = {updatedRows.StatusId}");
+                isCompleted = new BaseQueryService().ExecuteQuery<StatusesModel>($"Update [ClientStatuses] SET StatusType = N'{updatedRows.Status}', Discount = {updatedRows.Discount} WHERE StatusId = {updatedRows.StatusId}");
                 if (!isCompleted)
                 {
-                    isCompleted = new BaseQueryService().ExecuteQuery<StatusesModel>($"Insert into [ClientStatuses] (StatusType, Discount) VALUES ('{updatedRows.Status}', {updatedRows.Discount})");
+                    isCompleted = new BaseQueryService().ExecuteQuery<StatusesModel>($"Insert into [ClientStatuses] (StatusType, Discount) VALUES (N'{updatedRows.Status}', {updatedRows.Discount})");
                     isCompleted = false;
                 }
             }
@@ -70,10 +70,10 @@ namespace InventoryApp.ViewModels.Base
         {
             foreach (var updatedRows in StoretypesModels)
             {
-                isCompleted = new BaseQueryService().ExecuteQuery<StoretypesModel>($"Update [ClientStoreTypes] SET StoreType = '{updatedRows.StoreType}' WHERE StoreId = {updatedRows.StoreId}");
+                isCompleted = new BaseQueryService().ExecuteQuery<StoretypesModel>($"Update [ClientStoreTypes] SET StoreType = N'{updatedRows.StoreType}' WHERE StoreId = {updatedRows.StoreId}");
                 if (!isCompleted)
                 {
-                    isCompleted = new BaseQueryService().ExecuteQuery<StoretypesModel>($"Insert into [ClientStoreTypes] (StoreType) VALUES ('{updatedRows.StoreType}')");
+                    isCompleted = new BaseQueryService().ExecuteQuery<StoretypesModel>($"Insert into [ClientStoreTypes] (StoreType) VALUES (N'{updatedRows.StoreType}')");
                     isCompleted = false;
                 }
             }

@@ -138,7 +138,7 @@ namespace InventoryApp.ViewModels.Product
         private void CreateDocument()
         {
             var exportMessage = new DocumentService().ExportInformationToFile(AddNewShipment, "Отгрузки");
-            //Notification.ShowNotification(exportMessage);
+            Notification.ShowNotification(exportMessage);
         }
 
         private void Add()
@@ -154,7 +154,7 @@ namespace InventoryApp.ViewModels.Product
                 if (AddNewShipment.Amount > actualAmount)
                 {
                     Notification.ShowNotification($"Инфо: Недостаточно товара (или ничего не выбрано).");
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {actualAmount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * actualAmount} , {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
+                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES (N'{AddNewShipment.Date}', {actualAmount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * actualAmount} , {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} на {actualAmount} шт. добавлен.");
@@ -168,7 +168,7 @@ namespace InventoryApp.ViewModels.Product
                 }
                 else
                 {
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES ('{AddNewShipment.Date}', {AddNewShipment.Amount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * AddNewShipment.Amount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
+                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES (N'{AddNewShipment.Date}', {AddNewShipment.Amount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * AddNewShipment.Amount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} добавлен.");

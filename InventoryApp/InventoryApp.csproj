@@ -20,6 +20,7 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -32,7 +33,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -280,7 +280,6 @@
     <Compile Include="Models\Product\ProductModel.cs" />
     <Compile Include="Models\Product\ShipmentModel.cs" />
     <Compile Include="Models\Product\SupplyModel.cs" />
-    <Compile Include="Models\Common\StatsModel.cs" />
     <Compile Include="Models\User\BaseUser.cs" />
     <Compile Include="Models\User\ClientModel.cs" />
     <Compile Include="Models\User\ProviderModel.cs" />
@@ -310,10 +309,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataBase\ProductImages\" />
-    <Folder Include="Resources\Other\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Style\CustomScrollBar.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -378,6 +374,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataBase\MainDatabase\InventoryApp.mdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataBase\MainDatabase\InventoryApp_log.ldf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Logs\logs.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

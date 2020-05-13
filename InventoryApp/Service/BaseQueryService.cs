@@ -71,7 +71,6 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
-                //MessageBox.Show(e.Message);
                 new LogService().SetToFile("Database error: " + e.Message);
             }
             connection.Close();
@@ -82,11 +81,6 @@ namespace InventoryApp.Service
         {
             return ExecuteQuery(null, $"Set{tableName}", instanse, true);
         }
-
-        //public bool AddWithparameters(string tableName, List<string> parameters)
-        //{
-        //    return ExecuteQuery<BaseQueryService>(null, null, null, false, parameters, tableName, true);
-        //}
 
         public bool Delete(string tableName, int id)
         {
@@ -113,26 +107,12 @@ namespace InventoryApp.Service
                         {
                             if (fields.Name != "Id" && !fields.PropertyType.FullName.Contains("InventoryApp"))
                             {
-                                command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.VarChar)).Value = fields.GetValue(instanse);
+                                command.Parameters.Add(new SqlParameter($"@{fields.Name}", SqlDbType.NVarChar)).Value = fields.GetValue(instanse);
                             }
                         }
                         break;
                     case false:
                         command = new SqlCommand(Expression, connection);
-                        //switch (listQuery)
-                        //{
-                        //    case true:
-                        //        command = new SqlCommand($"INSERT INTO {tableName}(Column)VALUES(@Column)", connection);
-                        //        command.Parameters.Add("@Column", SqlDbType.VarChar);
-                        //        foreach (var value in list)
-                        //        {
-                        //            command.Parameters["@Column"].Value = value;
-                        //        }
-                        //        break;
-                        //    case false:
-                        //        command = new SqlCommand(Expression, connection);
-                        //        break;
-                        //}
                         break;
                 }
                 var exetudedCommand = command.ExecuteNonQuery();
@@ -141,7 +121,6 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
-                //MessageBox.Show(e.Message);
                 new LogService().SetToFile("Database error: " + e.Message);
             }
             connection.Close();

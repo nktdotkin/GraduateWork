@@ -14,6 +14,8 @@
         <KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding RestoreCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SettingsCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="L" Command="{Binding LogoutCommand}"></KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding OpenShipmentFolderCommand}"></KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding OpenSupplyFolderCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.DataContext>
         <Main:MainWindowViewModel/>
@@ -38,12 +40,12 @@
                                 <materialDesign:PackIcon Kind="Restore" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Background="#f4f4f4" Header="Документы поставок" InputGestureText="Ctrl+B" Command="{Binding OpenSupplyFolderCommand}">
+                        <MenuItem Background="#f4f4f4" Header="Документы поставок" InputGestureText="Ctrl+P" Command="{Binding OpenSupplyFolderCommand}">
                             <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="FileDocumentBoxPlus" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Background="#f4f4f4" Header="Документы отгрузок" InputGestureText="Ctrl+R" Command="{Binding OpenShipmentFolderCommand}">
+                        <MenuItem Background="#f4f4f4" Header="Документы отгрузок" InputGestureText="Ctrl+O" Command="{Binding OpenShipmentFolderCommand}">
                             <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="FileDocumentBoxMinus" />
                             </MenuItem.Icon>

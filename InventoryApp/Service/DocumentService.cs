@@ -12,7 +12,7 @@ namespace InventoryApp.Service
     class DocumentService : ViewModelsBase
     {
         private string FileDirectory = DateTime.Now.ToString("dd-MMM-yyyy");
-        private string CurrentDirectory = System.Environment.CurrentDirectory;
+        private string CurrentDirectory = Environment.CurrentDirectory;
         private string PathToFile = null;
 
         public string ExportInformationToFile<T>(T instanse, string documentType) where T : class
@@ -23,7 +23,7 @@ namespace InventoryApp.Service
                 {
                     Directory.CreateDirectory(Path.Combine(CurrentDirectory, documentType, FileDirectory));
                 }
-                PathToFile = Path.Combine(CurrentDirectory, documentType, FileDirectory, BaseService.GenerateUserName());
+                PathToFile = Path.Combine(CurrentDirectory, documentType, FileDirectory, BaseService.GenerateRandomString());
             }
             else if (!Properties.Settings.Default.SaveDocsAutomaticly)
             {
@@ -77,28 +77,19 @@ namespace InventoryApp.Service
             bool isCompleted = false;
             try
             {
-                //Create an instance for word app  
                 Microsoft.Office.Interop.Word.Application winword = new Microsoft.Office.Interop.Word.Application();
-
-                //Set animation status for word application  
                 winword.ShowAnimation = false;
-
-                //Set status for word application is to be visible or not.  
                 winword.Visible = false;
-
-                //Create a missing variable for missing value  
                 object missing = System.Reflection.Missing.Value;
 
-                //Create a new document  
-                Microsoft.Office.Interop.Word.Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+                Document document = winword.Documents.Add(ref missing, ref missing, ref missing, ref missing);
 
-                //Add header into the document
-                foreach (Microsoft.Office.Interop.Word.Section section in document.Sections)
+                foreach (Section section in document.Sections)
                 {
-                    Microsoft.Office.Interop.Word.Range headerRange = section.Headers[Microsoft.Office.Interop.Word.WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
-                    headerRange.Fields.Add(headerRange, Microsoft.Office.Interop.Word.WdFieldType.wdFieldPage);
-                    headerRange.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                    headerRange.Font.ColorIndex = Microsoft.Office.Interop.Word.WdColorIndex.wdBlack;
+                    Range headerRange = section.Headers[WdHeaderFooterIndex.wdHeaderFooterPrimary].Range;
+                    headerRange.Fields.Add(headerRange, WdFieldType.wdFieldPage);
+                    headerRange.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    headerRange.Font.ColorIndex = WdColorIndex.wdBlack;
                     headerRange.Font.Size = 12;
                     headerRange.Text = "Отчет за: " + DateTime.Now;
                 }
@@ -149,10 +140,9 @@ namespace InventoryApp.Service
                     }
                 }
 
-                //Add paragraph
-                Microsoft.Office.Interop.Word.Paragraph para1 = document.Content.Paragraphs.Add(ref missing);
+                Paragraph mainParagraph = document.Content.Paragraphs.Add(ref missing);
 
-                Table firstTable = document.Tables.Add(para1.Range, Headers.Count / 2, 2, ref missing, ref missing);
+                Table firstTable = document.Tables.Add(mainParagraph.Range, Headers.Count / 2, 2, ref missing, ref missing);
                 int x = 0;
 
                 firstTable.Borders.Enable = 1;
@@ -179,7 +169,6 @@ namespace InventoryApp.Service
                     }
                 }
 
-                //Save the document  
                 object filename = path + "-" + DateTime.Now.ToString("HH-mm") + ".docx";
                 document.SaveAs2(ref filename);
                 document.Close(ref missing, ref missing, ref missing);
@@ -188,7 +177,6 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
-                MessageBox.Show(e.Message);
                 isCompleted = false;
             }
             return isCompleted;

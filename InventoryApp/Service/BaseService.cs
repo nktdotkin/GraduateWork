@@ -34,7 +34,7 @@ namespace InventoryApp.Service
             timer.Start();
         }
 
-        public static string GenerateUserName()
+        public static string GenerateRandomString()
         {
             var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();

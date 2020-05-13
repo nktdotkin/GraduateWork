@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:InventoryApp.ViewModels.User"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:browser="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
-             xmlns:properties="clr-namespace:InventoryApp.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>

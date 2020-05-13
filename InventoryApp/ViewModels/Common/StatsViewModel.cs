@@ -1,5 +1,4 @@
-﻿using InventoryApp.Models.Common;
-using InventoryApp.Models.Product;
+﻿using InventoryApp.Models.Product;
 using InventoryApp.Models.User;
 using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
@@ -14,7 +13,6 @@ namespace InventoryApp.ViewModels.Common
 {
     class StatsViewModel : ViewModelsBase
     {
-        public StatsModel StatsModel { get; set; }
         public ObservableCollection<ShipmentModel> ShipmentModels { get; set; }
         public ChartValues<ShipmentModel> ShipmentStats { get; set; }
 

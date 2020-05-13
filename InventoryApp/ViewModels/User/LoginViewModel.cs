@@ -25,14 +25,14 @@ namespace InventoryApp.ViewModels.User
 
         public string UserName
         {
-            get { return string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? BaseService.GenerateUserName() : Properties.Settings.Default.UserName; }
+            get { return string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? BaseService.GenerateRandomString() : Properties.Settings.Default.UserName; }
             set
             {
                 if (Properties.Settings.Default.UserName != value && value.Length > 7)
                 {
                     Properties.Settings.Default.UserName = value; Properties.Settings.Default.Save(); OnPropertyChanged(nameof(UserName));
                 }
-                else { Properties.Settings.Default.UserName = BaseService.GenerateUserName(); }
+                else { Properties.Settings.Default.UserName = BaseService.GenerateRandomString(); }
             }
         }
         #endregion
