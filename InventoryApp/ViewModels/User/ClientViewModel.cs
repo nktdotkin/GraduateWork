@@ -17,7 +17,7 @@ namespace InventoryApp.ViewModels.User
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewClient = new ClientModel();
-            ClientLocationSource = new BaseQueryService().GetAddress(null);
+            ClientLocationSource = BaseService.GetAddress(null);
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ClientModel>();
             Task.Run(() => Update());
@@ -62,7 +62,7 @@ namespace InventoryApp.ViewModels.User
                     OnPropertyChanged(nameof(SelectedItem));
                     if (ClientLocationSource != selectedItem?.Address)
                     {
-                        ClientLocationSource = new BaseQueryService().GetAddress(selectedItem?.Address);
+                        ClientLocationSource = BaseService.GetAddress(selectedItem?.Address);
                         OnPropertyChanged(nameof(ClientLocationSource));
                     }
                 }

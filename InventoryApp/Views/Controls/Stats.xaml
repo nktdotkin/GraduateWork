@@ -20,12 +20,12 @@
         <Grid Grid.Column="0">
             <StackPanel Orientation="Vertical">
                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Command="{Binding GetDay}" Width="90" Foreground="Black" BorderBrush="Black" Style="{StaticResource MaterialDesignOutlinedButton}"
+    ToolTip="Статистика за неделю" Margin="10">День</Button>
                     <Button Command="{Binding GetWeek}" Width="90" Foreground="Black" BorderBrush="Black" Style="{StaticResource MaterialDesignOutlinedButton}"
-    ToolTip="Статистика за неделю" Margin="10">Неделя</Button>
+    ToolTip="Статистика за месяц" Margin="10">Неделя</Button>
                     <Button Command="{Binding GetMonth}" Width="90" Foreground="Black" BorderBrush="Black" Style="{StaticResource MaterialDesignOutlinedButton}"
-    ToolTip="Статистика за месяц" Margin="10">Месяц</Button>
-                    <Button Command="{Binding GetYear}" Width="90" Foreground="Black" BorderBrush="Black" Style="{StaticResource MaterialDesignOutlinedButton}"
-    ToolTip="Статистика за год" Margin="10">Год</Button>
+    ToolTip="Статистика за год" Margin="10">Месяц</Button>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
                     <materialDesign:Card Background="{DynamicResource MaterialDesignBackground}">
@@ -69,7 +69,7 @@
             <Grid Grid.Row="0">
                 <lvc:CartesianChart Grid.Row="2">
                     <lvc:CartesianChart.Series>
-                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentAmount}" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
+                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentAmount}" Width="Auto" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
                     </lvc:CartesianChart.Series>
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis LabelsRotation="20" Labels="{Binding SoldDateList}" Position="LeftBottom" >
@@ -86,7 +86,7 @@
             <Grid Grid.Row="1">
                 <lvc:CartesianChart Grid.Row="2">
                     <lvc:CartesianChart.Series>
-                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentPrice}" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
+                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentPrice}" Width="Auto" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
                     </lvc:CartesianChart.Series>
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis LabelsRotation="20" Labels="{Binding SoldProductList}" Position="LeftBottom" >

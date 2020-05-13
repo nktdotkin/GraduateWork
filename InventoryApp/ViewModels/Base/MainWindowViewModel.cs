@@ -122,19 +122,19 @@ namespace InventoryApp.ViewModels.Base
                     TablePanel = new Views.Controls.Product();
                     break;
                 case TabControl.Shipment:
-                    TablePanel = new Views.Controls.Shipment();
+                    TablePanel = new Shipment();
                     break;
                 case TabControl.Client:
-                    TablePanel = new Views.Controls.Client();
+                    TablePanel = new Client();
                     break;
                 case TabControl.Provider:
-                    TablePanel = new Views.Controls.Provider();
+                    TablePanel = new Provider();
                     break;
                 case TabControl.Supply:
-                    TablePanel = new Views.Controls.Supply();
+                    TablePanel = new Supply();
                     break;
                 case TabControl.Stats:
-                    TablePanel = new Views.Controls.Stats();
+                    TablePanel = new Stats();
                     break;
             }
         }
@@ -158,8 +158,15 @@ namespace InventoryApp.ViewModels.Base
 
         private void Settings()
         {
-            new Settings().Show();
-            Application.Current.Windows[0].Close();
+            if (Properties.Settings.Default.UserName.Equals("Administrator"))
+            {
+                new Settings().Show();
+                Application.Current.Windows[0].Close();
+            }
+            else
+            {
+                Notification.ShowNotification("Доступ запрещен");
+            }
         }
 
         private void OpenFolder(string documentType)

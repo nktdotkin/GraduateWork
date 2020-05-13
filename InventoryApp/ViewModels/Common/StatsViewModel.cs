@@ -28,22 +28,22 @@ namespace InventoryApp.ViewModels.Common
         public Dictionary<ClientModel, int> TopClientList { get; set; }
         public List<string> MessageList { get; set; }
 
+        public RelayCommand GetDay { get; set; }
         public RelayCommand GetWeek { get; set; }
         public RelayCommand GetMonth { get; set; }
-        public RelayCommand GetYear { get; set; }
 
         public StatsViewModel()
         {
             MessageList = new LogService().ReadFromFile();
             MessageList.Reverse();
             FormatterSold = value => value + ". штук";
-            FormatterEarned = value => value + "$";
+            FormatterEarned = value => value + " BYN";
             ShipmentStats = new ChartValues<ShipmentModel>();
             MapperShipmentAmount = Mappers.Xy<ShipmentModel>().X((sold, index) => index).Y(sold => sold.Amount);
             MapperShipmentPrice = Mappers.Xy<ShipmentModel>().X((sold, index) => index).Y(sold => (double)sold.TotalPrice);
+            GetDay = new RelayCommand((obj) => GetStatsByDate('d'));
             GetWeek = new RelayCommand((obj) => GetStatsByDate('w'));
             GetMonth = new RelayCommand((obj) => GetStatsByDate('m'));
-            GetYear = new RelayCommand((obj) => GetStatsByDate('y'));
             Update();
         }
 
@@ -52,7 +52,7 @@ namespace InventoryApp.ViewModels.Common
             ShipmentModels = new BaseQueryService().Fill<ShipmentModel>(($"GetShipment"));
             SoldDateList = ShipmentModels.Select(item => item.Date.ToString("dd MMM yyyy")).ToList();
             SoldProductList = ShipmentModels.Select(item => item.Product.Name).ToList();
-            GetStatsByDate('d');
+            GetStatsByDate('w');
             SelectTop();
         }
 
@@ -63,26 +63,20 @@ namespace InventoryApp.ViewModels.Common
             SoldProductList.Clear();
             switch (c)
             {
+                case 'd':
+                    foreach (var model in ShipmentModels.Where(item => item.Date.DayOfYear.Equals(DateTime.Now.DayOfYear) && item.Date.Year.Equals(DateTime.Now.Year)))
+                    {
+                        ModelToList(model);
+                    }
+                    break;
                 case 'w':
-                    foreach (var model in ShipmentModels.Where(item => item.Date.DayOfWeek.Equals(DateTime.Now.DayOfWeek)))
+                    foreach (var model in ShipmentModels.Where(item => item.Date.DayOfWeek.Equals(DateTime.Now.DayOfWeek) && item.Date.Year.Equals(DateTime.Now.Year)))
                     {
                         ModelToList(model);
                     }
                     break;
                 case 'm':
-                    foreach (var model in ShipmentModels.Where(item => item.Date.Month.Equals(DateTime.Now.Month)))
-                    {
-                        ModelToList(model);
-                    }
-                    break;
-                case 'y':
-                    foreach (var model in ShipmentModels.Where(item => item.Date.Year.Equals(DateTime.Now.Year)))
-                    {
-                        ModelToList(model);
-                    }
-                    break;
-                case 'd':
-                    foreach (var model in ShipmentModels)
+                    foreach (var model in ShipmentModels.Where(item => item.Date.Month.Equals(DateTime.Now.Month) && item.Date.Year.Equals(DateTime.Now.Year)))
                     {
                         ModelToList(model);
                     }

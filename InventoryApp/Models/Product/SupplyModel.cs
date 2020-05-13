@@ -14,10 +14,7 @@ namespace InventoryApp.Models.Product
             get => DateTime.ParseExact(date.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", CultureInfo.InvariantCulture);
             set
             {
-                if (value != date)
-                {
-                    date = value;
-                }
+                date = value;
             }
         }
         [Required(ErrorMessage = "Количество должно быть больше 0")]

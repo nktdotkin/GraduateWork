@@ -11,7 +11,7 @@ namespace InventoryApp.Service
             bool isCompleted = false;
             try
             {
-                using (StreamWriter sw = new StreamWriter(System.Environment.CurrentDirectory + @"\Logs\logs.txt", true, System.Text.Encoding.UTF8))
+                using (StreamWriter sw = new StreamWriter(Environment.CurrentDirectory + @"\Logs\logs.txt", true, System.Text.Encoding.UTF8))
                 {
                     sw.WriteLine(DateTime.Now + " - " + Properties.Settings.Default.CurrentUser + " - " + message);
                     sw.Dispose();
@@ -28,7 +28,7 @@ namespace InventoryApp.Service
         public List<string> ReadFromFile(string filePath = @"\Logs\logs.txt")
         {
             var messageList = new List<string>();
-            using (StreamReader sr = new StreamReader(System.Environment.CurrentDirectory + filePath, System.Text.Encoding.UTF8))
+            using (StreamReader sr = new StreamReader(Environment.CurrentDirectory + filePath, System.Text.Encoding.UTF8))
             {
                 string tempLine;
                 while ((tempLine = sr.ReadLine()) != null)

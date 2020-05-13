@@ -65,7 +65,7 @@
                                 <materialDesign:PackIcon Kind="ExitToApp" />
                             </MenuItem.Icon>
                             <MenuItem.DataContext>
-                                <BaseCommand:BaseQueryService/>
+                                <BaseCommand:BaseCommandsService/>
                             </MenuItem.DataContext>
                         </MenuItem>
                     </MenuItem>

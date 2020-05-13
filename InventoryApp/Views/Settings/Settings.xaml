@@ -55,7 +55,7 @@
                             <materialDesign:PackIcon Kind="ExitToApp" />
                         </MenuItem.Icon>
                         <MenuItem.DataContext>
-                            <BaseCommand:BaseQueryService/>
+                            <BaseCommand:BaseCommandsService/>
                         </MenuItem.DataContext>
                     </MenuItem>
                 </MenuItem>
@@ -82,8 +82,8 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel>
-                                                <TextBox Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
-                                                <TextBox Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"></TextBox>
+                                                <TextBox materialDesign:HintAssist.Hint="Статус" Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Status, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
+                                                <TextBox materialDesign:HintAssist.Hint="Размер скидки %" Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"></TextBox>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -104,8 +104,8 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel>
-                                                <TextBox Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Group, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
-                                                <TextBox Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Tax, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"></TextBox>
+                                                <TextBox materialDesign:HintAssist.Hint="Группа" Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Group, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
+                                                <TextBox materialDesign:HintAssist.Hint="Налог на группу %" Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding Tax, UpdateSourceTrigger=PropertyChanged}" MaxLength="2"></TextBox>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -126,7 +126,7 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel>
-                                                <TextBox Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding StoreType, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
+                                                <TextBox materialDesign:HintAssist.Hint="Тип магазина" Width="200" Style="{StaticResource DialogTextBox}" Text="{Binding StoreType, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>

@@ -1,13 +1,10 @@
 ﻿using InventoryApp.ViewModels.Base;
-using Microsoft.VisualStudio.PlatformUI;
 using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Windows;
-using System.Windows.Input;
 
 namespace InventoryApp.Service
 {
@@ -87,11 +84,6 @@ namespace InventoryApp.Service
             return ExecuteQuery<BaseQueryService>($"DELETE FROM {tableName} WHERE {tableName}Id = {id}");
         }
 
-        public ObservableCollection<T> Find<T>(ObservableCollection<T> searchInCollection, string searchItem) where T : class
-        {
-            return searchInCollection;
-        }
-
         public bool ExecuteQuery<T>(string Expression, string parametlessProcedureName = null, T instanse = null, bool parametlessQuery = false, bool isCompleted = false) where T : class
         {
             try
@@ -125,22 +117,6 @@ namespace InventoryApp.Service
             }
             connection.Close();
             return isCompleted;
-        }
-
-        public string GetAddress(string Address)
-        {
-            return ("https://www.google.com/maps/search/?api=1&query=" + Address?.Replace(" ", "+")) ?? "https://www.google.ru/maps";
-        }
-
-        public ICommand ExitCommand
-        {
-            get
-            {
-                return new DelegateCommand(() =>
-                {
-                    Application.Current.Shutdown();
-                });
-            }
         }
     }
 }

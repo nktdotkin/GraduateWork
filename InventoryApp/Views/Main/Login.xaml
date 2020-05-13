@@ -22,7 +22,7 @@
         <Button HorizontalAlignment="Center" Width="220" Margin="0,370,0,40" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Регистрация" Command="{Binding SingUpCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,20" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding ExitCommand}">
             <Button.DataContext>
-                <local:BaseQueryService/>
+                <local:BaseCommandsService/>
             </Button.DataContext>
             <materialDesign:PackIcon Kind="PowerOff" Foreground="Black"/>
         </Button>

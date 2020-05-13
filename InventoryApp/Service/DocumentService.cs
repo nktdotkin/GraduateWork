@@ -48,10 +48,10 @@ namespace InventoryApp.Service
 
         public List<string> GetFromDocument(string path)
         {
-            Microsoft.Office.Interop.Word.Application word = new Microsoft.Office.Interop.Word.Application();
+            Application word = new Application();
             Document doc = new Document();
             object fileName = path;
-            object missing = System.Type.Missing;
+            object missing = Type.Missing;
             doc = word.Documents.Open(ref fileName,
                     ref missing, ref missing, ref missing, ref missing,
                     ref missing, ref missing, ref missing, ref missing,
@@ -76,7 +76,7 @@ namespace InventoryApp.Service
             bool isCompleted = false;
             try
             {
-                Microsoft.Office.Interop.Word.Application winword = new Microsoft.Office.Interop.Word.Application();
+                Application winword = new Application();
                 winword.ShowAnimation = false;
                 winword.Visible = false;
                 object missing = System.Reflection.Missing.Value;

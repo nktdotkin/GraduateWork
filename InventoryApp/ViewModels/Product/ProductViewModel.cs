@@ -6,7 +6,9 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Product
@@ -170,7 +172,8 @@ namespace InventoryApp.ViewModels.Product
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
-            if (!string.IsNullOrWhiteSpace(fileDialog.FileName))
+            string fileExtension = Path.GetExtension(fileDialog.FileName);
+            if (!string.IsNullOrWhiteSpace(fileDialog.FileName) && Regex.IsMatch(fileExtension, @"([^\s]+(\.(?i)(jpg|png|gif|bmp))$)"))
             {
                 AddNewProduct.ImageLink = fileDialog.FileName;
                 Notification.ShowNotification($"Инфо: Файл {fileDialog.SafeFileName} добавлен.");
@@ -185,7 +188,8 @@ namespace InventoryApp.ViewModels.Product
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
-            if (!string.IsNullOrEmpty(fileDialog.FileName))
+            string fileExtension = Path.GetExtension(fileDialog.FileName);
+            if (!string.IsNullOrEmpty(fileDialog.FileName) && fileExtension.Contains("docx"))
             {
                 List<string> recordsList = new DocumentService().GetFromDocument(fileDialog.FileName);
                 List<string> newProduct = new List<string>();
@@ -242,6 +246,7 @@ namespace InventoryApp.ViewModels.Product
             var productCount = ProductModels.Select(items => items.Amount).Sum();
             var occupiedSpace = (productCount * 100) / Properties.Settings.Default.MaxCapacity;
             Properties.Settings.Default.ActualCapacity = productCount;
+            Properties.Settings.Default.Save();
             Notification.ShowNotification($"Инфо: Занятое пространство склада {occupiedSpace}%");
             return (occupiedSpace < 99) ? true : false;
         }

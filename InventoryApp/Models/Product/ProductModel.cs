@@ -21,10 +21,7 @@ namespace InventoryApp.Models.Product
             get => DateTime.ParseExact(expirationDateDays.Date.ToString("dd-MM-yyyy"), "dd-MM-yyyy", CultureInfo.InvariantCulture);
             set
             {
-                if (value != expirationDateDays)
-                {
-                    expirationDateDays = value;
-                }
+                expirationDateDays = value;
             }
         }
         public int Amount { get; set; }
@@ -33,6 +30,7 @@ namespace InventoryApp.Models.Product
         public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
         public int GroupId { get; set; }
+        [Required(ErrorMessage = "Выберите изображение")]
         public string ImageLink { get; set; }
         [Required(ErrorMessage = "Выберите группу")]
         public GroupsModel Groups { get; set; }
