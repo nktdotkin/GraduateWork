@@ -18,7 +18,7 @@ namespace InventoryApp.Service
             {
                 string snapshotQuery = $"CREATE DATABASE {Path.GetFileName(fileName)} " +
                     $"ON(name = 'INVENTORYAPP', filename = '{fileName}.ss') " +
-                    "AS SNAPSHOT of [C:\\DATABASE\\INVENTORYAPP.MDF];";
+                    $"AS SNAPSHOT of [{Environment.CurrentDirectory}\\DATABASE\\MainDatabase\\INVENTORYAPP.MDF];";
                 command = new SqlCommand(snapshotQuery, connection);
                 try
                 {
@@ -44,9 +44,9 @@ namespace InventoryApp.Service
             if (!string.IsNullOrWhiteSpace(fileName))
             {
                 string snapshotName = fileName.Remove(fileName.LastIndexOf('.'), 3);
-                string snapshotQuery = "ALTER DATABASE[C:\\DATABASE\\INVENTORYAPP.MDF] SET OFFLINE WITH ROLLBACK IMMEDIATE;" +
-                    " ALTER DATABASE[C:\\DATABASE\\INVENTORYAPP.MDF] SET ONLINE USE master;" +
-                    $" RESTORE DATABASE[C:\\DATABASE\\INVENTORYAPP.MDF] from DATABASE_SNAPSHOT = '{snapshotName}'";
+                string snapshotQuery = $"ALTER DATABASE[{Environment.CurrentDirectory}\\DATABASE\\MainDatabase\\INVENTORYAPP.MDF] SET OFFLINE WITH ROLLBACK IMMEDIATE;" +
+                    $" ALTER DATABASE[{Environment.CurrentDirectory}\\DATABASE\\MainDatabase\\INVENTORYAPP.MDF] SET ONLINE USE master;" +
+                    $" RESTORE DATABASE[{Environment.CurrentDirectory}\\DATABASE\\MainDatabase\\INVENTORYAPP.MDF] from DATABASE_SNAPSHOT = '{snapshotName}'";
                 command = new SqlCommand(snapshotQuery, connection);
                 try
                 {
