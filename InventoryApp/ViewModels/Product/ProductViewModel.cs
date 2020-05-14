@@ -129,6 +129,7 @@ namespace InventoryApp.ViewModels.Product
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Товар удален.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
@@ -139,7 +140,6 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification("Ошибка: Выберите товар.");
             }
-            Task.Run(() => Update());
         }
 
         private void Add()
@@ -158,6 +158,7 @@ namespace InventoryApp.ViewModels.Product
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: {AddNewProduct.Name} добавлен.");
+                        Task.Run(() => Update());
                     }
                 }
                 else
@@ -165,7 +166,6 @@ namespace InventoryApp.ViewModels.Product
                     Notification.ShowNotification("Ошибка: Добавление товара произошло с ошибкой.");
                 }
             }
-            Task.Run(() => Update());
         }
 
         private void AddProductImage()
@@ -232,13 +232,13 @@ namespace InventoryApp.ViewModels.Product
                 if (isDeleted && isAdded)
                 {
                     Notification.ShowNotification("Инфо: Товары списаны.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
                     Notification.ShowNotification("Ошибка: Списание товаров завершилось с ошибкой.");
                 }
             }
-            Task.Run(() => Update());
         }
 
         public bool CheckStorageCapacity()

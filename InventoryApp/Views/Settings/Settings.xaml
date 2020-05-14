@@ -50,7 +50,7 @@
                             <Settings:MainWindowViewModel/>
                         </MenuItem.DataContext>
                     </MenuItem>
-                    <MenuItem Background="#f4f4f4" Header="Выход" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
+                    <MenuItem Background="#f4f4f4" Header="Выход" Command="{Binding ExitCommand}">
                         <MenuItem.Icon>
                             <materialDesign:PackIcon Kind="ExitToApp" />
                         </MenuItem.Icon>

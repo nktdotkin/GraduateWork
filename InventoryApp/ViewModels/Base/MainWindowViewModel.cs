@@ -30,6 +30,7 @@ namespace InventoryApp.ViewModels.Base
             RestoreCommand = new RelayCommand((obj) => Restore());
             SettingsCommand = new RelayCommand((obj) => Settings());
             LogoutCommand = new RelayCommand((obj) => Logout());
+            OpenHelperCommand = new RelayCommand((obj) => OpenHelper());
             OpenShipmentFolderCommand = new RelayCommand((obj) => OpenFolder("Отгрузки"));
             OpenSupplyFolderCommand = new RelayCommand((obj) => OpenFolder("Поставки"));
             Notification = new NotificationServiceViewModel();
@@ -40,6 +41,7 @@ namespace InventoryApp.ViewModels.Base
         public RelayCommand BackupCommand { get; set; }
         public RelayCommand RestoreCommand { get; set; }
         public RelayCommand LogoutCommand { get; set; }
+        public RelayCommand OpenHelperCommand { get; set; }
 
         public RelayCommand OpenShipmentFolderCommand { get; set; }
         public RelayCommand OpenSupplyFolderCommand { get; set; }
@@ -156,6 +158,11 @@ namespace InventoryApp.ViewModels.Base
             Notification.ShowNotification(message);
         }
 
+        private void OpenHelper()
+        {
+
+        }
+
         private void Settings()
         {
             if (Properties.Settings.Default.UserName.Equals("Administrator"))
@@ -165,7 +172,7 @@ namespace InventoryApp.ViewModels.Base
             }
             else
             {
-                Notification.ShowNotification("Доступ запрещен");
+                Notification.ShowNotification("Доступ запрещен.");
             }
         }
 

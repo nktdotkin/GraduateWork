@@ -24,7 +24,7 @@ namespace InventoryApp.Service
                 {
                     connection.Open();
                     command.ExecuteNonQuery();
-                    message = "Создание снепшота завершено";
+                    message = "Создание снепшота завершено.";
                 }
                 catch (Exception e)
                 {
@@ -34,6 +34,10 @@ namespace InventoryApp.Service
                 {
                     connection.Close();
                 }
+            }
+            else
+            {
+                message = "Создание снепшота не завершено.";
             }
             return message;
         }
@@ -52,7 +56,7 @@ namespace InventoryApp.Service
                 {
                     connection.Open();
                     command.ExecuteNonQuery();
-                    message = "Восстановление из снепшота завершено";
+                    message = "Восстановление из снепшота завершено.";
                 }
                 catch (Exception e)
                 {
@@ -62,6 +66,10 @@ namespace InventoryApp.Service
                 {
                     connection.Close();
                 }
+            }
+            else
+            {
+                message = "Восстановление из снепшота не завершено.";
             }
             return message;
         }

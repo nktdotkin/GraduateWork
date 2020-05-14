@@ -112,6 +112,7 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Клиент удален.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
@@ -122,7 +123,6 @@ namespace InventoryApp.ViewModels.User
             {
                 Notification.ShowNotification("Ошибка: Выберите клиента.");
             }
-            Task.Run(() => Update());
         }
 
         private void Add()
@@ -140,13 +140,13 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted && isUpdated)
                 {
                     Notification.ShowNotification($"Инфо: {AddNewClient.Name} добавлен.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
                     Notification.ShowNotification($"Ошибка: {AddNewClient.Name} не добавлен.");
                 }
             }
-            Task.Run(() => Update());
         }
 
         private void Find(string searchText)

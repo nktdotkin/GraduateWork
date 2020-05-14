@@ -22,10 +22,7 @@ namespace InventoryApp.ViewModels.Product
             AddNewSupply = new SupplyModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<SupplyModel>();
-            ProviderModels = new ProviderViewModel().Update();
-            ProductModels = new ProductViewModel().Update();
-            var updateTask = Task.Run(() => Update());
-            Task.WaitAll(updateTask);
+            Task.Run(() => Update());
         }
 
         #region Properties
@@ -108,6 +105,8 @@ namespace InventoryApp.ViewModels.Product
         #region Functions
         private void Update()
         {
+            ProviderModels = new ProviderViewModel().Update();
+            ProductModels = new ProductViewModel().Update();
             SupplyModels = new BaseQueryService().Fill<SupplyModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(SupplyModels));
         }
@@ -157,13 +156,13 @@ namespace InventoryApp.ViewModels.Product
                         Task.Run(() => CreateDocument());
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
                     }
+                    Task.Run(() => Update());
                 }
                 else
                 {
                     Notification.ShowNotification("Ошибка: Добавление информации произошло с ошибкой.");
                 }
             }
-            Task.Run(() => Update());
         }
 
         private void Find(string searchText)

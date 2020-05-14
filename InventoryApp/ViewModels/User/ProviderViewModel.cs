@@ -109,6 +109,7 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Поставщик удален.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
@@ -119,7 +120,6 @@ namespace InventoryApp.ViewModels.User
             {
                 Notification.ShowNotification("Ошибка: Выберите поставщика.");
             }
-            Task.Run(() => Update());
         }
 
         private void Add()
@@ -135,13 +135,13 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted)
                 {
                     Notification.ShowNotification($"Инфо: {AddNewProvider.Name} добавлен.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
-                    Notification.ShowNotification($"Ошибка: {AddNewProvider.Name} не добавлен..");
+                    Notification.ShowNotification($"Ошибка: {AddNewProvider.Name} не добавлен.");
                 }
             }
-            Task.Run(() => Update());
         }
 
         private void Find(string searchText)

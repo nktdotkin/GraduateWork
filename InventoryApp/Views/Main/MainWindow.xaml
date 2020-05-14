@@ -16,6 +16,7 @@
         <KeyBinding Modifiers="Ctrl" Key="L" Command="{Binding LogoutCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding OpenShipmentFolderCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding OpenSupplyFolderCommand}"></KeyBinding>
+        <KeyBinding Modifiers="" Key="F1" Command="{Binding OpenSupplyFolderCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.DataContext>
         <Main:MainWindowViewModel/>
@@ -55,12 +56,17 @@
                                 <materialDesign:PackIcon Kind="Settings" />
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem Background="#f4f4f4" Header="Справка" InputGestureText="F1" Command="{Binding OpenHelperCommand}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="UserHelp" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem Background="#f4f4f4" Header="Логин" InputGestureText="Ctrl+L" Command="{Binding LogoutCommand}">
                             <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="User" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Background="#f4f4f4" Header="Выйти" InputGestureText="Ctrl+Q" Command="{Binding ExitCommand}">
+                        <MenuItem Background="#f4f4f4" Header="Выйти" Command="{Binding ExitCommand}">
                             <MenuItem.Icon>
                                 <materialDesign:PackIcon Kind="ExitToApp" />
                             </MenuItem.Icon>

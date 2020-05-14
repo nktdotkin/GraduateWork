@@ -23,8 +23,7 @@ namespace InventoryApp.ViewModels.Product
             AddNewShipment = new ShipmentModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ShipmentModel>();
-            var updateTask = Task.Run(() => Update());
-            Task.WaitAll(updateTask);
+            Task.Run(() => Update());
         }
 
         #region Properties
@@ -122,6 +121,7 @@ namespace InventoryApp.ViewModels.Product
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Информация о заказе удалена.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
@@ -132,7 +132,6 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification("Ошибка: Выберите информацию для удаления.");
             }
-            Task.Run(() => Update());
         }
 
         private void CreateDocument()
@@ -153,13 +152,13 @@ namespace InventoryApp.ViewModels.Product
                 var actualAmount = ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First();
                 if (AddNewShipment.Amount > actualAmount)
                 {
-                    Notification.ShowNotification($"Инфо: Недостаточно товара (или ничего не выбрано).");
                     bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES (N'{AddNewShipment.Date}', {actualAmount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * actualAmount} , {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} на {actualAmount} шт. добавлен.");
                         Task.Run(() => CreateDocument());
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={0} where ProductId = {AddNewShipment.Product.Id}");
+                        Task.Run(() => Update());
                     }
                     else
                     {
@@ -173,6 +172,7 @@ namespace InventoryApp.ViewModels.Product
                     {
                         Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} добавлен.");
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First() - AddNewShipment.Amount} where ProductId = {AddNewShipment.Product.Id}");
+                        Task.Run(() => Update());
                     }
                     else
                     {
@@ -180,7 +180,6 @@ namespace InventoryApp.ViewModels.Product
                     }
                 }
             }
-            Update();
         }
 
         private void Find(string searchText)

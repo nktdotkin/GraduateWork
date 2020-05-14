@@ -36,7 +36,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Название товара"/>
                     <DataGridTextColumn Binding="{Binding Path=Description}" Header="Описание"/>
-                    <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Срок хранения"/>
+                    <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Срок хранения до"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Количество"/>
                     <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена (без НДС)"/>
                     <DataGridTextColumn Binding="{Binding Path=Groups.Tax}" Header="Налог (на категорию)"/>
@@ -76,7 +76,7 @@
                             <Button Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AddProductImageCommand}">
                                 Добавить изображение
                             </Button>
-                            <DatePicker SelectedDate="{Binding AddNewProduct.ExpirationDateDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Срок хранения"/>
+                            <DatePicker SelectedDate="{Binding AddNewProduct.ExpirationDateDays, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintDatePicker}" materialDesign:HintAssist.Hint="Срок хранения до"/>
                             <TextBox Text="{Binding AddNewProduct.Price, UpdateSourceTrigger=Default}" Style="{StaticResource DialogTextBox}" materialDesign:HintAssist.Hint="Цена (без НДС)"/>
                             <ComboBox Height="35" materialDesign:HintAssist.Hint="Товарная группа"  ItemsSource="{Binding GroupsModels}"
                     SelectedValue="{Binding AddNewProduct.Groups}">
@@ -113,7 +113,7 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Binding="{Binding Path=Name}" Header="Название товара"/>
                                 <DataGridTextColumn Binding="{Binding Path=Description}" Header="Описание"/>
-                                <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Срок хранения"/>
+                                <DataGridTextColumn Binding="{Binding Path=ExpirationDateDays, StringFormat=dd-MM-yyyy}" Header="Срок хранения до"/>
                                 <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Количество"/>
                                 <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена (без НДС)"/>
                                 <DataGridTextColumn Binding="{Binding Path=Groups.Tax}" Header="Налог (на категорию)"/>
