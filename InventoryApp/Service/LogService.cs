@@ -6,20 +6,21 @@ namespace InventoryApp.Service
 {
     static class LogService
     {
-        private static string filePath = Environment.CurrentDirectory + @"\Logs\logs.txt";
+        private static string filePath = Environment.CurrentDirectory + @"\Logs";
 
         public static bool SetToFile(string message)
         {
             bool isCompleted = false;
             try
             {
-                if (!File.Exists(filePath))
+                if (!Directory.Exists(filePath))
                 {
-                    File.Create(filePath);
+                    Directory.CreateDirectory(filePath);
+                    File.Create(filePath + @"\logs.txt");
                 }
-                else if (File.Exists(filePath))
+                else if (Directory.Exists(filePath))
                 {
-                    using (StreamWriter sw = new StreamWriter(filePath, true, System.Text.Encoding.UTF8))
+                    using (StreamWriter sw = new StreamWriter(filePath + @"\logs.txt", true, System.Text.Encoding.UTF8))
                     {
                         sw.WriteLine(DateTime.Now + " - " + Properties.Settings.Default.CurrentUser + " - " + message);
                         sw.Dispose();
@@ -37,13 +38,28 @@ namespace InventoryApp.Service
         public static List<string> ReadFromFile()
         {
             var messageList = new List<string>();
-            using (StreamReader sr = new StreamReader(filePath, System.Text.Encoding.UTF8))
+            try
             {
-                string tempLine;
-                while ((tempLine = sr.ReadLine()) != null)
+                if (!Directory.Exists(filePath))
                 {
-                    messageList.Add(tempLine);
+                    Directory.CreateDirectory(filePath);
+                    File.Create(filePath + @"\logs.txt");
                 }
+                else if (Directory.Exists(filePath))
+                {
+                    using (StreamReader sr = new StreamReader(filePath + @"\logs.txt", System.Text.Encoding.UTF8))
+                    {
+                        string tempLine;
+                        while ((tempLine = sr.ReadLine()) != null)
+                        {
+                            messageList.Add(tempLine);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                //ignored
             }
             return messageList;
         }
