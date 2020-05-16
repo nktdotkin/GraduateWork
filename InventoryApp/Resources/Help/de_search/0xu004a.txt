@@ -1,0 +1,2 @@
+JPG; 4;
+JPG|PNG|GIF|BMP; 4;

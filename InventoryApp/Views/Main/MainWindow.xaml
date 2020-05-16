@@ -16,7 +16,7 @@
         <KeyBinding Modifiers="Ctrl" Key="L" Command="{Binding LogoutCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding OpenShipmentFolderCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding OpenSupplyFolderCommand}"></KeyBinding>
-        <KeyBinding Modifiers="" Key="F1" Command="{Binding OpenSupplyFolderCommand}"></KeyBinding>
+        <KeyBinding Modifiers="" Key="F1" Command="{Binding OpenHelperCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.DataContext>
         <Main:MainWindowViewModel/>

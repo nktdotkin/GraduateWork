@@ -4,6 +4,7 @@ using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
 using InventoryApp.Views.Settings;
 using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -160,7 +161,14 @@ namespace InventoryApp.ViewModels.Base
 
         private void OpenHelper()
         {
-
+            try
+            {
+                Process.Start(Environment.CurrentDirectory + @"\Resources\Help\index.htm");
+            }
+            catch
+            {
+                Notification.ShowNotification("Ошибка открытия справки.");
+            }
         }
 
         private void Settings()

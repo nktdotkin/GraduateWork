@@ -1,0 +1,21 @@
+1
+ Справочная система Inventory App
+ spravochnaya_sistema_inventory_app.htm
+2
+ Поставщики
+ postavshchiki.htm
+3
+ Клиенты
+ klienty.htm
+4
+ Товары
+ tovary.htm
+5
+ Поставки и отгрузки
+ postavki_i_otgruzki.htm
+6
+ Настройки
+ nastrojki.htm
+7
+ Статистика
+ statistika.htm

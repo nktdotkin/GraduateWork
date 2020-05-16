@@ -4,9 +4,9 @@ using System.IO;
 
 namespace InventoryApp.Service
 {
-    class LogService
+    static class LogService
     {
-        public bool SetToFile(string message)
+        public static bool SetToFile(string message)
         {
             bool isCompleted = false;
             try
@@ -25,7 +25,7 @@ namespace InventoryApp.Service
             return isCompleted;
         }
 
-        public List<string> ReadFromFile(string filePath = @"\Logs\logs.txt")
+        public static List<string> ReadFromFile(string filePath = @"\Logs\logs.txt")
         {
             var messageList = new List<string>();
             using (StreamReader sr = new StreamReader(Environment.CurrentDirectory + filePath, System.Text.Encoding.UTF8))

@@ -95,7 +95,7 @@
         </Grid>
         <ScrollViewer Margin="900,120,60,60" HorizontalAlignment="Left" Style="{StaticResource MaterialDesignScrollViewer}">
             <StackPanel>
-                <Expander IsExpanded="{Binding Source={x:Static properties:Settings.Default}, Path=ProductPreviewByDefault}" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
+                <Expander IsExpanded="{Binding Source={x:Static properties:Settings.Default}, Path=ProductPreviewByDefault, Mode=OneWay}" ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                     <Expander.Header>
                         <TextBlock Text="Предпросмотр товара" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                             <TextBlock.LayoutTransform>

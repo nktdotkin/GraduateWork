@@ -68,7 +68,7 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
-                new LogService().SetToFile("Database error: " + e.Message);
+                LogService.SetToFile("Database error: " + e.Message);
             }
             connection.Close();
             return collection;
@@ -113,7 +113,7 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
-                new LogService().SetToFile("Database error: " + e.Message);
+                LogService.SetToFile("Database error: " + e.Message);
             }
             connection.Close();
             return isCompleted;

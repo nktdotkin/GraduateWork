@@ -34,7 +34,7 @@ namespace InventoryApp.ViewModels.Common
 
         public StatsViewModel()
         {
-            MessageList = new LogService().ReadFromFile();
+            MessageList = LogService.ReadFromFile();
             MessageList.Reverse();
             FormatterSold = value => value + ". штук";
             FormatterEarned = value => value + " BYN";

@@ -50,7 +50,7 @@ namespace InventoryApp.ViewModels.Common
             foreach (var message in Messages)
             {
                 NotificationMessageQueue.Enqueue(message);
-                new LogService().SetToFile(message.ToString());
+                LogService.SetToFile(message.ToString());
             }
         }
 
