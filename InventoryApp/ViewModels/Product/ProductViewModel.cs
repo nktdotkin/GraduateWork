@@ -25,7 +25,7 @@ namespace InventoryApp.ViewModels.Product
             AddNewProduct = new ProductModel();
             Notification = new NotificationServiceViewModel();
             ModelValidation = new ValidationService<ProductModel>();
-            Task.Run(() => Update(true));
+            Task.Run(() => Update(false, true));
         }
 
         #region Properties
@@ -93,8 +93,8 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchByGroup));
                     if (!string.IsNullOrWhiteSpace(searchByGroup.Group))
                     {
-                        var updateTask = Task.Run(() => Update());
-                        Task.WaitAll(updateTask);
+                        //var updateTask = Task.Run(() => Update());
+                        //Task.WaitAll(updateTask);
                         Find(searchByGroup.Group);
                     }
                     else
@@ -107,10 +107,15 @@ namespace InventoryApp.ViewModels.Product
         #endregion
 
         #region Functions
-        public ObservableCollection<ProductModel> Update(bool isFirstStart = false)
+        public ObservableCollection<ProductModel> Update(bool onlyProduct = false, bool isFirstStart = false)
         {
-            GroupsModels = new BaseQueryService().Fill<GroupsModel>($"GetGroups");
-            OutdatedProductModels = new BaseQueryService().Fill<ProductModel>($"GetOutdatedProducts");
+            if (!onlyProduct)
+            {
+                GroupsModels = new BaseQueryService().Fill<GroupsModel>($"GetGroups");
+                OutdatedProductModels = new BaseQueryService().Fill<ProductModel>($"GetOutdatedProducts");
+                OnPropertyChanged(nameof(GroupsModels));
+                OnPropertyChanged(nameof(OutdatedProductModels));
+            }
             ProductModels = new BaseQueryService().Fill<ProductModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ProductModels));
             if (isFirstStart)
@@ -173,7 +178,7 @@ namespace InventoryApp.ViewModels.Product
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
             string fileExtension = Path.GetExtension(fileDialog.FileName);
-            if (!string.IsNullOrWhiteSpace(fileDialog.FileName) && Regex.IsMatch(fileExtension, @"([^\s]+(\.(?i)(jpg|png|gif|bmp))$)"))
+            if (!string.IsNullOrWhiteSpace(fileDialog.FileName) && Regex.IsMatch(fileExtension, @"((\.(?i)(jpg|png|gif|bmp))$)"))
             {
                 AddNewProduct.ImageLink = fileDialog.FileName;
                 Notification.ShowNotification($"Инфо: Файл {fileDialog.SafeFileName} добавлен.");

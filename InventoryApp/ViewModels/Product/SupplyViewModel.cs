@@ -87,11 +87,11 @@ namespace InventoryApp.ViewModels.Product
                 {
                     searchByProvider = value;
                     OnPropertyChanged(nameof(SearchByProvider));
-                    if (!string.IsNullOrWhiteSpace(searchByProvider.Phone))
+                    if (!string.IsNullOrWhiteSpace(searchByProvider.Company))
                     {
-                        var updateTask = Task.Run(() => Update());
-                        Task.WaitAll(updateTask);
-                        Find(searchByProvider.Phone);
+                        //var updateTask = Task.Run(() => Update());
+                        //Task.WaitAll(updateTask);
+                        Find(searchByProvider.Company);
                     }
                     else
                     {
@@ -100,15 +100,34 @@ namespace InventoryApp.ViewModels.Product
                 }
             }
         }
+
+        private bool spinnerVisibility;
+        public bool SpinnerVisibility
+        {
+            get => spinnerVisibility;
+            set
+            {
+                if (value != spinnerVisibility)
+                {
+                    spinnerVisibility = value;
+                    OnPropertyChanged(nameof(SpinnerVisibility));
+                }
+            }
+        }
         #endregion
 
         #region Functions
-        private void Update()
+        private void Update(bool onlySupply = false)
         {
-            ProviderModels = new ProviderViewModel().Update();
-            ProductModels = new ProductViewModel().Update();
+            if (!onlySupply)
+            {
+                ProviderModels = new ProviderViewModel().Update();
+                ProductModels = new ProductViewModel().Update(true);
+            }
             SupplyModels = new BaseQueryService().Fill<SupplyModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(SupplyModels));
+            OnPropertyChanged(nameof(ProviderModels));
+            OnPropertyChanged(nameof(ProductModels));
         }
 
         private void Delete()
@@ -138,6 +157,12 @@ namespace InventoryApp.ViewModels.Product
             Notification.ShowNotification(exportMessage);
         }
 
+        private void HideSpinner()
+        {
+            this.spinnerVisibility = false;
+            OnPropertyChanged(nameof(this.SpinnerVisibility));
+        }
+
         private void Add()
         {
             var errorList = ModelValidation.ValidateFields(AddNewSupply);
@@ -153,10 +178,12 @@ namespace InventoryApp.ViewModels.Product
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Поставка для {AddNewSupply.Product.Name} добавлена.");
+                        SpinnerVisibility = true;
                         Task.Run(() => CreateDocument());
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
                     }
-                    Task.Run(() => Update());
+                    Task.Run(() => Update(true));
+                    BaseService.DelayAction(300, () => HideSpinner());
                 }
                 else
                 {

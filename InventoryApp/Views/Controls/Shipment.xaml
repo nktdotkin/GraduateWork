@@ -11,6 +11,9 @@
     <UserControl.DataContext>
         <local:ShipmentViewModel/>
     </UserControl.DataContext>
+    <UserControl.InputBindings>
+        <KeyBinding Modifiers="" Key="Return" Command="{Binding AddCommand}"></KeyBinding>
+    </UserControl.InputBindings>
     <Grid>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,60,0,0">
             <Button ToolTip="Поиск" Background="{x:Null}" BorderBrush="{x:Null}" Width="70" Height="70">
@@ -31,6 +34,9 @@
         </StackPanel>
         <Grid Margin="0,180,0,0">
             <DataGrid Width="900" ColumnWidth="Auto" HorizontalAlignment="Left" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ShipmentModels, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
+                <DataGrid.InputBindings>
+                    <KeyBinding Modifiers="" Key="Delete" Command="{Binding DeleteCommand}"></KeyBinding>
+                </DataGrid.InputBindings>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Date, StringFormat=dd-MM-yyyy}" Header="Дата заказа"/>
                     <DataGridTextColumn Binding="{Binding Path=Amount}" Header="Количество"/>
@@ -161,6 +167,9 @@
                 </Expander>
             </StackPanel>
         </ScrollViewer>
+        <materialDesign:Card Width="100" Height="100" UniformCornerRadius="14" Padding="4" Visibility="{Binding SpinnerVisibility, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}" >
+            <ProgressBar Width="70" Height="70" Foreground="Black" Style="{StaticResource MaterialDesignCircularProgressBar}" Value="0" IsIndeterminate="True"  />
+        </materialDesign:Card>
         <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </UserControl>

@@ -95,10 +95,15 @@ namespace InventoryApp.ViewModels.User
         #endregion
 
         #region Functions
-        public ObservableCollection<ClientModel> Update()
+        public ObservableCollection<ClientModel> Update(bool onlyClient = false)
         {
-            StatusesModels = new BaseQueryService().Fill<StatusesModel>(($"GetStatuses"));
-            StoretypesModels = new BaseQueryService().Fill<StoretypesModel>(($"GetStoreTypes"));
+            if (!onlyClient)
+            {
+                StatusesModels = new BaseQueryService().Fill<StatusesModel>(($"GetStatuses"));
+                StoretypesModels = new BaseQueryService().Fill<StoretypesModel>(($"GetStoreTypes"));
+                OnPropertyChanged(nameof(StatusesModels));
+                OnPropertyChanged(nameof(StoretypesModels));
+            }
             ClientModels = new BaseQueryService().Fill<ClientModel>($"Get{TableName}");
             OnPropertyChanged(nameof(ClientModels));
             return ClientModels;

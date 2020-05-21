@@ -12,10 +12,10 @@ namespace InventoryApp.Service
     {
         private string FileDirectory = DateTime.Now.ToString("dd-MMM-yyyy");
         private string CurrentDirectory = Environment.CurrentDirectory;
-        private string PathToFile = null;
 
         public string ExportInformationToFile<T>(T instanse, string documentType) where T : class
         {
+            string PathToFile = string.Empty;
             if (Properties.Settings.Default.SaveDocsAutomaticly)
             {
                 if (!Directory.Exists(Path.Combine(CurrentDirectory, FileDirectory)))
@@ -176,6 +176,7 @@ namespace InventoryApp.Service
             }
             catch (Exception e)
             {
+                LogService.SetToFile("Ошибка файла: " + e.Message);
                 isCompleted = false;
             }
             return isCompleted;

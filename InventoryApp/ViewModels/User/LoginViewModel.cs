@@ -59,6 +59,8 @@ namespace InventoryApp.ViewModels.User
             byte isAdmin = 0;
             if (Properties.Settings.Default.FirstStart)
             {
+                var deleteAdmin = $"DELETE FROM [ManagerLogInfo] WHERE UserName like 'Administrator'";
+                new BaseQueryService().ExecuteQuery<LoginViewModel>(deleteAdmin);
                 isAdmin = 1;
                 Properties.Settings.Default.FirstStart = false;
                 Properties.Settings.Default.Save();

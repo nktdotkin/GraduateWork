@@ -11,6 +11,9 @@
     <UserControl.DataContext>
         <local:ClientViewModel/>
     </UserControl.DataContext>
+    <UserControl.InputBindings>
+        <KeyBinding Modifiers="" Key="Return" Command="{Binding AddCommand}"></KeyBinding>
+    </UserControl.InputBindings>
     <Grid>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Horizontal" Margin="0,60,0,0">
             <Button ToolTip="Поиск" Background="{x:Null}" BorderBrush="{x:Null}" Width="70" Height="70">
@@ -20,6 +23,9 @@
         </StackPanel>
         <Grid Margin="0,180,0,0">
             <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding ClientModels, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.InputBindings>
+                    <KeyBinding Modifiers="" Key="Delete" Command="{Binding DeleteCommand}"></KeyBinding>
+                </DataGrid.InputBindings>
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Name}" Header="Имя"/>
                     <DataGridTextColumn Binding="{Binding Path=Surname}" Header="Фамилия"/>
@@ -69,7 +75,10 @@
                                     <DataTemplate>
                                         <StackPanel>
                                             <TextBlock Text="{Binding Status}"/>
-                                            <TextBlock Text="{Binding Discount}"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Discount}"/>
+                                                <TextBlock Text="%"/>
+                                            </StackPanel>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>

@@ -91,8 +91,8 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchByClient));
                     if (!string.IsNullOrWhiteSpace(searchByClient.Phone))
                     {
-                        var updateTask = Task.Run(() => Update());
-                        Task.WaitAll(updateTask);
+                        //var updateTask = Task.Run(() => Update());
+                        //Task.WaitAll(updateTask);
                         Find(searchByClient.Phone);
                     }
                     else
@@ -102,15 +102,34 @@ namespace InventoryApp.ViewModels.Product
                 }
             }
         }
+
+        private bool spinnerVisibility;
+        public bool SpinnerVisibility
+        {
+            get => spinnerVisibility;
+            set
+            {
+                if (value != spinnerVisibility)
+                {
+                    spinnerVisibility = value;
+                    OnPropertyChanged(nameof(SpinnerVisibility));
+                }
+            }
+        }
         #endregion
 
         #region Functions
-        private void Update()
+        private void Update(bool onlyShipment = false)
         {
-            ClientModels = new ClientViewModel().Update();
-            ProductModels = new ProductViewModel().Update();
+            if (!onlyShipment)
+            {
+                ClientModels = new ClientViewModel().Update(true);
+                ProductModels = new ProductViewModel().Update(true);
+            }
             ShipmentModels = new BaseQueryService().Fill<ShipmentModel>(($"Get{TableName}"));
             OnPropertyChanged(nameof(ShipmentModels));
+            OnPropertyChanged(nameof(ClientModels));
+            OnPropertyChanged(nameof(ProductModels));
         }
 
         private void Delete()
@@ -140,6 +159,12 @@ namespace InventoryApp.ViewModels.Product
             Notification.ShowNotification(exportMessage);
         }
 
+        private void HideSpinner()
+        {
+            this.spinnerVisibility = false;
+            OnPropertyChanged(nameof(this.SpinnerVisibility));
+        }
+
         private void Add()
         {
             var errorList = ModelValidation.ValidateFields(AddNewShipment);
@@ -156,9 +181,11 @@ namespace InventoryApp.ViewModels.Product
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} на {actualAmount} шт. добавлен.");
+                        SpinnerVisibility = true;
                         Task.Run(() => CreateDocument());
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={0} where ProductId = {AddNewShipment.Product.Id}");
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
+                        BaseService.DelayAction(100, () => HideSpinner());
                     }
                     else
                     {
@@ -171,8 +198,11 @@ namespace InventoryApp.ViewModels.Product
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} добавлен.");
+                        SpinnerVisibility = true;
+                        Task.Run(() => CreateDocument());
                         new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First() - AddNewShipment.Amount} where ProductId = {AddNewShipment.Product.Id}");
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
+                        BaseService.DelayAction(300, () => HideSpinner());
                     }
                     else
                     {

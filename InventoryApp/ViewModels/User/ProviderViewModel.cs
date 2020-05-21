@@ -134,12 +134,12 @@ namespace InventoryApp.ViewModels.User
                 bool isCompleted = new BaseQueryService().Add(TableName, AddNewProvider);
                 if (isCompleted)
                 {
-                    Notification.ShowNotification($"Инфо: {AddNewProvider.Name} добавлен.");
+                    Notification.ShowNotification($"Инфо: Поставщик {AddNewProvider.Company} добавлен.");
                     Task.Run(() => Update());
                 }
                 else
                 {
-                    Notification.ShowNotification($"Ошибка: {AddNewProvider.Name} не добавлен.");
+                    Notification.ShowNotification($"Ошибка: Поставщик {AddNewProvider.Company} не добавлен.");
                 }
             }
         }
@@ -150,6 +150,7 @@ namespace InventoryApp.ViewModels.User
             items.Name.Contains(searchText) ||
             items.Surname.Contains(searchText) ||
             items.Company.Contains(searchText) ||
+            items.Email.Contains(searchText) ||
             items.Phone.Contains(searchText) ||
             items.Address.Contains(searchText)
             ).ToList();
