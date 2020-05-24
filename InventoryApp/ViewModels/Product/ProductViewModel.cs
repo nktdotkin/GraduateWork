@@ -93,8 +93,8 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchByGroup));
                     if (!string.IsNullOrWhiteSpace(searchByGroup.Group))
                     {
-                        //var updateTask = Task.Run(() => Update());
-                        //Task.WaitAll(updateTask);
+                        var updateTask = Task.Run(() => Update(true));
+                        Task.WaitAll(updateTask);
                         Find(searchByGroup.Group);
                     }
                     else

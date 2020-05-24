@@ -89,8 +89,8 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchByProvider));
                     if (!string.IsNullOrWhiteSpace(searchByProvider.Company))
                     {
-                        //var updateTask = Task.Run(() => Update());
-                        //Task.WaitAll(updateTask);
+                        var updateTask = Task.Run(() => Update(true));
+                        Task.WaitAll(updateTask);
                         Find(searchByProvider.Company);
                     }
                     else
@@ -200,6 +200,7 @@ namespace InventoryApp.ViewModels.Product
             items.Product.Description.Contains(searchText) ||
             items.Provider.Name.Contains(searchText) ||
             items.Provider.Phone.Contains(searchText) ||
+            items.Provider.Company.Contains(searchText) ||
             items.Provider.Surname.Contains(searchText)
             ).ToList();
             if (!SupplyModels.SequenceEqual(searchResult))

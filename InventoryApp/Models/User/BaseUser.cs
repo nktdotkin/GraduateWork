@@ -11,8 +11,10 @@ namespace InventoryApp.Models.User
         public int Id { get; set; }
         [Required(ErrorMessage = "Введите имя")]
         [StringLength(30, MinimumLength = 3)]
+        [RegularExpression(@"^[а-яА-Я]+$", ErrorMessage = "Имя только латиницей")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Введите фамилию")]
+        [RegularExpression(@"^[а-яА-Я]+$", ErrorMessage = "Фамилия только латиницей")]
         [StringLength(30, MinimumLength = 3)]
         public string Surname { get; set; }
         [Required(ErrorMessage = "Введите адрес")]

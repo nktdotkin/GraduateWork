@@ -140,7 +140,7 @@ namespace InventoryApp.ViewModels.User
             else
             {
                 bool isCompleted = new BaseQueryService().Add<ClientModel>(TableName, AddNewClient);
-                Update();
+                Update(true);
                 bool isUpdated = new BaseQueryService().ExecuteQuery<ClientModel>($"UPDATE {TableName} SET _StatusId = {AddNewClient.Status.StatusId}, _StoreId = {AddNewClient.StoreType.StoreId} WHERE ClientId = {ClientModels.Last().Id}");
                 if (isCompleted && isUpdated)
                 {

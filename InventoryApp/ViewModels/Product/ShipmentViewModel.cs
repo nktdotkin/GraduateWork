@@ -91,8 +91,8 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchByClient));
                     if (!string.IsNullOrWhiteSpace(searchByClient.Phone))
                     {
-                        //var updateTask = Task.Run(() => Update());
-                        //Task.WaitAll(updateTask);
+                        var updateTask = Task.Run(() => Update(true));
+                        Task.WaitAll(updateTask);
                         Find(searchByClient.Phone);
                     }
                     else
