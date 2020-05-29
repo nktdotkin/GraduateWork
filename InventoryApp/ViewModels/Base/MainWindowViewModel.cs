@@ -1,4 +1,6 @@
-﻿using InventoryApp.Service;
+﻿using CefSharp;
+using CefSharp.Wpf;
+using InventoryApp.Service;
 using InventoryApp.ViewModels.Common;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
@@ -119,6 +121,8 @@ namespace InventoryApp.ViewModels.Base
 
         private void ClickOnTab()
         {
+            GC.Collect(1, GCCollectionMode.Forced);
+            //Cef.Shutdown();
             switch (TabControl)
             {
                 case TabControl.Product:

@@ -8,9 +8,8 @@ namespace InventoryApp.Service
     {
         private static string filePath = Environment.CurrentDirectory + @"\Logs";
 
-        public static bool SetToFile(string message)
+        public static void SetToFile(string message)
         {
-            bool isCompleted = false;
             try
             {
                 if (!Directory.Exists(filePath))
@@ -32,7 +31,6 @@ namespace InventoryApp.Service
             {
                 //ignored
             }
-            return isCompleted;
         }
 
         public static List<string> ReadFromFile()

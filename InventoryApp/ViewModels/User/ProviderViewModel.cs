@@ -13,19 +13,16 @@ namespace InventoryApp.ViewModels.User
     {
         public ProviderViewModel()
         {
-            GC.Collect(1, GCCollectionMode.Forced);
-            ProviderModels = new ObservableCollection<ProviderModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewProvider = new ProviderModel();
             ProviderLocationSource = BaseService.GetAddress(null);
             Notification = new NotificationServiceViewModel();
-            ModelValidation = new ValidationService<ProviderModel>();
+            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update());
         }
 
         #region Properties
-        private const string TableName = "Provider";
         public string ProviderLocationSource { get; set; }
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
 
@@ -33,21 +30,10 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand AddCommand { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
-        private ValidationService<ProviderModel> ModelValidation { get; set; }
 
-        private ProviderModel addNewProvider;
-        public ProviderModel AddNewProvider
-        {
-            get => addNewProvider;
-            set
-            {
-                if (value != addNewProvider)
-                {
-                    addNewProvider = value;
-                    OnPropertyChanged(nameof(AddNewProvider));
-                }
-            }
-        }
+        private BaseQueryService BaseQueryService;
+
+        public ProviderModel AddNewProvider { get; set; }
 
         private ProviderModel selectedItem;
         public ProviderModel SelectedItem
@@ -77,7 +63,6 @@ namespace InventoryApp.ViewModels.User
                 if (value != searchText)
                 {
                     searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
                         var updateTask = Task.Run(() => Update());
@@ -88,24 +73,24 @@ namespace InventoryApp.ViewModels.User
                     {
                         Task.Run(() => Update());
                     }
+                    OnPropertyChanged(nameof(SearchText));
                 }
             }
         }
         #endregion
 
         #region Functions
-        public ObservableCollection<ProviderModel> Update()
+        public void Update()
         {
-            ProviderModels = new BaseQueryService().Fill<ProviderModel>(($"Get{TableName}"));
+            ProviderModels = BaseQueryService.Fill<ProviderModel>(($"Get{DataBaseTableNames.Provider}"));
             OnPropertyChanged(nameof(ProviderModels));
-            return ProviderModels;
         }
 
         private void Delete()
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = BaseQueryService.Delete(DataBaseTableNames.Provider, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Поставщик удален.");
@@ -124,14 +109,14 @@ namespace InventoryApp.ViewModels.User
 
         private void Add()
         {
-            var errorList = ModelValidation.ValidateFields(AddNewProvider);
+            var errorList = new ValidationService<ProviderModel>().ValidateFields(AddNewProvider);
             if (errorList.Any())
             {
                 Notification.ShowListNotification(errorList);
             }
             else
             {
-                bool isCompleted = new BaseQueryService().Add(TableName, AddNewProvider);
+                bool isCompleted = BaseQueryService.Add(DataBaseTableNames.Provider, AddNewProvider);
                 if (isCompleted)
                 {
                     Notification.ShowNotification($"Инфо: Поставщик {AddNewProvider.Company} добавлен.");

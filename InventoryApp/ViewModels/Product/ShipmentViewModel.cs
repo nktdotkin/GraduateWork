@@ -3,7 +3,6 @@ using InventoryApp.Models.User;
 using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
-using InventoryApp.ViewModels.User;
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -17,27 +16,28 @@ namespace InventoryApp.ViewModels.Product
         public ShipmentViewModel()
         {
             GC.Collect(1, GCCollectionMode.Forced);
-            ShipmentModels = new ObservableCollection<ShipmentModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewShipment = new ShipmentModel();
             Notification = new NotificationServiceViewModel();
-            ModelValidation = new ValidationService<ShipmentModel>();
+            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update());
         }
 
         #region Properties
-        private const string TableName = "Shipment";
         public ObservableCollection<ShipmentModel> ShipmentModels { get; set; }
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public ObservableCollection<ProductModel> ProductModels { get; set; }
 
-        private ValidationService<ShipmentModel> ModelValidation { get; set; }
         public NotificationServiceViewModel Notification { get; set; }
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
         public RelayCommand AddProductImageCommand { get; set; }
+
+        private BaseQueryService BaseQueryService;
+
+        public ShipmentModel AddNewShipment { get; set; }
 
         private ShipmentModel selectedItem;
         public ShipmentModel SelectedItem
@@ -53,7 +53,7 @@ namespace InventoryApp.ViewModels.Product
             }
         }
 
-        public ShipmentModel AddNewShipment { get; set; }
+        public bool SpinnerVisibility { get; set; }
 
         private string searchText;
         public string SearchText
@@ -67,13 +67,13 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        var updateTask = Task.Run(() => Update());
+                        var updateTask = Task.Run(() => Update(true));
                         Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
                     }
                 }
             }
@@ -97,22 +97,8 @@ namespace InventoryApp.ViewModels.Product
                     }
                     else
                     {
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
                     }
-                }
-            }
-        }
-
-        private bool spinnerVisibility;
-        public bool SpinnerVisibility
-        {
-            get => spinnerVisibility;
-            set
-            {
-                if (value != spinnerVisibility)
-                {
-                    spinnerVisibility = value;
-                    OnPropertyChanged(nameof(SpinnerVisibility));
                 }
             }
         }
@@ -123,24 +109,24 @@ namespace InventoryApp.ViewModels.Product
         {
             if (!onlyShipment)
             {
-                ClientModels = new ClientViewModel().Update(true);
-                ProductModels = new ProductViewModel().Update(true);
+                ClientModels = BaseQueryService.Fill<ClientModel>(($"Get{DataBaseTableNames.Client}"));
+                ProductModels = BaseQueryService.Fill<ProductModel>(($"Get{DataBaseTableNames.Product}"));
+                OnPropertyChanged(nameof(ClientModels));
+                OnPropertyChanged(nameof(ProductModels));
             }
-            ShipmentModels = new BaseQueryService().Fill<ShipmentModel>(($"Get{TableName}"));
+            ShipmentModels = BaseQueryService.Fill<ShipmentModel>(($"Get{DataBaseTableNames.Shipment}"));
             OnPropertyChanged(nameof(ShipmentModels));
-            OnPropertyChanged(nameof(ClientModels));
-            OnPropertyChanged(nameof(ProductModels));
         }
 
         private void Delete()
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = BaseQueryService.Delete(DataBaseTableNames.Shipment, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Информация о заказе удалена.");
-                    Task.Run(() => Update());
+                    Task.Run(() => Update(true));
                 }
                 else
                 {
@@ -161,13 +147,19 @@ namespace InventoryApp.ViewModels.Product
 
         private void HideSpinner()
         {
-            this.spinnerVisibility = false;
+            this.SpinnerVisibility = false;
+            OnPropertyChanged(nameof(this.SpinnerVisibility));
+        }
+
+        private void ShowSpinner()
+        {
+            this.SpinnerVisibility = true;
             OnPropertyChanged(nameof(this.SpinnerVisibility));
         }
 
         private void Add()
         {
-            var errorList = ModelValidation.ValidateFields(AddNewShipment);
+            var errorList = new ValidationService<ShipmentModel>().ValidateFields(AddNewShipment);
             if (errorList.Any())
             {
                 Notification.ShowListNotification(errorList);
@@ -177,38 +169,32 @@ namespace InventoryApp.ViewModels.Product
                 var actualAmount = ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First();
                 if (AddNewShipment.Amount > actualAmount)
                 {
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES (N'{AddNewShipment.Date}', {actualAmount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * actualAmount} , {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
-                    if (isCompleted)
-                    {
-                        Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} на {actualAmount} шт. добавлен.");
-                        SpinnerVisibility = true;
-                        Task.Run(() => CreateDocument());
-                        new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={0} where ProductId = {AddNewShipment.Product.Id}");
-                        Task.Run(() => Update(true));
-                        BaseService.DelayAction(100, () => HideSpinner());
-                    }
-                    else
-                    {
-                        Notification.ShowNotification("Ошибка: Добавление заказа произошло с ошибкой.");
-                    }
+                    AddOrder(actualAmount, 0);
                 }
                 else
                 {
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES (N'{AddNewShipment.Date}', {AddNewShipment.Amount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * AddNewShipment.Amount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
-                    if (isCompleted)
-                    {
-                        Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} добавлен.");
-                        SpinnerVisibility = true;
-                        Task.Run(() => CreateDocument());
-                        new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First() - AddNewShipment.Amount} where ProductId = {AddNewShipment.Product.Id}");
-                        Task.Run(() => Update(true));
-                        BaseService.DelayAction(300, () => HideSpinner());
-                    }
-                    else
-                    {
-                        Notification.ShowNotification("Ошибка: Добавление заказа произошло с ошибкой.");
-                    }
+                    AddOrder(AddNewShipment.Amount, ProductModels.Where(item => item.Id == AddNewShipment.Product.Id).Select(item => item.Amount).First() - AddNewShipment.Amount);
                 }
+            }
+        }
+
+        private void AddOrder(int amount, int setAmount)
+        {
+            bool isCompleted = BaseQueryService.
+    ExecuteQuery<ShipmentModel>($"INSERT INTO {DataBaseTableNames.Shipment} VALUES (N'{AddNewShipment.Date}', {amount}, {(AddNewShipment.Product.TotalPrice - (AddNewShipment.Client.Status.Discount * AddNewShipment.Product.TotalPrice / 100)) * AddNewShipment.Amount}, {AddNewShipment.Product.Id}, {AddNewShipment.Client.Id})");
+            if (isCompleted)
+            {
+                Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} добавлен.");
+                ShowSpinner();
+                Task.Run(() => CreateDocument());
+                BaseQueryService.
+                    ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={setAmount} where ProductId = {AddNewShipment.Product.Id}");
+                Task.Run(() => Update(true));
+                BaseService.DelayAction(300, () => HideSpinner());
+            }
+            else
+            {
+                Notification.ShowNotification("Ошибка: Добавление заказа произошло с ошибкой.");
             }
         }
 

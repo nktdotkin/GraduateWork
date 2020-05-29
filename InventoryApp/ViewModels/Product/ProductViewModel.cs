@@ -24,21 +24,24 @@ namespace InventoryApp.ViewModels.Product
             AddProductImageCommand = new RelayCommand((obj) => AddProductImage());
             AddNewProduct = new ProductModel();
             Notification = new NotificationServiceViewModel();
-            ModelValidation = new ValidationService<ProductModel>();
+            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update(false, true));
         }
 
         #region Properties
-        private const string TableName = "Product";
         public ObservableCollection<ProductModel> ProductModels { get; set; }
         public ObservableCollection<ProductModel> OutdatedProductModels { get; set; }
         public ObservableCollection<GroupsModel> GroupsModels { get; set; }
-        private ValidationService<ProductModel> ModelValidation { get; set; }
+
+        private BaseQueryService BaseQueryService;
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
         public RelayCommand AddProductImageCommand { get; set; }
         public RelayCommand ImportCommand { get; set; }
+
+        public ProductModel AddNewProduct { get; set; }
+        public NotificationServiceViewModel Notification { get; set; }
 
         private ProductModel selectedItem;
         public ProductModel SelectedItem
@@ -54,9 +57,6 @@ namespace InventoryApp.ViewModels.Product
             }
         }
 
-        public ProductModel AddNewProduct { get; set; }
-        public NotificationServiceViewModel Notification { get; set; }
-
         private string searchText;
         public string SearchText
         {
@@ -69,13 +69,13 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        var updateTask = Task.Run(() => Update());
+                        var updateTask = Task.Run(() => Update(true));
                         Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
                     }
                 }
             }
@@ -99,7 +99,7 @@ namespace InventoryApp.ViewModels.Product
                     }
                     else
                     {
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
                     }
                 }
             }
@@ -107,30 +107,29 @@ namespace InventoryApp.ViewModels.Product
         #endregion
 
         #region Functions
-        public ObservableCollection<ProductModel> Update(bool onlyProduct = false, bool isFirstStart = false)
+        public void Update(bool onlyProduct = false, bool isFirstStart = false)
         {
             if (!onlyProduct)
             {
-                GroupsModels = new BaseQueryService().Fill<GroupsModel>($"GetGroups");
-                OutdatedProductModels = new BaseQueryService().Fill<ProductModel>($"GetOutdatedProducts");
+                GroupsModels = BaseQueryService.Fill<GroupsModel>($"Get{DataBaseTableNames.Groups}");
+                OutdatedProductModels = BaseQueryService.Fill<ProductModel>($"Get{DataBaseTableNames.OutdatedProduct}");
                 OnPropertyChanged(nameof(GroupsModels));
                 OnPropertyChanged(nameof(OutdatedProductModels));
             }
-            ProductModels = new BaseQueryService().Fill<ProductModel>($"Get{TableName}");
+            ProductModels = BaseQueryService.Fill<ProductModel>($"Get{DataBaseTableNames.Product}");
             OnPropertyChanged(nameof(ProductModels));
             if (isFirstStart)
             {
                 CheckStorageCapacity();
                 Task.Run(() => DeleteOutdatingProducts());
             }
-            return ProductModels;
         }
 
         private void Delete()
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = BaseQueryService.Delete(DataBaseTableNames.Product, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Товар удален.");
@@ -149,7 +148,7 @@ namespace InventoryApp.ViewModels.Product
 
         private void Add()
         {
-            var errorList = ModelValidation.ValidateFields(AddNewProduct);
+            var errorList = new ValidationService<ProductModel>().ValidateFields(AddNewProduct);
             if (errorList.Any())
             {
                 Notification.ShowListNotification(errorList);
@@ -159,7 +158,7 @@ namespace InventoryApp.ViewModels.Product
                 if (CheckStorageCapacity())
                 {
                     AddNewProduct.GroupId = GroupsModels.Where(items => items.Group == AddNewProduct.Groups.Group).First().Id;
-                    bool isCompleted = new BaseQueryService().Add(TableName, AddNewProduct);
+                    bool isCompleted = BaseQueryService.Add(DataBaseTableNames.Product, AddNewProduct);
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: {AddNewProduct.Name} добавлен.");
@@ -232,8 +231,8 @@ namespace InventoryApp.ViewModels.Product
         {
             foreach (var oudatedPorducts in ProductModels.Where(items => (items.ExpirationDateDays.DayOfYear.Equals(DateTime.Now.DayOfYear - 1)) && items.ExpirationDateDays.Year.Equals(DateTime.Now.Year)))
             {
-                bool isDeleted = new BaseQueryService().Delete(TableName, oudatedPorducts.Id);
-                bool isAdded = new BaseQueryService().Add("OutdatedProduct", oudatedPorducts);
+                bool isDeleted = BaseQueryService.Delete(DataBaseTableNames.Product, oudatedPorducts.Id);
+                bool isAdded = BaseQueryService.Add("OutdatedProduct", oudatedPorducts);
                 if (isDeleted && isAdded)
                 {
                     Notification.ShowNotification("Инфо: Товары списаны.");
@@ -253,7 +252,7 @@ namespace InventoryApp.ViewModels.Product
             Properties.Settings.Default.ActualCapacity = productCount;
             Properties.Settings.Default.Save();
             Notification.ShowNotification($"Инфо: Занятое пространство склада {occupiedSpace}%");
-            return (occupiedSpace < 99) ? true : false;
+            return occupiedSpace < 99;
         }
 
         private void Find(string searchText)

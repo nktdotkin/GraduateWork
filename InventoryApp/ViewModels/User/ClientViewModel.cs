@@ -13,18 +13,16 @@ namespace InventoryApp.ViewModels.User
     {
         public ClientViewModel()
         {
-            GC.Collect(1, GCCollectionMode.Forced);
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewClient = new ClientModel();
             ClientLocationSource = BaseService.GetAddress(null);
             Notification = new NotificationServiceViewModel();
-            ModelValidation = new ValidationService<ClientModel>();
+            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update());
         }
 
         #region Properties
-        private const string TableName = "Client";
         public string ClientLocationSource { get; set; }
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public ObservableCollection<StoretypesModel> StoretypesModels { get; set; }
@@ -34,21 +32,10 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand AddCommand { get; set; }
 
         public NotificationServiceViewModel Notification { get; set; }
-        private ValidationService<ClientModel> ModelValidation { get; set; }
 
-        private ClientModel addNewClient;
-        public ClientModel AddNewClient
-        {
-            get => addNewClient;
-            set
-            {
-                if (value != addNewClient)
-                {
-                    addNewClient = value;
-                    OnPropertyChanged(nameof(AddNewClient));
-                }
-            }
-        }
+        private BaseQueryService BaseQueryService;
+
+        public ClientModel AddNewClient { get; set; }
 
         private ClientModel selectedItem;
         public ClientModel SelectedItem
@@ -78,7 +65,6 @@ namespace InventoryApp.ViewModels.User
                 if (value != searchText)
                 {
                     searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
                         var updateTask = Task.Run(() => Update());
@@ -89,31 +75,31 @@ namespace InventoryApp.ViewModels.User
                     {
                         Task.Run(() => Update());
                     }
+                    OnPropertyChanged(nameof(SearchText));
                 }
             }
         }
         #endregion
 
         #region Functions
-        public ObservableCollection<ClientModel> Update(bool onlyClient = false)
+        public void Update(bool onlyClient = false)
         {
             if (!onlyClient)
             {
-                StatusesModels = new BaseQueryService().Fill<StatusesModel>(($"GetStatuses"));
-                StoretypesModels = new BaseQueryService().Fill<StoretypesModel>(($"GetStoreTypes"));
+                StatusesModels = BaseQueryService.Fill<StatusesModel>(($"Get{DataBaseTableNames.Statuses}"));
+                StoretypesModels = BaseQueryService.Fill<StoretypesModel>(($"Get{DataBaseTableNames.StoreTypes}"));
                 OnPropertyChanged(nameof(StatusesModels));
                 OnPropertyChanged(nameof(StoretypesModels));
             }
-            ClientModels = new BaseQueryService().Fill<ClientModel>($"Get{TableName}");
+            ClientModels = BaseQueryService.Fill<ClientModel>($"Get{DataBaseTableNames.Client}");
             OnPropertyChanged(nameof(ClientModels));
-            return ClientModels;
         }
 
         private void Delete()
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = BaseQueryService.Delete(DataBaseTableNames.Client, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Клиент удален.");
@@ -132,16 +118,16 @@ namespace InventoryApp.ViewModels.User
 
         private void Add()
         {
-            var errorList = ModelValidation.ValidateFields(AddNewClient);
+            var errorList = new ValidationService<ClientModel>().ValidateFields(AddNewClient);
             if (errorList.Any())
             {
                 Notification.ShowListNotification(errorList);
             }
             else
             {
-                bool isCompleted = new BaseQueryService().Add<ClientModel>(TableName, AddNewClient);
+                bool isCompleted = BaseQueryService.Add<ClientModel>(DataBaseTableNames.Client, AddNewClient);
                 Update(true);
-                bool isUpdated = new BaseQueryService().ExecuteQuery<ClientModel>($"UPDATE {TableName} SET _StatusId = {AddNewClient.Status.StatusId}, _StoreId = {AddNewClient.StoreType.StoreId} WHERE ClientId = {ClientModels.Last().Id}");
+                bool isUpdated = BaseQueryService.ExecuteQuery<ClientModel>($"UPDATE {DataBaseTableNames.Client} SET _StatusId = {AddNewClient.Status.StatusId}, _StoreId = {AddNewClient.StoreType.StoreId} WHERE ClientId = {ClientModels.Last().Id}");
                 if (isCompleted && isUpdated)
                 {
                     Notification.ShowNotification($"Инфо: {AddNewClient.Name} добавлен.");

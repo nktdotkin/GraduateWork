@@ -3,7 +3,6 @@ using InventoryApp.Models.User;
 using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
-using InventoryApp.ViewModels.User;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,26 +15,29 @@ namespace InventoryApp.ViewModels.Product
         public SupplyViewModel()
         {
             GC.Collect(1, GCCollectionMode.Forced);
-            SupplyModels = new ObservableCollection<SupplyModel>();
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewSupply = new SupplyModel();
             Notification = new NotificationServiceViewModel();
-            ModelValidation = new ValidationService<SupplyModel>();
+            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update());
         }
 
         #region Properties
-        private const string TableName = "Supply";
         public ObservableCollection<SupplyModel> SupplyModels { get; set; }
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
         public ObservableCollection<ProductModel> ProductModels { get; set; }
 
-        private ValidationService<SupplyModel> ModelValidation { get; set; }
         public NotificationServiceViewModel Notification { get; set; }
+
+        private BaseQueryService BaseQueryService;
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
+
+        public SupplyModel AddNewSupply { get; set; }
+
+        public bool SpinnerVisibility { get; set; }
 
         private SupplyModel selectedItem;
         public SupplyModel SelectedItem
@@ -51,8 +53,6 @@ namespace InventoryApp.ViewModels.Product
             }
         }
 
-        public SupplyModel AddNewSupply { get; set; }
-
         private string searchText;
         public string SearchText
         {
@@ -65,13 +65,13 @@ namespace InventoryApp.ViewModels.Product
                     OnPropertyChanged(nameof(SearchText));
                     if (!string.IsNullOrWhiteSpace(searchText))
                     {
-                        var updateTask = Task.Run(() => Update());
+                        var updateTask = Task.Run(() => Update(true));
                         Task.WaitAll(updateTask);
                         Find(searchText);
                     }
                     else
                     {
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
                     }
                 }
             }
@@ -95,22 +95,8 @@ namespace InventoryApp.ViewModels.Product
                     }
                     else
                     {
-                        Task.Run(() => Update());
+                        Task.Run(() => Update(true));
                     }
-                }
-            }
-        }
-
-        private bool spinnerVisibility;
-        public bool SpinnerVisibility
-        {
-            get => spinnerVisibility;
-            set
-            {
-                if (value != spinnerVisibility)
-                {
-                    spinnerVisibility = value;
-                    OnPropertyChanged(nameof(SpinnerVisibility));
                 }
             }
         }
@@ -121,23 +107,24 @@ namespace InventoryApp.ViewModels.Product
         {
             if (!onlySupply)
             {
-                ProviderModels = new ProviderViewModel().Update();
-                ProductModels = new ProductViewModel().Update(true);
+                ProviderModels = BaseQueryService.Fill<ProviderModel>(($"Get{DataBaseTableNames.Provider}"));
+                ProductModels = BaseQueryService.Fill<ProductModel>(($"Get{DataBaseTableNames.Product}"));
+                OnPropertyChanged(nameof(ProviderModels));
+                OnPropertyChanged(nameof(ProductModels));
             }
-            SupplyModels = new BaseQueryService().Fill<SupplyModel>(($"Get{TableName}"));
+            SupplyModels = BaseQueryService.Fill<SupplyModel>(($"Get{DataBaseTableNames.Supply}"));
             OnPropertyChanged(nameof(SupplyModels));
-            OnPropertyChanged(nameof(ProviderModels));
-            OnPropertyChanged(nameof(ProductModels));
         }
 
         private void Delete()
         {
             if (SelectedItem?.Id != null)
             {
-                bool isCompleted = new BaseQueryService().Delete(TableName, SelectedItem.Id);
+                bool isCompleted = new BaseQueryService().Delete(DataBaseTableNames.Supply, SelectedItem.Id);
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Информация удалена.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
@@ -148,7 +135,6 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification("Ошибка: Выберите информацию для удаления.");
             }
-            Task.Run(() => Update());
         }
 
         private void CreateDocument()
@@ -159,13 +145,19 @@ namespace InventoryApp.ViewModels.Product
 
         private void HideSpinner()
         {
-            this.spinnerVisibility = false;
+            this.SpinnerVisibility = false;
+            OnPropertyChanged(nameof(this.SpinnerVisibility));
+        }
+
+        private void ShowSpinner()
+        {
+            this.SpinnerVisibility = true;
             OnPropertyChanged(nameof(this.SpinnerVisibility));
         }
 
         private void Add()
         {
-            var errorList = ModelValidation.ValidateFields(AddNewSupply);
+            var errorList = new ValidationService<SupplyModel>().ValidateFields(AddNewSupply);
             if (errorList.Any())
             {
                 Notification.ShowListNotification(errorList);
@@ -174,13 +166,15 @@ namespace InventoryApp.ViewModels.Product
             {
                 if ((Properties.Settings.Default.MaxCapacity - Properties.Settings.Default.ActualCapacity) > AddNewSupply.Amount)
                 {
-                    bool isCompleted = new BaseQueryService().ExecuteQuery<ShipmentModel>($"INSERT INTO {TableName} VALUES (N'{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
+                    bool isCompleted = BaseQueryService.
+                        ExecuteQuery<ShipmentModel>($"INSERT INTO {DataBaseTableNames.Supply} VALUES (N'{AddNewSupply.Date}', {AddNewSupply.Amount}, {AddNewSupply.Product.Id}, {AddNewSupply.Provider.Id})");
                     if (isCompleted)
                     {
                         Notification.ShowNotification($"Инфо: Поставка для {AddNewSupply.Product.Name} добавлена.");
-                        SpinnerVisibility = true;
+                        ShowSpinner();
                         Task.Run(() => CreateDocument());
-                        new BaseQueryService().ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
+                        BaseQueryService.
+                            ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
                     }
                     Task.Run(() => Update(true));
                     BaseService.DelayAction(300, () => HideSpinner());

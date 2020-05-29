@@ -49,7 +49,7 @@ namespace InventoryApp.ViewModels.Common
 
         private void Update()
         {
-            ShipmentModels = new BaseQueryService().Fill<ShipmentModel>(($"GetShipment"));
+            ShipmentModels = new BaseQueryService().Fill<ShipmentModel>(($"Get{DataBaseTableNames.Shipment}"));
             SoldDateList = ShipmentModels.Select(item => item.Date.ToString("dd MMM yyyy")).ToList();
             SoldProductList = ShipmentModels.Select(item => item.Product.Name).ToList();
             GetStatsByDate('w');
