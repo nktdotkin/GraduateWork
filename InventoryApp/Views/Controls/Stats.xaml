@@ -1,21 +1,21 @@
 ﻿<UserControl x:Class="InventoryApp.Views.Controls.Stats"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:InventoryApp.ViewModels.Common"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
-        <local:StatsViewModel/>
+        <local:StatsViewModel />
     </UserControl.DataContext>
     <Grid Margin="0,180,0,0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0">
             <StackPanel Orientation="Vertical">
@@ -33,12 +33,12 @@
                             <Expander HorizontalAlignment="Stretch" Header="Топ клиентов (количество покупок)">
                                 <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="24,8,24,16">
                                     <TextBlock Text="Клиенты:" />
-                                    <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding TopClientList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
+                                    <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding TopClientList, UpdateSourceTrigger=PropertyChanged}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding Path=Key.Name}" Header="Имя"/>
-                                            <DataGridTextColumn Binding="{Binding Path=Key.Surname}" Header="Фамилия"/>
-                                            <DataGridTextColumn Binding="{Binding Path=Key.Status.Status}" Header="Статус"/>
-                                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Количество купленных товаров"/>
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Name}" Header="Имя" />
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Surname}" Header="Фамилия" />
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Status.Status}" Header="Статус" />
+                                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Количество купленных товаров" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </StackPanel>
@@ -47,11 +47,11 @@
                             <Expander HorizontalAlignment="Stretch" Header="Топ товаров (количество продаж)">
                                 <StackPanel Orientation="Vertical" TextBlock.Foreground="{DynamicResource MaterialDesignBody}" Margin="24,8,24,16">
                                     <TextBlock Text="Товары:" />
-                                    <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding TopProductList, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedItem}">
+                                    <DataGrid Width="900" HorizontalAlignment="Left" ColumnWidth="Auto" Style="{StaticResource DataGridStyle}" ItemsSource="{Binding TopProductList, UpdateSourceTrigger=PropertyChanged}">
                                         <DataGrid.Columns>
-                                            <DataGridTextColumn Binding="{Binding Path=Key.Name}" Header="Название"/>
-                                            <DataGridTextColumn Binding="{Binding Path=Key.Groups.Group}" Header="Группа"/>
-                                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Количество"/>
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Name}" Header="Название" />
+                                            <DataGridTextColumn Binding="{Binding Path=Key.Groups.Group}" Header="Группа" />
+                                            <DataGridTextColumn Binding="{Binding Path=Value}" Header="Количество" />
                                         </DataGrid.Columns>
                                     </DataGrid>
                                 </StackPanel>
@@ -63,17 +63,17 @@
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <lvc:CartesianChart Grid.Row="2">
                     <lvc:CartesianChart.Series>
-                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentAmount}" Width="Auto" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
+                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentAmount}" Width="Auto" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73" />
                     </lvc:CartesianChart.Series>
                     <lvc:CartesianChart.AxisX>
-                        <lvc:Axis LabelsRotation="20" Labels="{Binding SoldDateList}" Position="LeftBottom" >
-                            <lvc:Axis.Separator >
+                        <lvc:Axis LabelsRotation="20" Labels="{Binding SoldDateList}" Position="LeftBottom">
+                            <lvc:Axis.Separator>
                                 <lvc:Separator Step="1"></lvc:Separator>
                             </lvc:Axis.Separator>
                         </lvc:Axis>
@@ -86,11 +86,11 @@
             <Grid Grid.Row="1">
                 <lvc:CartesianChart Grid.Row="2">
                     <lvc:CartesianChart.Series>
-                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentPrice}" Width="Auto" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73"/>
+                        <lvc:ColumnSeries Values="{Binding ShipmentStats}" Configuration="{Binding MapperShipmentPrice}" Width="Auto" StrokeThickness="100" DataLabels="True" FontSize="20" Stroke="#FFDE73" />
                     </lvc:CartesianChart.Series>
                     <lvc:CartesianChart.AxisX>
-                        <lvc:Axis LabelsRotation="20" Labels="{Binding SoldProductList}" Position="LeftBottom" >
-                            <lvc:Axis.Separator >
+                        <lvc:Axis LabelsRotation="20" Labels="{Binding SoldProductList}" Position="LeftBottom">
+                            <lvc:Axis.Separator>
                                 <lvc:Separator Step="1"></lvc:Separator>
                             </lvc:Axis.Separator>
                         </lvc:Axis>

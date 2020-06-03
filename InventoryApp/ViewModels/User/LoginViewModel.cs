@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace InventoryApp.ViewModels.User
 {
-    class LoginViewModel : ViewModelsBase
+    internal class LoginViewModel : ViewModelsBase
     {
         public LoginViewModel()
         {
@@ -35,9 +35,11 @@ namespace InventoryApp.ViewModels.User
                 else { Properties.Settings.Default.UserName = BaseService.GenerateRandomString(); }
             }
         }
-        #endregion
+
+        #endregion Properties
 
         #region Functions
+
         private void SignIn(object param)
         {
             var signInQuery = $"UPDATE [ManagerLogInfo] SET UserName = '{UserName}' WHERE UserName = '{UserName}' and UserPass = '{PasswordSecurityService.PasswordEncrypt(param as PasswordBox)}'";
@@ -101,6 +103,7 @@ namespace InventoryApp.ViewModels.User
             }
             Properties.Settings.Default.Save();
         }
-        #endregion
+
+        #endregion Functions
     }
 }

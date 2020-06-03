@@ -3,18 +3,16 @@ using InventoryApp.Models.User;
 using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Product
 {
-    class SupplyViewModel : ViewModelsBase
+    internal class SupplyViewModel : ViewModelsBase
     {
         public SupplyViewModel()
         {
-            GC.Collect(1, GCCollectionMode.Forced);
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewSupply = new SupplyModel();
@@ -24,6 +22,7 @@ namespace InventoryApp.ViewModels.Product
         }
 
         #region Properties
+
         public ObservableCollection<SupplyModel> SupplyModels { get; set; }
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
         public ObservableCollection<ProductModel> ProductModels { get; set; }
@@ -40,69 +39,68 @@ namespace InventoryApp.ViewModels.Product
         public bool SpinnerVisibility { get; set; }
 
         private SupplyModel selectedItem;
+
         public SupplyModel SelectedItem
         {
             get => selectedItem;
             set
             {
-                if (value != selectedItem)
-                {
-                    selectedItem = value;
-                    OnPropertyChanged(nameof(SelectedItem));
-                }
+                if (value == selectedItem) return;
+                selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
         private string searchText;
+
         public string SearchText
         {
             get => searchText;
             set
             {
-                if (value != searchText)
+                if (value == searchText) return;
+                searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
-                    if (!string.IsNullOrWhiteSpace(searchText))
-                    {
-                        var updateTask = Task.Run(() => Update(true));
-                        Task.WaitAll(updateTask);
-                        Find(searchText);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update(true));
-                    }
+                    var updateTask = Task.Run(() => Update(true));
+                    Task.WaitAll(updateTask);
+                    Find(searchText);
+                }
+                else
+                {
+                    Task.Run(() => Update(true));
                 }
             }
         }
 
         private ProviderModel searchByProvider;
+
         public ProviderModel SearchByProvider
         {
             get => searchByProvider;
             set
             {
-                if (value != searchByProvider)
+                if (value == searchByProvider) return;
+                searchByProvider = value;
+                OnPropertyChanged(nameof(SearchByProvider));
+                if (!string.IsNullOrWhiteSpace(searchByProvider.Company))
                 {
-                    searchByProvider = value;
-                    OnPropertyChanged(nameof(SearchByProvider));
-                    if (!string.IsNullOrWhiteSpace(searchByProvider.Company))
-                    {
-                        var updateTask = Task.Run(() => Update(true));
-                        Task.WaitAll(updateTask);
-                        Find(searchByProvider.Company);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update(true));
-                    }
+                    var updateTask = Task.Run(() => Update(true));
+                    Task.WaitAll(updateTask);
+                    Find(searchByProvider.Company);
+                }
+                else
+                {
+                    Task.Run(() => Update(true));
                 }
             }
         }
-        #endregion
+
+        #endregion Properties
 
         #region Functions
+
         private void Update(bool onlySupply = false)
         {
             if (!onlySupply)
@@ -172,7 +170,7 @@ namespace InventoryApp.ViewModels.Product
                     {
                         Notification.ShowNotification($"Инфо: Поставка для {AddNewSupply.Product.Name} добавлена.");
                         ShowSpinner();
-                        Task.Run(() => CreateDocument());
+                        Task.Run(CreateDocument);
                         BaseQueryService.
                             ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={ProductModels.Where(item => item.Id == AddNewSupply.Product.Id).Select(item => item.Amount).First() + AddNewSupply.Amount} where ProductId = {AddNewSupply.Product.Id}");
                     }
@@ -197,7 +195,7 @@ namespace InventoryApp.ViewModels.Product
             items.Provider.Company.Contains(searchText) ||
             items.Provider.Surname.Contains(searchText)
             ).ToList();
-            if (!SupplyModels.SequenceEqual(searchResult))
+            if (SupplyModels.SequenceEqual(searchResult)) return;
             {
                 SupplyModels.Clear();
                 foreach (var items in searchResult)
@@ -207,6 +205,7 @@ namespace InventoryApp.ViewModels.Product
                 OnPropertyChanged(nameof(SupplyModels));
             }
         }
-        #endregion
+
+        #endregion Functions
     }
 }

@@ -6,7 +6,7 @@ using System.Windows.Controls;
 
 namespace InventoryApp.Service
 {
-    static class PasswordSecurityService
+    internal static class PasswordSecurityService
     {
         public static string PasswordEncrypt(PasswordBox password)
         {

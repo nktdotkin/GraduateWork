@@ -1,6 +1,6 @@
 ﻿namespace InventoryApp.Service
 {
-    static class DataBaseTableNames
+    internal static class DataBaseTableNames
     {
         internal const string Client = "Client";
         internal const string Provider = "Provider";

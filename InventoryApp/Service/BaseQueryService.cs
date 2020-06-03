@@ -8,9 +8,9 @@ using System.Linq;
 
 namespace InventoryApp.Service
 {
-    class BaseQueryService : ViewModelsBase
+    internal class BaseQueryService : ViewModelsBase
     {
-        private static string connectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
+        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
         private SqlConnection connection = new SqlConnection(connectionString);
         private SqlCommand command;
         private SqlDataReader reader;
@@ -20,8 +20,7 @@ namespace InventoryApp.Service
             var collection = new ObservableCollection<T>();
             try
             {
-                command = new SqlCommand(commandToExecute, connection);
-                command.CommandType = CommandType.StoredProcedure;
+                command = new SqlCommand(commandToExecute, connection) {CommandType = CommandType.StoredProcedure};
                 connection.Open();
                 reader = command.ExecuteReader();
                 int readerValueCounter = 0;
@@ -84,7 +83,7 @@ namespace InventoryApp.Service
             return ExecuteQuery<BaseQueryService>($"DELETE FROM {tableName} WHERE {tableName}Id = {id}");
         }
 
-        public bool ExecuteQuery<T>(string Expression, string parametlessProcedureName = null, T instanse = null, bool parametlessQuery = false, bool isCompleted = false) where T : class
+        public bool ExecuteQuery<T>(string expression, string parametlessProcedureName = null, T instanse = null, bool parametlessQuery = false, bool isCompleted = false) where T : class
         {
             try
             {
@@ -103,12 +102,13 @@ namespace InventoryApp.Service
                             }
                         }
                         break;
+
                     case false:
-                        command = new SqlCommand(Expression, connection);
+                        command = new SqlCommand(expression, connection);
                         break;
                 }
-                var exetudedCommand = command.ExecuteNonQuery();
-                if (exetudedCommand > 0)
+                var executedudedCommand = command.ExecuteNonQuery();
+                if (executedudedCommand > 0)
                     isCompleted = true;
             }
             catch (Exception e)

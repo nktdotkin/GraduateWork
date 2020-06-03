@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Common
 {
-    class NotificationServiceViewModel : ViewModelsBase
+    internal class NotificationServiceViewModel : ViewModelsBase
     {
         private bool isActive;
+
         public bool IsActive
         {
             get => isActive;
@@ -25,6 +26,7 @@ namespace InventoryApp.ViewModels.Common
         }
 
         private SnackbarMessageQueue notificationMessageQueue;
+
         public SnackbarMessageQueue NotificationMessageQueue
         {
             get => notificationMessageQueue;

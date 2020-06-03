@@ -3,19 +3,16 @@ using InventoryApp.Models.User;
 using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
-using System;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Product
 {
-    class ShipmentViewModel : ViewModelsBase
+    internal class ShipmentViewModel : ViewModelsBase
     {
         public ShipmentViewModel()
         {
-            GC.Collect(1, GCCollectionMode.Forced);
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             AddNewShipment = new ShipmentModel();
@@ -25,6 +22,7 @@ namespace InventoryApp.ViewModels.Product
         }
 
         #region Properties
+
         public ObservableCollection<ShipmentModel> ShipmentModels { get; set; }
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public ObservableCollection<ProductModel> ProductModels { get; set; }
@@ -33,78 +31,76 @@ namespace InventoryApp.ViewModels.Product
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
-        public RelayCommand AddProductImageCommand { get; set; }
 
         private BaseQueryService BaseQueryService;
 
         public ShipmentModel AddNewShipment { get; set; }
 
         private ShipmentModel selectedItem;
+
         public ShipmentModel SelectedItem
         {
             get => selectedItem;
             set
             {
-                if (value != selectedItem)
-                {
-                    selectedItem = value;
-                    OnPropertyChanged(nameof(SelectedItem));
-                }
+                if (value == selectedItem) return;
+                selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
         public bool SpinnerVisibility { get; set; }
 
         private string searchText;
+
         public string SearchText
         {
             get => searchText;
             set
             {
-                if (value != searchText)
+                if (value == searchText) return;
+                searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
-                    if (!string.IsNullOrWhiteSpace(searchText))
-                    {
-                        var updateTask = Task.Run(() => Update(true));
-                        Task.WaitAll(updateTask);
-                        Find(searchText);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update(true));
-                    }
+                    var updateTask = Task.Run(() => Update(true));
+                    Task.WaitAll(updateTask);
+                    Find(searchText);
+                }
+                else
+                {
+                    Task.Run(() => Update(true));
                 }
             }
         }
 
         private ClientModel searchByClient;
+
         public ClientModel SearchByClient
         {
             get => searchByClient;
             set
             {
-                if (value != searchByClient)
+                if (value == searchByClient) return;
+                searchByClient = value;
+                OnPropertyChanged(nameof(SearchByClient));
+                if (!string.IsNullOrWhiteSpace(searchByClient.Phone))
                 {
-                    searchByClient = value;
-                    OnPropertyChanged(nameof(SearchByClient));
-                    if (!string.IsNullOrWhiteSpace(searchByClient.Phone))
-                    {
-                        var updateTask = Task.Run(() => Update(true));
-                        Task.WaitAll(updateTask);
-                        Find(searchByClient.Phone);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update(true));
-                    }
+                    var updateTask = Task.Run(() => Update(true));
+                    Task.WaitAll(updateTask);
+                    Find(searchByClient.Phone);
+                }
+                else
+                {
+                    Task.Run(() => Update(true));
                 }
             }
         }
-        #endregion
+
+        #endregion Properties
 
         #region Functions
+
         private void Update(bool onlyShipment = false)
         {
             if (!onlyShipment)
@@ -186,11 +182,11 @@ namespace InventoryApp.ViewModels.Product
             {
                 Notification.ShowNotification($"Инфо: Заказ для {AddNewShipment.Client.Name} добавлен.");
                 ShowSpinner();
-                Task.Run(() => CreateDocument());
+                Task.Run(CreateDocument);
                 BaseQueryService.
                     ExecuteQuery<ShipmentModel>($"Update Product set ProductAmount={setAmount} where ProductId = {AddNewShipment.Product.Id}");
                 Task.Run(() => Update(true));
-                BaseService.DelayAction(300, () => HideSpinner());
+                BaseService.DelayAction(300, HideSpinner);
             }
             else
             {
@@ -218,6 +214,7 @@ namespace InventoryApp.ViewModels.Product
                 OnPropertyChanged(nameof(ShipmentModels));
             }
         }
-        #endregion
+
+        #endregion Functions
     }
 }

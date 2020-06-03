@@ -8,21 +8,21 @@ using System.Linq;
 
 namespace InventoryApp.Service
 {
-    class DocumentService : ViewModelsBase
+    internal class DocumentService : ViewModelsBase
     {
-        private string FileDirectory = DateTime.Now.ToString("dd-MMM-yyyy");
-        private string CurrentDirectory = Environment.CurrentDirectory;
+        private readonly string FileDirectory = DateTime.Now.ToString("dd-MMM-yyyy");
+        private readonly string CurrentDirectory = Environment.CurrentDirectory;
 
         public string ExportInformationToFile<T>(T instanse, string documentType) where T : class
         {
-            string PathToFile = string.Empty;
+            string pathToFile = string.Empty;
             if (Properties.Settings.Default.SaveDocsAutomaticly)
             {
                 if (!Directory.Exists(Path.Combine(CurrentDirectory, FileDirectory)))
                 {
                     Directory.CreateDirectory(Path.Combine(CurrentDirectory, documentType, FileDirectory));
                 }
-                PathToFile = Path.Combine(CurrentDirectory, documentType, FileDirectory, BaseService.GenerateRandomString());
+                pathToFile = Path.Combine(CurrentDirectory, documentType, FileDirectory, BaseService.GenerateRandomString());
             }
             else if (!Properties.Settings.Default.SaveDocsAutomaticly)
             {
@@ -33,20 +33,13 @@ namespace InventoryApp.Service
                 {
                     Directory.CreateDirectory(Path.Combine(newFileDirectoryName, documentType, FileDirectory));
                 }
-                PathToFile = Path.Combine(newFileDirectoryName, documentType, FileDirectory, Path.GetFileName(fileDialog.FileName));
+                pathToFile = Path.Combine(newFileDirectoryName, documentType, FileDirectory, Path.GetFileName(fileDialog.FileName));
             }
-            bool isCompleted = CreateDocument(PathToFile, instanse);
-            if (isCompleted)
-            {
-                return "Инфо: Экспорт в файл успешно завершен.";
-            }
-            else
-            {
-                return "Ошибка: Экспорт в файл завершен с ошибкой.";
-            }
+            bool isCompleted = CreateDocument(pathToFile, instanse);
+            return isCompleted ? "Инфо: Экспорт в файл успешно завершен." : "Ошибка: Экспорт в файл завершен с ошибкой.";
         }
 
-        public List<string> GetFromDocument(string path)
+        public static List<string> GetFromDocument(string path)
         {
             Application word = new Application();
             Document doc = new Document();
@@ -69,7 +62,7 @@ namespace InventoryApp.Service
             return data;
         }
 
-        private bool CreateDocument<T>(string path, T firstLevelInstanse) where T : class
+        private static bool CreateDocument<T>(string path, T firstLevelInstanse) where T : class
         {
             List<string> Headers = new List<string>();
             List<string> Rows = new List<string>();
@@ -120,22 +113,18 @@ namespace InventoryApp.Service
                             else
                             {
                                 var secondLevelPropertyValue = secondLevelProperty.GetValue(secondLevelInstance).ToString();
-                                if (!secondLevelFields.Name.Contains("Id"))
-                                {
-                                    Headers.Add(firstLevelFields.Name + " " + secondLevelProperty.Name);
-                                    Rows.Add(secondLevelPropertyValue);
-                                }
+                                if (secondLevelFields.Name.Contains("Id")) continue;
+                                Headers.Add(firstLevelFields.Name + " " + secondLevelProperty.Name);
+                                Rows.Add(secondLevelPropertyValue);
                             }
                         }
                     }
                     else
                     {
                         var firstLevelPropertyValue = firstLevelProperty.GetValue(firstLevelInstanse).ToString();
-                        if (!firstLevelFields.Name.Contains("Id"))
-                        {
-                            Headers.Add(firstLevelProperty.Name);
-                            Rows.Add(firstLevelPropertyValue);
-                        }
+                        if (firstLevelFields.Name.Contains("Id")) continue;
+                        Headers.Add(firstLevelProperty.Name);
+                        Rows.Add(firstLevelPropertyValue);
                     }
                 }
 
@@ -145,26 +134,23 @@ namespace InventoryApp.Service
                 int x = 0;
 
                 firstTable.Borders.Enable = 1;
-                foreach (Row row in firstTable.Rows)
+                foreach (var cell in from Row row in firstTable.Rows from Cell cell in row.Cells select cell)
                 {
-                    foreach (Cell cell in row.Cells)
+                    if (cell.RowIndex == 1)
                     {
-                        if (cell.RowIndex == 1)
-                        {
-                            cell.Range.Font.Bold = 1;
-                            cell.Range.Font.Name = "Times New Roman";
-                            cell.Range.Font.Size = 12;
-                            cell.Range.Font.ColorIndex = WdColorIndex.wdGray25;
-                            cell.Shading.BackgroundPatternColor = WdColor.wdColorBlack;
-                            cell.VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
-                            cell.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                        }
-                        else
-                        {
-                            cell.Range.Text += Headers[x];
-                            cell.Range.Text += Rows[x];
-                            x++;
-                        }
+                        cell.Range.Font.Bold = 1;
+                        cell.Range.Font.Name = "Times New Roman";
+                        cell.Range.Font.Size = 12;
+                        cell.Range.Font.ColorIndex = WdColorIndex.wdGray25;
+                        cell.Shading.BackgroundPatternColor = WdColor.wdColorBlack;
+                        cell.VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
+                        cell.Range.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                    }
+                    else
+                    {
+                        cell.Range.Text += Headers[x];
+                        cell.Range.Text += Rows[x];
+                        x++;
                     }
                 }
 

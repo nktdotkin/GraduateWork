@@ -39,14 +39,14 @@ namespace InventoryApp.Service
 
         public static string GenerateRandomString()
         {
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();
             return new string(Enumerable.Repeat(chars, 10).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
-        public static string GetAddress(string Address)
+        public static string GetAddress(string address)
         {
-            return ("https://www.google.com/maps/search/?api=1&query=" + Address?.Replace(" ", "+")) ?? "https://www.google.ru/maps";
+            return ("https://www.google.com/maps/search/?api=1&query=" + address?.Replace(" ", "+")) ?? "https://www.google.ru/maps";
         }
     }
 

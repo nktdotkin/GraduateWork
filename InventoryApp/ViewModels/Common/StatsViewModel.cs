@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace InventoryApp.ViewModels.Common
 {
-    class StatsViewModel : ViewModelsBase
+    internal class StatsViewModel : ViewModelsBase
     {
         public ObservableCollection<ShipmentModel> ShipmentModels { get; set; }
         public ChartValues<ShipmentModel> ShipmentStats { get; set; }
@@ -69,12 +69,14 @@ namespace InventoryApp.ViewModels.Common
                         ModelToList(model);
                     }
                     break;
+
                 case 'w':
                     foreach (var model in ShipmentModels.Where(item => item.Date.DayOfWeek.Equals(DateTime.Now.DayOfWeek) && item.Date.Year.Equals(DateTime.Now.Year)))
                     {
                         ModelToList(model);
                     }
                     break;
+
                 case 'm':
                     foreach (var model in ShipmentModels.Where(item => item.Date.Month.Equals(DateTime.Now.Month) && item.Date.Year.Equals(DateTime.Now.Year)))
                     {

@@ -3,31 +3,31 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Style x:Key="ColorZoneBase" TargetType="{x:Type materialDesign:ColorZone}" BasedOn="{StaticResource {x:Type materialDesign:ColorZone}}">
         <Setter Property="Mode" Value="Standard" />
-        <Setter Property="Padding" Value="8 4 8 4"/>
+        <Setter Property="Padding" Value="8 4 8 4" />
         <Setter Property="CornerRadius" Value="10" />
         <Setter Property="Margin" Value="8" />
         <Setter Property="Panel.ZIndex" Value="1" />
-        <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth1"/>
+        <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth1" />
     </Style>
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
     <Style x:Key="ColorZoneTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
         <Setter Property="Margin" Value="8 0 8 0" />
-        <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden"/>
+        <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
     <Style x:Key="ColorZoneComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignComboBox}">
         <Setter Property="Margin" Value="8 0 0 0" />
-        <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden"/>
+        <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
     <Style x:Key="ColorZoneDatePicker" TargetType="{x:Type DatePicker}" BasedOn="{StaticResource MaterialDesignDatePicker}">
         <Setter Property="Margin" Value="8 0 0 0" />
-        <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden"/>
+        <Setter Property="materialDesign:TextFieldAssist.DecorationVisibility" Value="Hidden" />
         <Setter Property="BorderThickness" Value="0" />
     </Style>
     <Style x:Key="DataGridStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource MaterialDesignDataGrid}">
         <Setter Property="CanUserSortColumns" Value="True" />
-        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False" />
         <Setter Property="CanUserResizeColumns" Value="False" />
         <Setter Property="CanUserReorderColumns" Value="False" />
         <Setter Property="CanUserResizeRows" Value="False" />
@@ -117,7 +117,7 @@
                                 </ScrollViewer.Background>
                             </ScrollViewer>
                             <ContentControl Grid.Row="2"
-                            x:Name="PART_FindToolBarHost"/>
+                            x:Name="PART_FindToolBarHost" />
                         </Grid>
                     </Border>
                 </ControlTemplate>

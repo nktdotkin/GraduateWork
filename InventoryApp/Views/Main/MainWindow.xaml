@@ -16,19 +16,19 @@
         <KeyBinding Modifiers="Ctrl" Key="L" Command="{Binding LogoutCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding OpenShipmentFolderCommand}"></KeyBinding>
         <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding OpenSupplyFolderCommand}"></KeyBinding>
-        <KeyBinding Modifiers="" Key="F1" Command="{Binding OpenHelperCommand}"></KeyBinding>
+        <KeyBinding Key="F1" Command="{Binding OpenHelperCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.DataContext>
-        <Main:MainWindowViewModel/>
+        <Main:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
         <!--Top Grid-->
         <Grid Height="60" VerticalAlignment="Top" Background="#FFE082">
             <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="-0,0,0,0" HorizontalAlignment="Left"></Image>
-            <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22"/>
+            <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <TextBlock VerticalAlignment="Center" Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ManagerVisibility, Converter={StaticResource BoolToVis}}" Text="Админ:" FontFamily="Arial" FontSize="22"/>
-                <TextBlock VerticalAlignment="Center" Text="{Binding Source={x:Static properties:Settings.Default}, Path=CurrentUser}" FontFamily="Arial" FontSize="22"/>
+                <TextBlock VerticalAlignment="Center" Visibility="{Binding Source={x:Static properties:Settings.Default}, Path=ManagerVisibility, Converter={StaticResource BoolToVis}}" Text="Админ:" FontFamily="Arial" FontSize="22" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Source={x:Static properties:Settings.Default}, Path=CurrentUser}" FontFamily="Arial" FontSize="22" />
                 <Menu Margin="0,0,20,0"  Background="Transparent" IsMainMenu="True">
                     <MenuItem Height="35" Width="50" Icon="{materialDesign:PackIcon Kind=UserBox}">
                         <MenuItem IsEnabled="{Binding Source={x:Static properties:Settings.Default}, Path=ManagerVisibility}" Background="#f4f4f4" Header="Создать копию" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
@@ -71,7 +71,7 @@
                                 <materialDesign:PackIcon Kind="ExitToApp" />
                             </MenuItem.Icon>
                             <MenuItem.DataContext>
-                                <BaseCommand:BaseCommandsService/>
+                                <BaseCommand:BaseCommandsService />
                             </MenuItem.DataContext>
                         </MenuItem>
                     </MenuItem>
@@ -80,15 +80,15 @@
         </Grid>
         <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,120,0,0">
             <StackPanel Orientation="Horizontal">
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding StatsSwitch}" Width="Auto" Height="50" Content="Статистика"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProductSwitch}" Width="Auto" Height="50" Content="Товары"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ShipmentSwitch}" Width="Auto" Height="50" Content="Заказы"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ClientSwitch}" Width="Auto" Height="50" Content="Клиенты"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProviderSwitch}" Width="Auto" Height="50" Content="Поставщики"/>
-                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding SupplySwitch}" Width="Auto" Height="50" Content="Поставки"/>
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding StatsSwitch}" Width="Auto" Height="50" Content="Статистика" />
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProductSwitch}" Width="Auto" Height="50" Content="Товары" />
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ShipmentSwitch}" Width="Auto" Height="50" Content="Заказы" />
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ClientSwitch}" Width="Auto" Height="50" Content="Клиенты" />
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding ProviderSwitch}" Width="Auto" Height="50" Content="Поставщики" />
+                <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Command="{Binding ClickTabCommand}" GroupName="TabPanel" IsChecked="{Binding SupplySwitch}" Width="Auto" Height="50" Content="Поставки" />
             </StackPanel>
         </Grid>
-        <ContentControl Content="{Binding TablePanel}"/>
-        <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}"/>
+        <ContentControl Content="{Binding TablePanel}" />
+        <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,80,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </Window>

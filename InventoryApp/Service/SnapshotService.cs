@@ -5,10 +5,10 @@ using System.IO;
 
 namespace InventoryApp.Service
 {
-    class SnapshotService
+    internal class SnapshotService
     {
-        private static string connectionString = ConfigurationManager.ConnectionStrings["SQLDirect"].ConnectionString;
-        private SqlConnection connection = new SqlConnection(connectionString);
+        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["SQLDirect"].ConnectionString;
+        private readonly SqlConnection connection = new SqlConnection(connectionString);
         private SqlCommand command;
 
         public string CreateSnapshot(string fileName)

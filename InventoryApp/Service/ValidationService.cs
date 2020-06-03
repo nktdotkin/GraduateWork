@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InventoryApp.Service
 {
-    class ValidationService<T> where T : class
+    internal class ValidationService<T> where T : class
     {
         public List<ValidationResult> ValidateFields(T instanse)
         {

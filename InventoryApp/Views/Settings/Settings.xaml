@@ -13,12 +13,12 @@
         <KeyBinding Modifiers="Ctrl" Key="H" Command="{Binding MainWindowCommand}"></KeyBinding>
     </Window.InputBindings>
     <Window.DataContext>
-        <Settings:SettingsViewModel/>
+        <Settings:SettingsViewModel />
     </Window.DataContext>
     <Grid>
         <Grid Height="60" VerticalAlignment="Top" Background="#FFDE73">
             <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="-0,0,0,0" HorizontalAlignment="Left"></Image>
-            <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22"/>
+            <TextBlock Text="Inventory App" Foreground="Black" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="60,17,0,16" FontFamily="Arial" FontSize="22" />
             <Menu Margin="0,0,20,0"  Background="Transparent" IsMainMenu="True" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <MenuItem Height="35" Width="50" Icon="{materialDesign:PackIcon Kind=UserBox}">
                     <MenuItem Background="#f4f4f4" Header="Создать копию" InputGestureText="Ctrl+B" Command="{Binding BackupCommand}">
@@ -26,7 +26,7 @@
                             <materialDesign:PackIcon Kind="Backup" />
                         </MenuItem.Icon>
                         <MenuItem.DataContext>
-                            <Settings:MainWindowViewModel/>
+                            <Settings:MainWindowViewModel />
                         </MenuItem.DataContext>
                     </MenuItem>
                     <MenuItem Background="#f4f4f4" Header="Восстановить из копии" InputGestureText="Ctrl+R" Command="{Binding RestoreCommand}">
@@ -34,7 +34,7 @@
                             <materialDesign:PackIcon Kind="Restore" />
                         </MenuItem.Icon>
                         <MenuItem.DataContext>
-                            <Settings:MainWindowViewModel/>
+                            <Settings:MainWindowViewModel />
                         </MenuItem.DataContext>
                     </MenuItem>
                     <MenuItem Background="#f4f4f4" Header="Домой" InputGestureText="Ctrl+S" Command="{Binding MainWindowCommand}">
@@ -47,7 +47,7 @@
                             <materialDesign:PackIcon Kind="User" />
                         </MenuItem.Icon>
                         <MenuItem.DataContext>
-                            <Settings:MainWindowViewModel/>
+                            <Settings:MainWindowViewModel />
                         </MenuItem.DataContext>
                     </MenuItem>
                     <MenuItem Background="#f4f4f4" Header="Выход" Command="{Binding ExitCommand}">
@@ -55,7 +55,7 @@
                             <materialDesign:PackIcon Kind="ExitToApp" />
                         </MenuItem.Icon>
                         <MenuItem.DataContext>
-                            <BaseCommand:BaseCommandsService/>
+                            <BaseCommand:BaseCommandsService />
                         </MenuItem.DataContext>
                     </MenuItem>
                 </MenuItem>
@@ -63,8 +63,8 @@
         </Grid>
         <Grid Margin="0,60,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <ScrollViewer Style="{StaticResource MaterialDesignScrollViewer}">
@@ -73,7 +73,7 @@
                             <Expander.Header>
                                 <TextBlock Text="Редактировать статусы" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                                     <TextBlock.LayoutTransform>
-                                        <RotateTransform Angle="90"/>
+                                        <RotateTransform Angle="90" />
                                     </TextBlock.LayoutTransform>
                                 </TextBlock>
                             </Expander.Header>
@@ -88,14 +88,14 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <Button Margin="20" Width="160" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Добавить статус" Command="{Binding AddNewStatusCommand}"/>
+                                <Button Margin="20" Width="160" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Добавить статус" Command="{Binding AddNewStatusCommand}" />
                             </StackPanel>
                         </Expander>
                         <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                             <Expander.Header>
                                 <TextBlock Text="Редактировать группы" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                                     <TextBlock.LayoutTransform>
-                                        <RotateTransform Angle="90"/>
+                                        <RotateTransform Angle="90" />
                                     </TextBlock.LayoutTransform>
                                 </TextBlock>
                             </Expander.Header>
@@ -110,14 +110,14 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <Button Margin="20" Width="160" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Добавить группу" Command="{Binding AddNewGroupCommand}"/>
+                                <Button Margin="20" Width="160" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Добавить группу" Command="{Binding AddNewGroupCommand}" />
                             </StackPanel>
                         </Expander>
                         <Expander ExpandDirection="Right"  materialDesign:ExpanderAssist.RightHeaderPadding="0,35,0,5">
                             <Expander.Header>
                                 <TextBlock Text="Редактировать типы магазинов" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" RenderTransformOrigin=".5,.5">
                                     <TextBlock.LayoutTransform>
-                                        <RotateTransform Angle="90"/>
+                                        <RotateTransform Angle="90" />
                                     </TextBlock.LayoutTransform>
                                 </TextBlock>
                             </Expander.Header>
@@ -131,7 +131,7 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <Button Margin="20" Width="160" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Добавить тип" Command="{Binding AddNewStoreCommand}"/>
+                                <Button Margin="20" Width="160" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Добавить тип" Command="{Binding AddNewStoreCommand}" />
                             </StackPanel>
                         </Expander>
                     </StackPanel>
@@ -139,15 +139,15 @@
             </Grid>
             <Grid Grid.Column="1">
                 <StackPanel>
-                    <TextBlock Margin="0,20,0,0" Text="Прочие настройки:" Foreground="#cc420c" FontSize="20" FontFamily="Helvetica Neue"/>
-                    <ListBox  />
+                    <TextBlock Margin="0,20,0,0" Text="Прочие настройки:" Foreground="#cc420c" FontSize="20" FontFamily="Helvetica Neue" />
+                    <ListBox />
                     <StackPanel Orientation="Vertical">
-                        <CheckBox Margin="10" Style="{StaticResource MaterialDesignDarkCheckBox}" Content="Показывать превью автоматически" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ProductPreviewByDefault}"/>
-                        <CheckBox Margin="10" Style="{StaticResource MaterialDesignDarkCheckBox}" Content="Сохранять документы автоматически" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=SaveDocsAutomaticly}"/>
-                        <CheckBox Margin="10" Style="{StaticResource MaterialDesignDarkCheckBox}" Content="Сброс пароля администратора" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=FirstStart}"/>
+                        <CheckBox Margin="10" Style="{StaticResource MaterialDesignDarkCheckBox}" Content="Показывать превью автоматически" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ProductPreviewByDefault}" />
+                        <CheckBox Margin="10" Style="{StaticResource MaterialDesignDarkCheckBox}" Content="Сохранять документы автоматически" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=SaveDocsAutomaticly}" />
+                        <CheckBox Margin="10" Style="{StaticResource MaterialDesignDarkCheckBox}" Content="Сброс пароля администратора" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=FirstStart}" />
                         <Border Background="{DynamicResource MaterialDesignDivider}" Height="1" HorizontalAlignment="Stretch" SnapsToDevicePixels="True" />
-                        <TextBlock Margin="10" Text="Вместимость склада (ед.)"/>
-                        <TextBox Margin="10" Style="{StaticResource DialogTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=MaxCapacity}" MaxLength="6"/>
+                        <TextBlock Margin="10" Text="Вместимость склада (ед.)" />
+                        <TextBox Margin="10" Style="{StaticResource DialogTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=MaxCapacity}" MaxLength="6" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

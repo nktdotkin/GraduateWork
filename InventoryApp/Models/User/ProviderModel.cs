@@ -2,7 +2,7 @@
 
 namespace InventoryApp.Models.User
 {
-    class ProviderModel : BaseUser
+    internal class ProviderModel : BaseUser
     {
         [Required(ErrorMessage = "Введите название компании")]
         [StringLength(50, MinimumLength = 5)]

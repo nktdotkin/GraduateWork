@@ -13,11 +13,10 @@ using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.Product
 {
-    class ProductViewModel : ViewModelsBase
+    internal class ProductViewModel : ViewModelsBase
     {
         public ProductViewModel()
         {
-            GC.Collect(1, GCCollectionMode.Forced);
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
             ImportCommand = new RelayCommand((obj) => GetProductFromFile());
@@ -29,6 +28,7 @@ namespace InventoryApp.ViewModels.Product
         }
 
         #region Properties
+
         public ObservableCollection<ProductModel> ProductModels { get; set; }
         public ObservableCollection<ProductModel> OutdatedProductModels { get; set; }
         public ObservableCollection<GroupsModel> GroupsModels { get; set; }
@@ -44,70 +44,69 @@ namespace InventoryApp.ViewModels.Product
         public NotificationServiceViewModel Notification { get; set; }
 
         private ProductModel selectedItem;
+
         public ProductModel SelectedItem
         {
             get => selectedItem;
             set
             {
-                if (value != selectedItem)
-                {
-                    selectedItem = value;
-                    OnPropertyChanged(nameof(SelectedItem));
-                }
+                if (value == selectedItem) return;
+                selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
             }
         }
 
         private string searchText;
+
         public string SearchText
         {
             get => searchText;
             set
             {
-                if (value != searchText)
+                if (value == searchText) return;
+                searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
-                    if (!string.IsNullOrWhiteSpace(searchText))
-                    {
-                        var updateTask = Task.Run(() => Update(true));
-                        Task.WaitAll(updateTask);
-                        Find(searchText);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update(true));
-                    }
+                    var updateTask = Task.Run(() => Update(true));
+                    Task.WaitAll(updateTask);
+                    Find(searchText);
+                }
+                else
+                {
+                    Task.Run(() => Update(true));
                 }
             }
         }
 
         private GroupsModel searchByGroup;
+
         public GroupsModel SearchByGroup
         {
             get => searchByGroup;
             set
             {
-                if (value != searchByGroup)
+                if (value == searchByGroup) return;
+                searchByGroup = value;
+                OnPropertyChanged(nameof(SearchByGroup));
+                if (!string.IsNullOrWhiteSpace(searchByGroup.Group))
                 {
-                    searchByGroup = value;
-                    OnPropertyChanged(nameof(SearchByGroup));
-                    if (!string.IsNullOrWhiteSpace(searchByGroup.Group))
-                    {
-                        var updateTask = Task.Run(() => Update(true));
-                        Task.WaitAll(updateTask);
-                        Find(searchByGroup.Group);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update(true));
-                    }
+                    var updateTask = Task.Run(() => Update(true));
+                    Task.WaitAll(updateTask);
+                    Find(searchByGroup.Group);
+                }
+                else
+                {
+                    Task.Run(() => Update(true));
                 }
             }
         }
-        #endregion
+
+        #endregion Properties
 
         #region Functions
-        public void Update(bool onlyProduct = false, bool isFirstStart = false)
+
+        private void Update(bool onlyProduct = false, bool isFirstStart = false)
         {
             if (!onlyProduct)
             {
@@ -118,11 +117,9 @@ namespace InventoryApp.ViewModels.Product
             }
             ProductModels = BaseQueryService.Fill<ProductModel>($"Get{DataBaseTableNames.Product}");
             OnPropertyChanged(nameof(ProductModels));
-            if (isFirstStart)
-            {
-                CheckStorageCapacity();
-                Task.Run(() => DeleteOutdatingProducts());
-            }
+            if (!isFirstStart) return;
+            CheckStorageCapacity();
+            Task.Run(DeleteOutdatingProducts);
         }
 
         private void Delete()
@@ -157,13 +154,11 @@ namespace InventoryApp.ViewModels.Product
             {
                 if (CheckStorageCapacity())
                 {
-                    AddNewProduct.GroupId = GroupsModels.Where(items => items.Group == AddNewProduct.Groups.Group).First().Id;
+                    AddNewProduct.GroupId = GroupsModels.First(items => items.Group == AddNewProduct.Groups.Group).Id;
                     bool isCompleted = BaseQueryService.Add(DataBaseTableNames.Product, AddNewProduct);
-                    if (isCompleted)
-                    {
-                        Notification.ShowNotification($"Инфо: {AddNewProduct.Name} добавлен.");
-                        Task.Run(() => Update());
-                    }
+                    if (!isCompleted) return;
+                    Notification.ShowNotification($"Инфо: {AddNewProduct.Name} добавлен.");
+                    Task.Run(() => Update());
                 }
                 else
                 {
@@ -174,7 +169,7 @@ namespace InventoryApp.ViewModels.Product
 
         private void AddProductImage()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
+            var fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
             string fileExtension = Path.GetExtension(fileDialog.FileName);
             if (!string.IsNullOrWhiteSpace(fileDialog.FileName) && Regex.IsMatch(fileExtension, @"((\.(?i)(jpg|png|gif|bmp))$)"))
@@ -190,41 +185,34 @@ namespace InventoryApp.ViewModels.Product
 
         private void GetProductFromFile()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
+            var fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
             string fileExtension = Path.GetExtension(fileDialog.FileName);
-            if (!string.IsNullOrEmpty(fileDialog.FileName) && fileExtension.Contains("docx"))
+            if (string.IsNullOrEmpty(fileDialog.FileName) || !fileExtension.Contains("docx")) return;
+            var recordsList = DocumentService.GetFromDocument(fileDialog.FileName);
+            var newProduct = new List<string>();
+            int j = 0;
+            for (int i = 0; i < recordsList.Count; i++)
             {
-                List<string> recordsList = new DocumentService().GetFromDocument(fileDialog.FileName);
-                List<string> newProduct = new List<string>();
-                int j = 0;
-                for (int i = 0; i < recordsList.Count; i++)
+                if (recordsList.Contains("Product"))
                 {
-                    if (recordsList[i].Contains("Product"))
-                    {
-                        newProduct.Add(recordsList[j + 1]);
-                    }
-                    j++;
+                    newProduct.Add(recordsList[j + 1]);
                 }
-                int counter = 0;
-                foreach (var fields in AddNewProduct.GetType().GetProperties().OrderBy(x => x.MetadataToken))
-                {
-                    var productProperty = AddNewProduct.GetType().GetProperty(fields.Name);
-                    if (fields.Name != "Id" && fields.Name != "GroupId")
-                    {
-                        if (fields.Name.Contains("Groups"))
-                        {
-                            productProperty.SetValue(AddNewProduct, Convert.ChangeType(GroupsModels.Where(group => group.Group.Contains(newProduct[counter])).First(), productProperty.PropertyType));
-                        }
-                        else
-                        {
-                            productProperty.SetValue(AddNewProduct, Convert.ChangeType(newProduct[counter], productProperty.PropertyType));
-                        }
-                        counter++;
-                    }
-                }
-                Add();
+                j++;
             }
+            int counter = 0;
+            foreach (var fields in AddNewProduct.GetType().GetProperties().OrderBy(x => x.MetadataToken))
+            {
+                var productProperty = AddNewProduct.GetType().GetProperty(fields.Name);
+                if (fields.Name == "Id" || fields.Name == "GroupId") continue;
+                productProperty.SetValue(AddNewProduct,
+                    fields.Name.Contains("Groups")
+                        ? Convert.ChangeType(GroupsModels.First(group => @group.Group.Contains(newProduct[counter])),
+                            productProperty.PropertyType)
+                        : Convert.ChangeType(newProduct[counter], productProperty.PropertyType));
+                counter++;
+            }
+            Add();
         }
 
         private void DeleteOutdatingProducts()
@@ -245,7 +233,7 @@ namespace InventoryApp.ViewModels.Product
             }
         }
 
-        public bool CheckStorageCapacity()
+        private bool CheckStorageCapacity()
         {
             var productCount = ProductModels.Select(items => items.Amount).Sum();
             var occupiedSpace = (productCount * 100) / Properties.Settings.Default.MaxCapacity;
@@ -262,7 +250,7 @@ namespace InventoryApp.ViewModels.Product
             items.Groups.Group.Contains(searchText) ||
             items.Description.Contains(searchText)
             ).ToList();
-            if (!ProductModels.SequenceEqual(searchResult))
+            if (ProductModels.SequenceEqual(searchResult)) return;
             {
                 ProductModels.Clear();
                 foreach (var items in searchResult)
@@ -272,6 +260,7 @@ namespace InventoryApp.ViewModels.Product
                 OnPropertyChanged(nameof(ProductModels));
             }
         }
-        #endregion
+
+        #endregion Functions
     }
 }

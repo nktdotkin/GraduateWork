@@ -2,14 +2,13 @@
 using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.User
 {
-    class ClientViewModel : ViewModelsBase
+    internal class ClientViewModel : ViewModelsBase
     {
         public ClientViewModel()
         {
@@ -23,6 +22,7 @@ namespace InventoryApp.ViewModels.User
         }
 
         #region Properties
+
         public string ClientLocationSource { get; set; }
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public ObservableCollection<StoretypesModel> StoretypesModels { get; set; }
@@ -38,51 +38,49 @@ namespace InventoryApp.ViewModels.User
         public ClientModel AddNewClient { get; set; }
 
         private ClientModel selectedItem;
+
         public ClientModel SelectedItem
         {
             get => selectedItem;
             set
             {
-                if (value != selectedItem)
-                {
-                    selectedItem = value;
-                    OnPropertyChanged(nameof(SelectedItem));
-                    if (ClientLocationSource != selectedItem?.Address)
-                    {
-                        ClientLocationSource = BaseService.GetAddress(selectedItem?.Address);
-                        OnPropertyChanged(nameof(ClientLocationSource));
-                    }
-                }
+                if (value == selectedItem) return;
+                selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
+                if (ClientLocationSource == selectedItem?.Address) return;
+                ClientLocationSource = BaseService.GetAddress(selectedItem?.Address);
+                OnPropertyChanged(nameof(ClientLocationSource));
             }
         }
 
         private string searchText;
+
         public string SearchText
         {
             get => searchText;
             set
             {
-                if (value != searchText)
+                if (value == searchText) return;
+                searchText = value;
+                if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    searchText = value;
-                    if (!string.IsNullOrWhiteSpace(searchText))
-                    {
-                        var updateTask = Task.Run(() => Update());
-                        Task.WaitAll(updateTask);
-                        Find(searchText);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update());
-                    }
-                    OnPropertyChanged(nameof(SearchText));
+                    var updateTask = Task.Run(() => Update());
+                    Task.WaitAll(updateTask);
+                    Find(searchText);
                 }
+                else
+                {
+                    Task.Run(() => Update());
+                }
+                OnPropertyChanged(nameof(SearchText));
             }
         }
-        #endregion
+
+        #endregion Properties
 
         #region Functions
-        public void Update(bool onlyClient = false)
+
+        private void Update(bool onlyClient = false)
         {
             if (!onlyClient)
             {
@@ -125,7 +123,7 @@ namespace InventoryApp.ViewModels.User
             }
             else
             {
-                bool isCompleted = BaseQueryService.Add<ClientModel>(DataBaseTableNames.Client, AddNewClient);
+                bool isCompleted = BaseQueryService.Add(DataBaseTableNames.Client, AddNewClient);
                 Update(true);
                 bool isUpdated = BaseQueryService.ExecuteQuery<ClientModel>($"UPDATE {DataBaseTableNames.Client} SET _StatusId = {AddNewClient.Status.StatusId}, _StoreId = {AddNewClient.StoreType.StoreId} WHERE ClientId = {ClientModels.Last().Id}");
                 if (isCompleted && isUpdated)
@@ -149,7 +147,7 @@ namespace InventoryApp.ViewModels.User
             items.Phone.Contains(searchText) ||
             items.Address.Contains(searchText)
             ).ToList();
-            if (!ClientModels.SequenceEqual(searchResult))
+            if (ClientModels.SequenceEqual(searchResult)) return;
             {
                 ClientModels.Clear();
                 foreach (var items in searchResult)
@@ -159,6 +157,7 @@ namespace InventoryApp.ViewModels.User
                 OnPropertyChanged(nameof(ClientModels));
             }
         }
-        #endregion
+
+        #endregion Functions
     }
 }

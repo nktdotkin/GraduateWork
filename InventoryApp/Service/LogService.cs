@@ -4,9 +4,9 @@ using System.IO;
 
 namespace InventoryApp.Service
 {
-    static class LogService
+    internal static class LogService
     {
-        private static string filePath = Environment.CurrentDirectory + @"\Logs";
+        private static readonly string filePath = Environment.CurrentDirectory + @"\Logs";
 
         public static void SetToFile(string message)
         {

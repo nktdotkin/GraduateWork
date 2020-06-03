@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace InventoryApp.ViewModels.Base
 {
-    class SettingsViewModel : ViewModelsBase
+    internal class SettingsViewModel : ViewModelsBase
     {
         public SettingsViewModel()
         {

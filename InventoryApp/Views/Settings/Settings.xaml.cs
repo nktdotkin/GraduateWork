@@ -14,7 +14,6 @@ namespace InventoryApp.Views.Settings
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-
         }
     }
 }

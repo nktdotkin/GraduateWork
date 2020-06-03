@@ -9,25 +9,25 @@
         mc:Ignorable="d"
         Title="Login" Height="450" Width="300" WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False" WindowStartupLocation="CenterScreen">
     <Window.InputBindings>
-        <KeyBinding Modifiers="" Key="Return" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=PasswordBox}"></KeyBinding>
+        <KeyBinding Key="Return" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=PasswordBox}"></KeyBinding>
     </Window.InputBindings>
     <Window.DataContext>
-        <Login:LoginViewModel/>
+        <Login:LoginViewModel />
     </Window.DataContext>
     <Grid Background="#FFDE73">
-        <Image Source="/InventoryApp;component/Resources/Icons/log.png" Margin="40,160,220,250" Width="30"/>
-        <Image Source="/InventoryApp;component/Resources/Icons/pass.png" Margin="40,240,220,170" Width="30"/>
-        <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="95,10,95,0" VerticalAlignment="Top" Height="68" Width="68"/>
-        <Button HorizontalAlignment="Center" Width="220" Margin="0,310,0,100" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Войти" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
-        <Button HorizontalAlignment="Center" Width="220" Margin="0,370,0,40" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Регистрация" Command="{Binding SingUpCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+        <Image Source="/InventoryApp;component/Resources/Icons/log.png" Margin="40,160,220,250" Width="30" />
+        <Image Source="/InventoryApp;component/Resources/Icons/pass.png" Margin="40,240,220,170" Width="30" />
+        <Image Source="/InventoryApp;component/Resources/Icons/cart.png" Margin="95,10,95,0" VerticalAlignment="Top" Height="68" Width="68" />
+        <Button HorizontalAlignment="Center" Width="220" Margin="0,310,0,100" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Войти" Command="{Binding SignInCommand}" CommandParameter="{Binding ElementName=PasswordBox}" />
+        <Button HorizontalAlignment="Center" Width="220" Margin="0,370,0,40" Background="{x:Null}" FontFamily="Arial" Foreground="Black" BorderBrush="Black" Content="Регистрация" Command="{Binding SingUpCommand}" CommandParameter="{Binding ElementName=PasswordBox}" />
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,20" Background="{x:Null}" BorderBrush="{x:Null}" Command="{Binding ExitCommand}">
             <Button.DataContext>
-                <local:BaseCommandsService/>
+                <local:BaseCommandsService />
             </Button.DataContext>
-            <materialDesign:PackIcon Kind="PowerOff" Foreground="Black"/>
+            <materialDesign:PackIcon Kind="PowerOff" Foreground="Black" />
         </Button>
-        <TextBox materialDesign:HintAssist.Hint="Логин" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="20" Margin="80,150,40,255" Text="{Binding UserName}" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18"/>
+        <TextBox materialDesign:HintAssist.Hint="Логин" Style="{StaticResource MaterialDesignFloatingHintTextBox}"  MaxLength="20" Margin="80,150,40,255" Text="{Binding UserName}" FontFamily="Arial" Foreground="Black" TextAlignment="Justify" FontSize="18" />
         <PasswordBox x:Name="PasswordBox" materialDesign:HintAssist.Hint="Пароль" materialDesign:HintAssist.HelperText="Минимум 8 символов" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" MaxLength="12" Margin="80,230,39,175" FontFamily="Arial" FontSize="18" />
-        <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}"/>
+        <materialDesign:Snackbar MessageQueue="{Binding Notification.NotificationMessageQueue, UpdateSourceTrigger=PropertyChanged}" Margin="0,20,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" IsActive="{Binding Notification.IsActive, UpdateSourceTrigger=PropertyChanged}" />
     </Grid>
 </Window>

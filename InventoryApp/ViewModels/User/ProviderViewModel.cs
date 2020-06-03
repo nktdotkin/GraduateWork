@@ -2,14 +2,13 @@
 using InventoryApp.Service;
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace InventoryApp.ViewModels.User
 {
-    class ProviderViewModel : ViewModelsBase
+    internal class ProviderViewModel : ViewModelsBase
     {
         public ProviderViewModel()
         {
@@ -19,10 +18,11 @@ namespace InventoryApp.ViewModels.User
             ProviderLocationSource = BaseService.GetAddress(null);
             Notification = new NotificationServiceViewModel();
             BaseQueryService = new BaseQueryService();
-            Task.Run(() => Update());
+            Task.Run(Update);
         }
 
         #region Properties
+
         public string ProviderLocationSource { get; set; }
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
 
@@ -36,51 +36,49 @@ namespace InventoryApp.ViewModels.User
         public ProviderModel AddNewProvider { get; set; }
 
         private ProviderModel selectedItem;
+
         public ProviderModel SelectedItem
         {
             get => selectedItem;
             set
             {
-                if (value != selectedItem)
-                {
-                    selectedItem = value;
-                    OnPropertyChanged(nameof(SelectedItem));
-                    if (ProviderLocationSource != selectedItem?.Address)
-                    {
-                        ProviderLocationSource = BaseService.GetAddress(selectedItem?.Address);
-                        OnPropertyChanged(nameof(ProviderLocationSource));
-                    }
-                }
+                if (value == selectedItem) return;
+                selectedItem = value;
+                OnPropertyChanged(nameof(SelectedItem));
+                if (ProviderLocationSource == selectedItem?.Address) return;
+                ProviderLocationSource = BaseService.GetAddress(selectedItem?.Address);
+                OnPropertyChanged(nameof(ProviderLocationSource));
             }
         }
 
         private string searchText;
+
         public string SearchText
         {
             get => searchText;
             set
             {
-                if (value != searchText)
+                if (value == searchText) return;
+                searchText = value;
+                if (!string.IsNullOrWhiteSpace(searchText))
                 {
-                    searchText = value;
-                    if (!string.IsNullOrWhiteSpace(searchText))
-                    {
-                        var updateTask = Task.Run(() => Update());
-                        Task.WaitAll(updateTask);
-                        Find(searchText);
-                    }
-                    else
-                    {
-                        Task.Run(() => Update());
-                    }
-                    OnPropertyChanged(nameof(SearchText));
+                    var updateTask = Task.Run(Update);
+                    Task.WaitAll(updateTask);
+                    Find(searchText);
                 }
+                else
+                {
+                    Task.Run(Update);
+                }
+                OnPropertyChanged(nameof(SearchText));
             }
         }
-        #endregion
+
+        #endregion Properties
 
         #region Functions
-        public void Update()
+
+        private void Update()
         {
             ProviderModels = BaseQueryService.Fill<ProviderModel>(($"Get{DataBaseTableNames.Provider}"));
             OnPropertyChanged(nameof(ProviderModels));
@@ -94,7 +92,7 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Поставщик удален.");
-                    Task.Run(() => Update());
+                    Task.Run(Update);
                 }
                 else
                 {
@@ -120,7 +118,7 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted)
                 {
                     Notification.ShowNotification($"Инфо: Поставщик {AddNewProvider.Company} добавлен.");
-                    Task.Run(() => Update());
+                    Task.Run(Update);
                 }
                 else
                 {
@@ -149,6 +147,7 @@ namespace InventoryApp.ViewModels.User
                 OnPropertyChanged(nameof(ProviderModels));
             }
         }
-        #endregion
+
+        #endregion Functions
     }
 }

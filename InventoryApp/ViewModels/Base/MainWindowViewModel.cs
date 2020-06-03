@@ -1,6 +1,4 @@
-﻿using CefSharp;
-using CefSharp.Wpf;
-using InventoryApp.Service;
+﻿using InventoryApp.Service;
 using InventoryApp.ViewModels.Common;
 using InventoryApp.Views.Controls;
 using InventoryApp.Views.Main;
@@ -13,7 +11,7 @@ using System.Windows;
 
 namespace InventoryApp.ViewModels.Base
 {
-    enum TabControl
+    internal enum TabControl
     {
         Stats,
         Supply,
@@ -23,11 +21,11 @@ namespace InventoryApp.ViewModels.Base
         Provider
     }
 
-    class MainWindowViewModel : ViewModelsBase
+    internal class MainWindowViewModel : ViewModelsBase
     {
         public MainWindowViewModel()
         {
-            tablePanel = new Stats();
+            Initialize();
             ClickTabCommand = new RelayCommand((obj) => ClickOnTab());
             BackupCommand = new RelayCommand((obj) => Backup());
             RestoreCommand = new RelayCommand((obj) => Restore());
@@ -51,7 +49,7 @@ namespace InventoryApp.ViewModels.Base
 
         public NotificationServiceViewModel Notification { get; set; }
 
-        private object tablePanel;
+        private object tablePanel = new Stats();
         private TabControl tabControl;
 
         public object TablePanel
@@ -119,29 +117,50 @@ namespace InventoryApp.ViewModels.Base
             set { TabControl = value ? TabControl.Supply : TabControl; }
         }
 
+        private Views.Controls.Product ProductView { get; set; }
+        private Shipment ShipmentView { get; set; }
+        private Client ClientView { get; set; }
+        private Provider ProviderView { get; set; }
+        private Supply SupplyView { get; set; }
+        private Stats StatsView { get; set; }
+
+        private void Initialize()
+        {
+            ProductView = new Views.Controls.Product();
+            ShipmentView = new Shipment();
+            ClientView = new Client();
+            ProviderView = new Provider();
+            SupplyView = new Supply();
+            StatsView = new Stats();
+        }
+
         private void ClickOnTab()
         {
             GC.Collect(1, GCCollectionMode.Forced);
-            //Cef.Shutdown();
             switch (TabControl)
             {
                 case TabControl.Product:
-                    TablePanel = new Views.Controls.Product();
+                    TablePanel = ProductView;
                     break;
+
                 case TabControl.Shipment:
-                    TablePanel = new Shipment();
+                    TablePanel = ShipmentView;
                     break;
+
                 case TabControl.Client:
-                    TablePanel = new Client();
+                    TablePanel = ClientView;
                     break;
+
                 case TabControl.Provider:
-                    TablePanel = new Provider();
+                    TablePanel = ProviderView;
                     break;
+
                 case TabControl.Supply:
-                    TablePanel = new Supply();
+                    TablePanel = SupplyView;
                     break;
+
                 case TabControl.Stats:
-                    TablePanel = new Stats();
+                    TablePanel = StatsView;
                     break;
             }
         }
@@ -200,7 +219,7 @@ namespace InventoryApp.ViewModels.Base
         private void Logout()
         {
             new Login().Show();
-            Application.Current.Windows[0].Close();
+            Application.Current.Windows[0]?.Close();
         }
     }
 }
