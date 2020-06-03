@@ -130,7 +130,7 @@ namespace InventoryApp.ViewModels.Product
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Товар удален.");
-                    Task.Run(() => Update());
+                    ProductModels.Remove(SelectedItem);
                 }
                 else
                 {

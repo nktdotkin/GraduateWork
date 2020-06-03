@@ -25,7 +25,7 @@ namespace InventoryApp.ViewModels.User
 
         public string UserName
         {
-            get { return string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? BaseService.GenerateRandomString() : Properties.Settings.Default.UserName; }
+            get => string.IsNullOrEmpty(Properties.Settings.Default.UserName) ? BaseService.GenerateRandomString() : Properties.Settings.Default.UserName;
             set
             {
                 if (Properties.Settings.Default.UserName != value && value.Length > 7)
@@ -48,7 +48,7 @@ namespace InventoryApp.ViewModels.User
             {
                 ManagerAccess(UserName);
                 new MainWindow().Show();
-                Application.Current.Windows[0].Close();
+                Application.Current.Windows[0]?.Close();
             }
             else
             {
@@ -69,38 +69,24 @@ namespace InventoryApp.ViewModels.User
             }
             var signUpQuery = $"INSERT INTO [ManagerLogInfo] (UserName, UserPass, UserStatus) VALUES ('{UserName}', '{PasswordSecurityService.PasswordEncrypt(param as PasswordBox)}', {isAdmin})";
             bool isSignedUp = new BaseQueryService().ExecuteQuery<LoginViewModel>(signUpQuery);
-            if (isSignedUp)
-            {
-                Notification.ShowNotification("Инфо: Успешная регистрация.");
-            }
-            else
-            {
-                Notification.ShowNotification("Ошибка: Регистрация завершилась с ошибкой.");
-            }
+            Notification.ShowNotification(isSignedUp
+                ? "Инфо: Успешная регистрация."
+                : "Ошибка: Регистрация завершилась с ошибкой.");
         }
 
         private bool IsFirstStart()
         {
-            if (Properties.Settings.Default.FirstStart)
-            {
-                Properties.Settings.Default.UserName = "Administrator";
-                Properties.Settings.Default.Save();
-                Notification.ShowNotification("Инфо: Задайте пароль администратора.");
-            }
+            if (!Properties.Settings.Default.FirstStart) return Properties.Settings.Default.FirstStart;
+            Properties.Settings.Default.UserName = "Administrator";
+            Properties.Settings.Default.Save();
+            Notification.ShowNotification("Инфо: Задайте пароль администратора.");
             return Properties.Settings.Default.FirstStart;
         }
 
         private void ManagerAccess(string userName)
         {
             Properties.Settings.Default.CurrentUser = userName;
-            if (userName.Equals("Administrator"))
-            {
-                Properties.Settings.Default.ManagerVisibility = true;
-            }
-            else
-            {
-                Properties.Settings.Default.ManagerVisibility = false;
-            }
+            Properties.Settings.Default.ManagerVisibility = userName.Equals("Administrator");
             Properties.Settings.Default.Save();
         }
 

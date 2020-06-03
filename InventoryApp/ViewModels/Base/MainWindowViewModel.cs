@@ -67,54 +67,52 @@ namespace InventoryApp.ViewModels.Base
             get => tabControl;
             set
             {
-                if (value != tabControl)
-                {
-                    tabControl = value;
-                    OnPropertyChanged(nameof(TabControl));
-                    OnPropertyChanged(nameof(ProductSwitch));
-                    OnPropertyChanged(nameof(StatsSwitch));
-                    OnPropertyChanged(nameof(ShipmentSwitch));
-                    OnPropertyChanged(nameof(ClientSwitch));
-                    OnPropertyChanged(nameof(ProviderSwitch));
-                    OnPropertyChanged(nameof(SupplySwitch));
-                }
+                if (value == tabControl) return;
+                tabControl = value;
+                OnPropertyChanged(nameof(TabControl));
+                OnPropertyChanged(nameof(ProductSwitch));
+                OnPropertyChanged(nameof(StatsSwitch));
+                OnPropertyChanged(nameof(ShipmentSwitch));
+                OnPropertyChanged(nameof(ClientSwitch));
+                OnPropertyChanged(nameof(ProviderSwitch));
+                OnPropertyChanged(nameof(SupplySwitch));
             }
         }
 
         public bool ProductSwitch
         {
-            get { return TabControl == TabControl.Product; }
-            set { TabControl = value ? TabControl.Product : TabControl; }
+            get => TabControl == TabControl.Product;
+            set => TabControl = value ? TabControl.Product : TabControl;
         }
 
         public bool StatsSwitch
         {
-            get { return TabControl == TabControl.Stats; }
-            set { TabControl = value ? TabControl.Stats : TabControl; }
+            get => TabControl == TabControl.Stats;
+            set => TabControl = value ? TabControl.Stats : TabControl;
         }
 
         public bool ShipmentSwitch
         {
-            get { return TabControl == TabControl.Shipment; }
-            set { TabControl = value ? TabControl.Shipment : TabControl; }
+            get => TabControl == TabControl.Shipment;
+            set => TabControl = value ? TabControl.Shipment : TabControl;
         }
 
         public bool ClientSwitch
         {
-            get { return TabControl == TabControl.Client; }
-            set { TabControl = value ? TabControl.Client : TabControl; }
+            get => TabControl == TabControl.Client;
+            set => TabControl = value ? TabControl.Client : TabControl;
         }
 
         public bool ProviderSwitch
         {
-            get { return TabControl == TabControl.Provider; }
-            set { TabControl = value ? TabControl.Provider : TabControl; }
+            get => TabControl == TabControl.Provider;
+            set => TabControl = value ? TabControl.Provider : TabControl;
         }
 
         public bool SupplySwitch
         {
-            get { return TabControl == TabControl.Supply; }
-            set { TabControl = value ? TabControl.Supply : TabControl; }
+            get => TabControl == TabControl.Supply;
+            set => TabControl = value ? TabControl.Supply : TabControl;
         }
 
         private Views.Controls.Product ProductView { get; set; }
@@ -167,18 +165,17 @@ namespace InventoryApp.ViewModels.Base
 
         private void Backup()
         {
-            SaveFileDialog fileDialog = new SaveFileDialog();
+            var fileDialog = new SaveFileDialog();
             fileDialog.ShowDialog();
-            string message = new SnapshotService().CreateSnapshot(fileDialog.FileName);
+            var message = new SnapshotService().CreateSnapshot(fileDialog.FileName);
             Notification.ShowNotification(message);
         }
 
         private void Restore()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.ValidateNames = false;
+            var fileDialog = new OpenFileDialog {ValidateNames = false};
             fileDialog.ShowDialog();
-            string message = new SnapshotService().RestoreFromSnapshot(fileDialog.SafeFileName);
+            var message = new SnapshotService().RestoreFromSnapshot(fileDialog.SafeFileName);
             Notification.ShowNotification(message);
         }
 
@@ -199,7 +196,7 @@ namespace InventoryApp.ViewModels.Base
             if (Properties.Settings.Default.UserName.Equals("Administrator"))
             {
                 new Settings().Show();
-                Application.Current.Windows[0].Close();
+                Application.Current.Windows[0]?.Close();
             }
             else
             {

@@ -92,7 +92,7 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Поставщик удален.");
-                    Task.Run(Update);
+                    ProviderModels.Remove(SelectedItem);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ namespace InventoryApp.ViewModels.User
             items.Phone.Contains(searchText) ||
             items.Address.Contains(searchText)
             ).ToList();
-            if (!ProviderModels.SequenceEqual(searchResult))
+            if (ProviderModels.SequenceEqual(searchResult)) return;
             {
                 ProviderModels.Clear();
                 foreach (var items in searchResult)

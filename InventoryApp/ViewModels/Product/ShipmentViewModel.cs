@@ -122,7 +122,7 @@ namespace InventoryApp.ViewModels.Product
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Информация о заказе удалена.");
-                    Task.Run(() => Update(true));
+                    ShipmentModels.Remove(SelectedItem);
                 }
                 else
                 {
@@ -204,7 +204,7 @@ namespace InventoryApp.ViewModels.Product
             items.Client.Phone.Contains(searchText) ||
             items.Client.Surname.Contains(searchText)
             ).ToList();
-            if (!ShipmentModels.SequenceEqual(searchResult))
+            if (ShipmentModels.SequenceEqual(searchResult)) return;
             {
                 ShipmentModels.Clear();
                 foreach (var items in searchResult)

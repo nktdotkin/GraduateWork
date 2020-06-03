@@ -10,8 +10,8 @@ namespace InventoryApp.Service
 {
     internal class BaseQueryService : ViewModelsBase
     {
-        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
-        private SqlConnection connection = new SqlConnection(connectionString);
+        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
+        private SqlConnection connection = new SqlConnection(ConnectionString);
         private SqlCommand command;
         private SqlDataReader reader;
 
@@ -87,7 +87,7 @@ namespace InventoryApp.Service
         {
             try
             {
-                connection = new SqlConnection(connectionString);
+                connection = new SqlConnection(ConnectionString);
                 connection.Open();
                 switch (parametlessQuery)
                 {

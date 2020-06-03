@@ -52,7 +52,6 @@ namespace InventoryApp.ViewModels.Product
         }
 
         private string searchText;
-
         public string SearchText
         {
             get => searchText;
@@ -75,7 +74,6 @@ namespace InventoryApp.ViewModels.Product
         }
 
         private ProviderModel searchByProvider;
-
         public ProviderModel SearchByProvider
         {
             get => searchByProvider;
@@ -122,7 +120,7 @@ namespace InventoryApp.ViewModels.Product
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Информация удалена.");
-                    Task.Run(() => Update());
+                    SupplyModels.Remove(SelectedItem);
                 }
                 else
                 {

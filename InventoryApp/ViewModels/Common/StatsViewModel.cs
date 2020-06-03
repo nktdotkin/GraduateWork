@@ -97,11 +97,15 @@ namespace InventoryApp.ViewModels.Common
         {
             TopClientList = new Dictionary<ClientModel, int>();
             TopProductList = new Dictionary<ProductModel, int>();
-            foreach (var values in ShipmentModels.GroupBy(item => item.Client.Id).Select(g => new { Value = g.Sum(s => s.Amount), Key = g.First().Client }).Take(3))
+            foreach (var values in ShipmentModels.GroupBy(item => item.Client.Id).
+                Select(g => new { Value = g.Sum(s => s.Amount), Key = g.First().Client }).
+                Take(3).OrderByDescending(c => c.Value))
             {
                 TopClientList.Add(values.Key, values.Value);
             }
-            foreach (var values in ShipmentModels.GroupBy(item => item.Product.Id).Select(g => new { Value = g.Sum(s => s.Amount), Key = g.First().Product }).Take(3))
+            foreach (var values in ShipmentModels.GroupBy(item => item.Product.Id).
+                Select(g => new { Value = g.Sum(s => s.Amount), Key = g.First().Product }).
+                Take(3).OrderByDescending(c => c.Value))
             {
                 TopProductList.Add(values.Key, values.Value);
             }

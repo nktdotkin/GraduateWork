@@ -101,6 +101,7 @@ namespace InventoryApp.ViewModels.User
                 if (isCompleted)
                 {
                     Notification.ShowNotification("Инфо: Клиент удален.");
+                    ClientModels.Remove(SelectedItem);
                     Task.Run(() => Update());
                 }
                 else

@@ -7,8 +7,8 @@ namespace InventoryApp.Service
 {
     internal class SnapshotService
     {
-        private static readonly string connectionString = ConfigurationManager.ConnectionStrings["SQLDirect"].ConnectionString;
-        private readonly SqlConnection connection = new SqlConnection(connectionString);
+        private static readonly string ConnectionString = ConfigurationManager.ConnectionStrings["SQLDirect"].ConnectionString;
+        private readonly SqlConnection connection = new SqlConnection(ConnectionString);
         private SqlCommand command;
 
         public string CreateSnapshot(string fileName)
