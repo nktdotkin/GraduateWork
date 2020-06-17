@@ -2,6 +2,7 @@
 using InventoryApp.ViewModels.Base;
 using InventoryApp.ViewModels.Common;
 using InventoryApp.Views.Main;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -13,15 +14,19 @@ namespace InventoryApp.ViewModels.User
         {
             SignInCommand = new RelayCommand(SignIn);
             SingUpCommand = new RelayCommand(SingUp);
-            Notification = new NotificationServiceViewModel();
             IsFirstStart();
+        }
+
+        ~LoginViewModel()
+        {
+            GC.Collect(1, GCCollectionMode.Forced);
         }
 
         #region Properties
 
         public RelayCommand SignInCommand { get; set; }
         public RelayCommand SingUpCommand { get; set; }
-        public NotificationServiceViewModel Notification { get; set; }
+        public NotificationServiceViewModel Notification { get; set; } = new NotificationServiceViewModel();
 
         public string UserName
         {

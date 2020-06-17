@@ -15,9 +15,6 @@ namespace InventoryApp.ViewModels.Product
         {
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
-            AddNewSupply = new SupplyModel();
-            Notification = new NotificationServiceViewModel();
-            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update());
         }
 
@@ -27,14 +24,14 @@ namespace InventoryApp.ViewModels.Product
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
         public ObservableCollection<ProductModel> ProductModels { get; set; }
 
-        public NotificationServiceViewModel Notification { get; set; }
+        public NotificationServiceViewModel Notification { get; set; } = new NotificationServiceViewModel();
 
-        private BaseQueryService BaseQueryService;
+        private BaseQueryService BaseQueryService = new BaseQueryService();
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
-        public SupplyModel AddNewSupply { get; set; }
+        public SupplyModel AddNewSupply { get; set; } = new SupplyModel();
 
         public bool SpinnerVisibility { get; set; }
 
@@ -52,6 +49,7 @@ namespace InventoryApp.ViewModels.Product
         }
 
         private string searchText;
+
         public string SearchText
         {
             get => searchText;
@@ -74,6 +72,7 @@ namespace InventoryApp.ViewModels.Product
         }
 
         private ProviderModel searchByProvider;
+
         public ProviderModel SearchByProvider
         {
             get => searchByProvider;

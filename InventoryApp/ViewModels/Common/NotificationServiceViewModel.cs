@@ -17,11 +17,9 @@ namespace InventoryApp.ViewModels.Common
             get => isActive;
             set
             {
-                if (value != isActive)
-                {
-                    isActive = value;
-                    OnPropertyChanged(nameof(IsActive));
-                }
+                if (value == isActive) return;
+                isActive = value;
+                OnPropertyChanged(nameof(IsActive));
             }
         }
 

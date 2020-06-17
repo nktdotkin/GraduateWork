@@ -14,26 +14,22 @@ namespace InventoryApp.ViewModels.User
         {
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
-            AddNewProvider = new ProviderModel();
-            ProviderLocationSource = BaseService.GetAddress(null);
-            Notification = new NotificationServiceViewModel();
-            BaseQueryService = new BaseQueryService();
             Task.Run(Update);
         }
 
         #region Properties
 
-        public string ProviderLocationSource { get; set; }
+        public string ProviderLocationSource { get; set; } = BaseService.GetAddress(null);
         public ObservableCollection<ProviderModel> ProviderModels { get; set; }
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
-        public NotificationServiceViewModel Notification { get; set; }
+        public NotificationServiceViewModel Notification { get; set; } = new NotificationServiceViewModel();
 
-        private BaseQueryService BaseQueryService;
+        private BaseQueryService BaseQueryService = new BaseQueryService();
 
-        public ProviderModel AddNewProvider { get; set; }
+        public ProviderModel AddNewProvider { get; set; } = new ProviderModel();
 
         private ProviderModel selectedItem;
 

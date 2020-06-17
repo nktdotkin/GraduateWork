@@ -14,16 +14,12 @@ namespace InventoryApp.ViewModels.User
         {
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
-            AddNewClient = new ClientModel();
-            ClientLocationSource = BaseService.GetAddress(null);
-            Notification = new NotificationServiceViewModel();
-            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update());
         }
 
         #region Properties
 
-        public string ClientLocationSource { get; set; }
+        public string ClientLocationSource { get; set; } = BaseService.GetAddress(null);
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public ObservableCollection<StoretypesModel> StoretypesModels { get; set; }
         public ObservableCollection<StatusesModel> StatusesModels { get; set; }
@@ -31,11 +27,11 @@ namespace InventoryApp.ViewModels.User
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
-        public NotificationServiceViewModel Notification { get; set; }
+        public NotificationServiceViewModel Notification { get; set; } = new NotificationServiceViewModel();
 
-        private BaseQueryService BaseQueryService;
+        private BaseQueryService BaseQueryService = new BaseQueryService();
 
-        public ClientModel AddNewClient { get; set; }
+        public ClientModel AddNewClient { get; set; } = new ClientModel();
 
         private ClientModel selectedItem;
 

@@ -14,19 +14,19 @@ namespace InventoryApp.ViewModels.Common
     internal class StatsViewModel : ViewModelsBase
     {
         public ObservableCollection<ShipmentModel> ShipmentModels { get; set; }
-        public ChartValues<ShipmentModel> ShipmentStats { get; set; }
+        public ChartValues<ShipmentModel> ShipmentStats { get; set; } = new ChartValues<ShipmentModel>();
 
-        public Func<double, string> FormatterSold { get; set; }
-        public Func<double, string> FormatterEarned { get; set; }
+        public Func<double, string> FormatterSold { get; set; } = value => value + ". штук";
+        public Func<double, string> FormatterEarned { get; set; } = value => value + " BYN";
 
         public object MapperShipmentAmount { get; set; }
         public object MapperShipmentPrice { get; set; }
 
         public List<string> SoldDateList { get; set; }
         public List<string> SoldProductList { get; set; }
-        public Dictionary<ProductModel, int> TopProductList { get; set; }
-        public Dictionary<ClientModel, int> TopClientList { get; set; }
-        public List<string> MessageList { get; set; }
+        public Dictionary<ProductModel, int> TopProductList { get; set; } = new Dictionary<ProductModel, int>();
+        public Dictionary<ClientModel, int> TopClientList { get; set; } = new Dictionary<ClientModel, int>();
+        public List<string> MessageList { get; set; } = LogService.ReadFromFile();
 
         public RelayCommand GetDay { get; set; }
         public RelayCommand GetWeek { get; set; }
@@ -34,11 +34,7 @@ namespace InventoryApp.ViewModels.Common
 
         public StatsViewModel()
         {
-            MessageList = LogService.ReadFromFile();
             MessageList.Reverse();
-            FormatterSold = value => value + ". штук";
-            FormatterEarned = value => value + " BYN";
-            ShipmentStats = new ChartValues<ShipmentModel>();
             MapperShipmentAmount = Mappers.Xy<ShipmentModel>().X((sold, index) => index).Y(sold => sold.Amount);
             MapperShipmentPrice = Mappers.Xy<ShipmentModel>().X((sold, index) => index).Y(sold => (double)sold.TotalPrice);
             GetDay = new RelayCommand((obj) => GetStatsByDate('d'));
@@ -95,8 +91,6 @@ namespace InventoryApp.ViewModels.Common
 
         private void SelectTop()
         {
-            TopClientList = new Dictionary<ClientModel, int>();
-            TopProductList = new Dictionary<ProductModel, int>();
             foreach (var values in ShipmentModels.GroupBy(item => item.Client.Id).
                 Select(g => new { Value = g.Sum(s => s.Amount), Key = g.First().Client }).
                 Take(3).OrderByDescending(c => c.Value))

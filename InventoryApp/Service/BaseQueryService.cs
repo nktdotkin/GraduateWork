@@ -20,7 +20,7 @@ namespace InventoryApp.Service
             var collection = new ObservableCollection<T>();
             try
             {
-                command = new SqlCommand(commandToExecute, connection) {CommandType = CommandType.StoredProcedure};
+                command = new SqlCommand(commandToExecute, connection) { CommandType = CommandType.StoredProcedure };
                 connection.Open();
                 reader = command.ExecuteReader();
                 int readerValueCounter = 0;

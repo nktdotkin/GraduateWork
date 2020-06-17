@@ -15,9 +15,6 @@ namespace InventoryApp.ViewModels.Product
         {
             DeleteCommand = new RelayCommand((obj) => Delete());
             AddCommand = new RelayCommand((obj) => Add());
-            AddNewShipment = new ShipmentModel();
-            Notification = new NotificationServiceViewModel();
-            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update());
         }
 
@@ -27,14 +24,14 @@ namespace InventoryApp.ViewModels.Product
         public ObservableCollection<ClientModel> ClientModels { get; set; }
         public ObservableCollection<ProductModel> ProductModels { get; set; }
 
-        public NotificationServiceViewModel Notification { get; set; }
+        public NotificationServiceViewModel Notification { get; set; } = new NotificationServiceViewModel();
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
 
-        private BaseQueryService BaseQueryService;
+        private BaseQueryService BaseQueryService = new BaseQueryService();
 
-        public ShipmentModel AddNewShipment { get; set; }
+        public ShipmentModel AddNewShipment { get; set; } = new ShipmentModel();
 
         private ShipmentModel selectedItem;
 

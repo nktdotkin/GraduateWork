@@ -1,8 +1,8 @@
 ﻿using InventoryApp.Models.Product;
 using InventoryApp.Models.User;
 using InventoryApp.Service;
-using InventoryApp.ViewModels.Common;
 using InventoryApp.Views.Main;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -16,9 +16,12 @@ namespace InventoryApp.ViewModels.Base
             AddNewStatusCommand = new RelayCommand((obj) => AddNewStatus());
             AddNewGroupCommand = new RelayCommand((obj) => AddNewGroup());
             AddNewStoreCommand = new RelayCommand((obj) => AddNewStore());
-            Notification = new NotificationServiceViewModel();
-            BaseQueryService = new BaseQueryService();
             GetFromDatabase();
+        }
+
+        ~SettingsViewModel()
+        {
+            GC.Collect(1, GCCollectionMode.Forced);
         }
 
         public RelayCommand MainWindowCommand { get; set; }
@@ -26,8 +29,7 @@ namespace InventoryApp.ViewModels.Base
         public ObservableCollection<GroupsModel> GroupsModels { get; set; }
         public ObservableCollection<StoretypesModel> StoretypesModels { get; set; }
 
-        public NotificationServiceViewModel Notification { get; set; }
-        private BaseQueryService BaseQueryService;
+        private BaseQueryService BaseQueryService = new BaseQueryService();
 
         public RelayCommand AddNewStatusCommand { get; set; }
         public RelayCommand AddNewGroupCommand { get; set; }
@@ -47,11 +49,9 @@ namespace InventoryApp.ViewModels.Base
             foreach (var updatedRows in GroupsModels)
             {
                 isCompleted = BaseQueryService.ExecuteQuery<GroupsModel>($"Update [ProductGroups] SET GroupType = N'{updatedRows.Group}', Tax = {updatedRows.Tax} WHERE GroupId = {updatedRows.Id}");
-                if (!isCompleted)
-                {
-                    isCompleted = BaseQueryService.ExecuteQuery<GroupsModel>($"Insert into [ProductGroups] (GroupType, Tax) VALUES (N'{updatedRows.Group}', {updatedRows.Tax})");
-                    isCompleted = false;
-                }
+                if (isCompleted) continue;
+                isCompleted = BaseQueryService.ExecuteQuery<GroupsModel>($"Insert into [ProductGroups] (GroupType, Tax) VALUES (N'{updatedRows.Group}', {updatedRows.Tax})");
+                isCompleted = false;
             }
         }
 
@@ -60,11 +60,9 @@ namespace InventoryApp.ViewModels.Base
             foreach (var updatedRows in StatusesModels)
             {
                 isCompleted = BaseQueryService.ExecuteQuery<StatusesModel>($"Update [ClientStatuses] SET StatusType = N'{updatedRows.Status}', Discount = {updatedRows.Discount} WHERE StatusId = {updatedRows.StatusId}");
-                if (!isCompleted)
-                {
-                    isCompleted = BaseQueryService.ExecuteQuery<StatusesModel>($"Insert into [ClientStatuses] (StatusType, Discount) VALUES (N'{updatedRows.Status}', {updatedRows.Discount})");
-                    isCompleted = false;
-                }
+                if (isCompleted) continue;
+                isCompleted = BaseQueryService.ExecuteQuery<StatusesModel>($"Insert into [ClientStatuses] (StatusType, Discount) VALUES (N'{updatedRows.Status}', {updatedRows.Discount})");
+                isCompleted = false;
             }
         }
 
@@ -73,11 +71,9 @@ namespace InventoryApp.ViewModels.Base
             foreach (var updatedRows in StoretypesModels)
             {
                 isCompleted = BaseQueryService.ExecuteQuery<StoretypesModel>($"Update [ClientStoreTypes] SET StoreType = N'{updatedRows.StoreType}' WHERE StoreId = {updatedRows.StoreId}");
-                if (!isCompleted)
-                {
-                    isCompleted = BaseQueryService.ExecuteQuery<StoretypesModel>($"Insert into [ClientStoreTypes] (StoreType) VALUES (N'{updatedRows.StoreType}')");
-                    isCompleted = false;
-                }
+                if (isCompleted) continue;
+                isCompleted = BaseQueryService.ExecuteQuery<StoretypesModel>($"Insert into [ClientStoreTypes] (StoreType) VALUES (N'{updatedRows.StoreType}')");
+                isCompleted = false;
             }
         }
 
@@ -105,7 +101,7 @@ namespace InventoryApp.ViewModels.Base
         {
             UpdateInfo();
             new MainWindow().Show();
-            Application.Current.Windows[0].Close();
+            Application.Current.Windows[0]?.Close();
         }
 
         private void UpdateInfo()

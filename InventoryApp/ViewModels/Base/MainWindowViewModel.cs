@@ -34,7 +34,11 @@ namespace InventoryApp.ViewModels.Base
             OpenHelperCommand = new RelayCommand((obj) => OpenHelper());
             OpenShipmentFolderCommand = new RelayCommand((obj) => OpenFolder("Отгрузки"));
             OpenSupplyFolderCommand = new RelayCommand((obj) => OpenFolder("Поставки"));
-            Notification = new NotificationServiceViewModel();
+        }
+
+        ~MainWindowViewModel()
+        {
+            GC.Collect(1, GCCollectionMode.Forced);
         }
 
         public RelayCommand SettingsCommand { get; set; }
@@ -47,7 +51,7 @@ namespace InventoryApp.ViewModels.Base
         public RelayCommand OpenShipmentFolderCommand { get; set; }
         public RelayCommand OpenSupplyFolderCommand { get; set; }
 
-        public NotificationServiceViewModel Notification { get; set; }
+        public NotificationServiceViewModel Notification { get; set; } = new NotificationServiceViewModel();
 
         private object tablePanel = new Stats();
         private TabControl tabControl;
@@ -115,34 +119,25 @@ namespace InventoryApp.ViewModels.Base
             set => TabControl = value ? TabControl.Supply : TabControl;
         }
 
-        private Views.Controls.Product ProductView { get; set; }
-        private Shipment ShipmentView { get; set; }
         private Client ClientView { get; set; }
         private Provider ProviderView { get; set; }
-        private Supply SupplyView { get; set; }
-        private Stats StatsView { get; set; }
 
         private void Initialize()
         {
-            ProductView = new Views.Controls.Product();
-            ShipmentView = new Shipment();
             ClientView = new Client();
             ProviderView = new Provider();
-            SupplyView = new Supply();
-            StatsView = new Stats();
         }
 
         private void ClickOnTab()
         {
-            GC.Collect(1, GCCollectionMode.Forced);
             switch (TabControl)
             {
                 case TabControl.Product:
-                    TablePanel = ProductView;
+                    TablePanel = new Views.Controls.Product();
                     break;
 
                 case TabControl.Shipment:
-                    TablePanel = ShipmentView;
+                    TablePanel = new Shipment();
                     break;
 
                 case TabControl.Client:
@@ -154,29 +149,44 @@ namespace InventoryApp.ViewModels.Base
                     break;
 
                 case TabControl.Supply:
-                    TablePanel = SupplyView;
+                    TablePanel = new Supply();
                     break;
 
                 case TabControl.Stats:
-                    TablePanel = StatsView;
+                    TablePanel = new Stats();
                     break;
             }
         }
 
         private void Backup()
         {
-            var fileDialog = new SaveFileDialog();
-            fileDialog.ShowDialog();
-            var message = new SnapshotService().CreateSnapshot(fileDialog.FileName);
-            Notification.ShowNotification(message);
+            if (Properties.Settings.Default.UserName.Equals("Administrator"))
+            {
+                var fileDialog = new SaveFileDialog();
+                fileDialog.ShowDialog();
+                var message = new SnapshotService().CreateSnapshot(fileDialog.FileName);
+                Notification.ShowNotification(message);
+            }
+            else
+            {
+                Notification.ShowNotification("Ошибка: Доступ запрещен.");
+            }
         }
 
         private void Restore()
         {
-            var fileDialog = new OpenFileDialog {ValidateNames = false};
-            fileDialog.ShowDialog();
-            var message = new SnapshotService().RestoreFromSnapshot(fileDialog.SafeFileName);
-            Notification.ShowNotification(message);
+            if (Properties.Settings.Default.UserName.Equals("Administrator"))
+            {
+                var fileDialog = new OpenFileDialog { ValidateNames = false };
+                fileDialog.ShowDialog();
+                var message = new SnapshotService().RestoreFromSnapshot(fileDialog.SafeFileName);
+                Notification.ShowNotification(message);
+                BaseService.DelayAction(3000, Logout);
+            }
+            else
+            {
+                Notification.ShowNotification("Ошибка: Доступ запрещен.");
+            }
         }
 
         private void OpenHelper()
@@ -187,7 +197,7 @@ namespace InventoryApp.ViewModels.Base
             }
             catch
             {
-                Notification.ShowNotification("Ошибка открытия справки.");
+                Notification.ShowNotification("Ошибка: Справка не может быть открыта.");
             }
         }
 
@@ -200,17 +210,17 @@ namespace InventoryApp.ViewModels.Base
             }
             else
             {
-                Notification.ShowNotification("Доступ запрещен.");
+                Notification.ShowNotification("Ошибка: Доступ запрещен.");
             }
         }
 
         private void OpenFolder(string documentType)
         {
-            if (!Directory.Exists(Path.Combine(System.Environment.CurrentDirectory, documentType)))
+            if (!Directory.Exists(Path.Combine(Environment.CurrentDirectory, documentType)))
             {
-                Directory.CreateDirectory(Path.Combine(System.Environment.CurrentDirectory, documentType));
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, documentType));
             }
-            Process.Start(Path.Combine(System.Environment.CurrentDirectory, documentType));
+            Process.Start(Path.Combine(Environment.CurrentDirectory, documentType));
         }
 
         private void Logout()

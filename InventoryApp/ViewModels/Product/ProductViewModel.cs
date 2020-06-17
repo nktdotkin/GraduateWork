@@ -21,9 +21,6 @@ namespace InventoryApp.ViewModels.Product
             AddCommand = new RelayCommand((obj) => Add());
             ImportCommand = new RelayCommand((obj) => GetProductFromFile());
             AddProductImageCommand = new RelayCommand((obj) => AddProductImage());
-            AddNewProduct = new ProductModel();
-            Notification = new NotificationServiceViewModel();
-            BaseQueryService = new BaseQueryService();
             Task.Run(() => Update(false, true));
         }
 
@@ -33,15 +30,15 @@ namespace InventoryApp.ViewModels.Product
         public ObservableCollection<ProductModel> OutdatedProductModels { get; set; }
         public ObservableCollection<GroupsModel> GroupsModels { get; set; }
 
-        private BaseQueryService BaseQueryService;
+        private BaseQueryService BaseQueryService = new BaseQueryService();
 
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand AddCommand { get; set; }
         public RelayCommand AddProductImageCommand { get; set; }
         public RelayCommand ImportCommand { get; set; }
 
-        public ProductModel AddNewProduct { get; set; }
-        public NotificationServiceViewModel Notification { get; set; }
+        public ProductModel AddNewProduct { get; set; } = new ProductModel();
+        public NotificationServiceViewModel Notification { get; set; } = new NotificationServiceViewModel();
 
         private ProductModel selectedItem;
 
@@ -194,7 +191,7 @@ namespace InventoryApp.ViewModels.Product
             int j = 0;
             for (int i = 0; i < recordsList.Count; i++)
             {
-                if (recordsList.Contains("Product"))
+                if (recordsList[i].Contains("Product"))
                 {
                     newProduct.Add(recordsList[j + 1]);
                 }
@@ -206,8 +203,8 @@ namespace InventoryApp.ViewModels.Product
                 var productProperty = AddNewProduct.GetType().GetProperty(fields.Name);
                 if (fields.Name == "Id" || fields.Name == "GroupId") continue;
                 productProperty.SetValue(AddNewProduct,
-                    fields.Name.Contains("Groups")
-                        ? Convert.ChangeType(GroupsModels.First(group => @group.Group.Contains(newProduct[counter])),
+                    fields.Name.Contains("Group")
+                        ? Convert.ChangeType(GroupsModels.First(group => @group.Group.Contains(newProduct[counter + 1])),
                             productProperty.PropertyType)
                         : Convert.ChangeType(newProduct[counter], productProperty.PropertyType));
                 counter++;
